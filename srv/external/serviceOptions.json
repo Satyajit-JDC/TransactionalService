@@ -1,0 +1,7 @@
+{
+  "srv/external/RegulationComplianceMasterService.edmx": {
+    "packageName": "regulationcompliancemasterservice_api",
+    "directoryName": "regulationcompliancemasterservice_api",
+    "basePath": "/service/RegulationComplianceMasterService"
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "name": "zcom_capRegCompTransSrv",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/connectivity": "^3.15.0",
+    "@sap-cloud-sdk/core": "^1.54.2",
+    "@sap-cloud-sdk/http-client": "^3.15.0",
+    "@sap-cloud-sdk/odata-v4": "^3.15.0",
+    "@sap-cloud-sdk/openapi": "^3.14.0",
+    "@sap-cloud-sdk/openapi-generator": "^3.15.0",
+    "@sap-cloud-sdk/resilience": "^3.15.0",
+    "@sap-cloud-sdk/util": "^3.15.0",
+    "@sap/cds-hana": "^2",
+    "@sap/xb-msg-amqp-v100": "^0.9.58",
+    "@sap/xssec": "^3",
+    "@types/global-npm": "^0.4.4",
+    "express": "^4",
+    "glob": "^10.4.2",
+    "ts-jest": "^29.1.5"
+  },
+  "devDependencies": {
+    "@cap-js/cds-typer": "^0.21.2",
+    "@cap-js/sqlite": "^1.7.1",
+    "@eslint/js": "^9.5.0",
+    "@sap-cloud-sdk/generator": "^3.15.0",
+    "@sap/cds": "^7.9.2",
+    "@sap/cds-compiler": "^4.9.4",
+    "@sap/cds-dk": "^7.9.2",
+    "@sap/dev-cap-tools": "^1.31.0",
+    "@sap/eslint-plugin-ui5-jsdocs": "^2.0.8",
+    "@sap/hdi-deploy": "^5.2.0",
+    "@sap/ux-specification": "^1.120.12",
+    "@sapui5/ts-types": "^1.124.1",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^20.14.2",
+    "@typescript-eslint/eslint-plugin": "^7.12.0",
+    "@typescript-eslint/parser": "^7.12.0",
+    "chai": "^4.4.1",
+    "chai-as-promised": "^8.0.0",
+    "chai-subset": "^1.6.0",
+    "eslint": "^8.57.0",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.1",
+    "globals": "^15.6.0"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "start-service:ts": "cds-ts run --with-mocks --in-memory",
+    "build:cf": "npm run build:cds && npm run cleanup:ts && npm run build:ts",
+    "build:ts": "tsc",
+    "build:cds": "cds build --production",
+    "cleanup:ts": "npx rimraf gen/srv/**/*.ts",
+    "cds-lint-tslint": "cds lint --debug && npx eslint .",
+    "test": "cds bind --profile hybrid --exec jest",
+    "undeploy": "cf undeploy zcom_capRegCompTransSrv --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-zcom_feregcompmadj": "cds watch --open zcom_feregcompmadj/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "imports": {
+    "#cds-models/*": "./@cds-models/*/index.js"
+  },
+  "cds": {
+    "requires": {
+      "RegulationComplianceMasterService": {
+        "kind": "odata-v4",
+        "model": "srv/external/RegulationComplianceMasterService",
+        "[hybrid]": {
+          "credentials": {
+            "path": "/service/RegulationComplianceMasterService",
+            "destination": "RegulationComplianceMasterService"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "path": "/service/RegulationComplianceMasterService",
+            "destination": "RegulationComplianceMasterService"
+          }
+        }
+      },
+      "LogUtilityService": {
+        "kind": "odata-v4",
+        "model": "srv/external/LogUtilityService",
+        "[hybrid]": {
+          "credentials": {
+            "path": "/odata/v4/log-utility",
+            "destination": "LogUtilityService"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "path": "/odata/v4/log-utility",
+            "destination": "LogUtilityService"
+          }
+        }
+      },
+      "RenewableEvents": {
+        "[hybrid]": {
+          "kind": "enterprise-messaging-shared",
+          "queue": {
+            "name": "sap/dev/1/Renewable/Events"
+          },
+          "format": "cloudevents",
+          "subscribePrefix": "sap/dev/1/"
+        },
+        "[production]": {
+          "kind": "enterprise-messaging-shared",
+          "queue": {
+            "name": "sap/dev/1/Renewable/Events"
+          },
+          "format": "cloudevents",
+          "subscribePrefix": "sap/dev/1/"
+        }
+      },
+      "db": "hana",
+      "auth": "xsuaa"
+    }
+  },
+  "sapux": [
+    "app/zcom_feregcompmadj"
+  ]
+}

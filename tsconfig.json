@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "forceConsistentCasingInFileNames": true,
+    "target": "es2022",
+    "module": "commonjs",
+    "outDir": "./gen/srv",
+    "baseUrl": "./",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "allowJs": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "esModuleInterop": true,
+    "paths": {
+      "#cds-models/*": [
+        "./@cds-models/*/index.ts",
+        "./srv/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "./srv/**/*.ts"
+  ]
+}

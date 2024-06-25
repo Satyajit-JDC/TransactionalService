@@ -1,0 +1,115 @@
+# Get Metadata of Service 
+###
+GET http://localhost:4004/odata/v4/regulation-compliance-transaction/RegulationComplianceTransaction 
+
+
+# Call Action processEvent 
+###
+POST http://localhost:4004/odata/v4/regulation-compliance-transaction/processEvent
+Content-Type: application/json
+
+{
+    "eventData": [
+        {
+            "regulationMaterial": "1059392",
+            "regulationEventType": "RFS2",
+            "regulationFuelCategory": "GS",
+            "fuelSubCategory": "BD",
+            "regulationGroupName": "R003",
+            "regulationMaterialGroupName": "M001",
+            "documentDate": "2024-06-18",
+            "incotermsPart1": "FOB",
+            "incotermsPart2": "BPUSPDX",
+            "movementType": "101",
+            "originRegion": "",
+            "destinationRegion": "",
+            "modeofTransport": "11",
+            "fuelQuantity": 420.000,
+            "fuelUnitofMeasurement": "UG6",
+            "dcode": "",
+            "vintageYear": "2024",
+            "rinMultiplier": 1,
+            "sourceOrgCompanyCode": "",
+            "qapCertified": "",
+            "businessPartnerNumber": "",
+            "businessPartnerDesc": "",
+            "billofLading": "99123",
+            "passRetainIndicator": "",
+            "reversalPostingDate": "2024-06-18",
+            "referenceContractGeneralDocumentNumber": "",
+            "referenceContractDocumentItemNumber": "",
+            "sourceOrgCompanyMaterialNumber": "1059392",
+            "sourceOrgCompanyMaterialNumberDesc": "Gasoline",
+            "postingDate": "2024-06-18",
+            "obligationMaterialDocumentNumber": "5000001",
+            "obligationMaterialDocumentItemNumber": "0010",
+            "obligationReverseMaterialDocumentNumber": "",
+            "obligationReverseMaterialDocumentItemNumber": "",
+            "rfOrder": "",
+            "rfOrderItem": "",
+            "sourceOrgCompanyPlant": "0563",
+            "sourceOrgCompanyStorageLocation": "1000"
+        }
+    ]
+}
+
+
+# Call Action trans 
+###
+POST http://localhost:4004/odata/v4/regulation-compliance-transaction/RegulationComplianceTransaction
+Content-Type: application/json
+{
+    "regulationType": "RFS2",
+    "regulationCategory": "RFS2",
+    "objectCategory": "D",
+    "objectType": "RVO",
+    "sourceScenario": "GM",
+    "subObjectScenario": "RFS2_RVO",
+    "transactionCategory": "PUR",
+    "transactionType": "PUR1",
+    "impact": "I",
+    "movementType": "101",
+    "fuelLogisticsCompanyMaterialNumber": "5000",
+    "fuelQuantity": 10,
+    "fuelQuantityRaw": "10",
+    "fuelUnitofMeasurement": "RIN",
+    "fuelQuantityinAlternateUOM": "RIN",
+    "regulationQuantity": 10,
+    "regulationUnitOfMeasurement": "RIN"
+}
+
+# Call on Create trans 
+###
+POST http://localhost:4004/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction
+Content-Type: application/json
+
+{
+    "objectId": 923,
+    "regulationType": "RFS2",
+    "regulationCategory": "RFS2",
+    "objectCategory": "D",
+    "objectType": "RVO",
+    "sourceScenario": "MDJ",
+    "subObjectScenario": "RFS2_MDJ_RVO",
+    "transactionCategory": "PUR",
+    "transactionType": "PUR1",
+    "impact": "I",
+    "documentDate":"2024-06-01",
+    "renewablesDocumentMonth": "06",
+    "renewablesDocumentComplianceYear": "2024",
+    "businessPartnerNumber":"1234",
+    "reasonCode":"30",
+    "sourceOrgCompanyPlant":"1000",
+    "regulationQuantity": 200,
+    "regulationUnitOfMeasurement": "RIN",
+    "regulationLogisticsCompanyMaterialNumber":"CELLULOSIC_2024"
+
+}
+# Get Metadata of Service 
+###
+GET http://localhost:4004/odata/v4/regulation-compliance-transaction/MaintainRegulationType 
+
+# Get Metadata of Service 
+###
+GET http://localhost:4004/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction
+

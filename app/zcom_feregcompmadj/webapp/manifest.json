@@ -1,0 +1,199 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "com.sap.chs.com.zcomferegcompmadj",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.13.6",
+      "toolsId": "ad0439a8-f785-4fb2-bd8a-8a55299c83ca"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/regulation-compliance-transaction/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "manualadj-manage": {
+          "semanticObject": "manualadj",
+          "action": "manage",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.124.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.ushell": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.sap.chs.com.zcomferegcompmadj.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ManualAdjRegulationComplianceTransactionList",
+          "target": "ManualAdjRegulationComplianceTransactionList"
+        },
+        {
+          "pattern": "ManualAdjRegulationComplianceTransaction({key}):?query:",
+          "name": "ManualAdjRegulationComplianceTransactionObjectPage",
+          "target": "ManualAdjRegulationComplianceTransactionObjectPage"
+        }
+      ],
+      "targets": {
+        "ManualAdjRegulationComplianceTransactionList": {
+          "type": "Component",
+          "id": "ManualAdjRegulationComplianceTransactionList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ManualAdjRegulationComplianceTransaction",
+              "variantManagement": "Page",
+              "navigation": {
+                "ManualAdjRegulationComplianceTransaction": {
+                  "detail": {
+                    "route": "ManualAdjRegulationComplianceTransactionObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable",
+                    "widthIncludingColumnHeader": true
+                  },
+                  "columns": {
+                    "DataField::objectId": {
+                      "width": "100%"
+                    },
+                    "DataField::objectType": {
+                      "width": "100%"
+                    },
+                    "DataField::transactionType": {
+                      "width": "100%"
+                    },
+                    "DataField::billofLading": {
+                      "width": "100%"
+                    },
+                    "DataField::sourceOrgCompanyMaterialNumberDesc": {
+                      "width": "100%"
+                    },
+                    "DataField::sourceOrgCompanyPlant": {
+                      "width": "100%"
+                    },
+                    "DataField::sourceOrgCompanyStorageLocation": {
+                      "width": "100%"
+                    },
+                    "DataField::autoMatch": {
+                      "width": "100%"
+                    },
+                    "DataField::regulationQuantity": {
+                      "width": "100%"
+                    },
+                    "DataField::regulationUnitOfMeasurement": {
+                      "width": "100%"
+                    },
+                    "DataField::sourceOrgCompanyMaterialNumber": {
+                      "width": "100%"
+                    },
+                    "DataField::documentDate": {
+                      "width": "100%"
+                    }
+                  }
+                }
+              },
+              "initialLoad": "Enabled"
+            }
+          }
+        },
+        "ManualAdjRegulationComplianceTransactionObjectPage": {
+          "type": "Component",
+          "id": "ManualAdjRegulationComplianceTransactionObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ManualAdjRegulationComplianceTransaction"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "com.sap.chs.com"
+  }
+}

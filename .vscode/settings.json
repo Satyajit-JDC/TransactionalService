@@ -1,0 +1,11 @@
+{
+  "eslint.validate": [
+    "cds",
+    "csn",
+    "csv",
+    "csv (semicolon)",
+    "tsv",
+    "tab"
+  ],
+  "SAP HANA Database Explorer.ShowXsAdvancedConnections": true
+}

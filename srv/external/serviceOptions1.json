@@ -1,0 +1,7 @@
+{
+  "srv/external/LogUtilityService.edmx": {
+    "packageName": "logutilityservice_api",
+    "directoryName": "logutilityservice_api",
+    "basePath": "/odata/v4/log-utility"
+  }
+}
