@@ -1,7 +1,8 @@
 import cds from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import { MaintainRenewableMaterialConfiguration, MaintainTransactionType, MaintainAdjustmentReasonCode, Uom, 
-    Impact, ObjectCategory } from '../external/regulationcompliancemasterservice_api';
+    Impact, ObjectCategory, 
+    MaintainRegulationTransactionTypeTs} from '../external/regulationcompliancemasterservice_api';
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
@@ -280,7 +281,7 @@ class RegulationComplianceBaseClass {
         // return await SELECT.from(MaintainRenewableMaterialConfiguration).where({ regType: { in: regType }, and: { objectType: { in: objectType }, and: { year: year } } });
     }
 
-    async getTransactiontype(sFilters: string): Promise<MaintainTransactionType[]> {
+    async getTransactiontype(sFilters: string): Promise<MaintainRegulationTransactionTypeTs[]> {
 
         const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
         if (sFilters) {
