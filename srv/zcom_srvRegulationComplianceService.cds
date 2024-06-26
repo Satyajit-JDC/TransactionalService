@@ -31,4 +31,6 @@ service RegulationComplianceTransactionService {
     entity GetObjectCategory as projection on master.ObjectCategory;
     entity GetUOM   as projection on master.UOM;
     entity GetImpact as projection on master.Impact;
+    entity GetFuelSubCategory as projection on master.FuelSubCategory;
+    entity GetMovementType as projection on master.MaintainMovementType;
 }

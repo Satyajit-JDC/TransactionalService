@@ -844,6 +844,15 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //             // jwt: sJWT
         //         }));
         // })
+        this.on('READ', 'GetFuelSubCategory', async () => {
+            const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('');
+            return oFuelSubCategory.data;
+        })
+        this.on('READ', 'GetMovementType', async () => {
+            const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('');
+            return oMovementTypes.data;
+        })
+        
         return super.init()
     }
 }
