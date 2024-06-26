@@ -1,7 +1,9 @@
 import cds from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import { MaintainRenewableMaterialConfiguration, MaintainTransactionType, MaintainAdjustmentReasonCode, Uom, 
-    Impact, ObjectCategory } from '../external/regulationcompliancemasterservice_api';
+    Impact, ObjectCategory, 
+    MaintainRegulationTransactionTypeTs,
+    TransactionCategory} from '../external/regulationcompliancemasterservice_api';
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
@@ -280,7 +282,7 @@ class RegulationComplianceBaseClass {
         // return await SELECT.from(MaintainRenewableMaterialConfiguration).where({ regType: { in: regType }, and: { objectType: { in: objectType }, and: { year: year } } });
     }
 
-    async getTransactiontype(sFilters: string): Promise<MaintainTransactionType[]> {
+    async getTransactiontype(sFilters: string): Promise<MaintainRegulationTransactionTypeTs[]> {
 
         const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
         if (sFilters) {
@@ -288,7 +290,8 @@ class RegulationComplianceBaseClass {
             // const data = 
             return await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                 .addCustomQueryParameters({
-                    $filter: encodedFilterValue
+                    $filter: encodedFilterValue,
+                    $expand: typeof TransactionCategory
                 }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                 .execute({
                     destinationName: "RegulationComplianceMasterService"
@@ -296,7 +299,9 @@ class RegulationComplianceBaseClass {
         } else {
             return await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                 .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                .execute({
+                .addCustomQueryParameters({
+                    $expand: typeof TransactionCategory
+                }).execute({
                     destinationName: "RegulationComplianceMasterService"
                 });
         }
@@ -304,11 +309,11 @@ class RegulationComplianceBaseClass {
     }
 
     async getRegulationTransactionTypeTs(sFilters: string): Promise<IMaintainRegulationTransactionTypeTs> {
-        const aIMaintainRegulationTransactionTypeTsMAP = { map: {} } as IMaintainRegulationTransactionTypeTs;
+        const aIMaintainRegulationTransactionTypeTsMAP = { map: {}, data: [] } as IMaintainRegulationTransactionTypeTs;
+        const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi(),
+        encodedFilterValue = encodeURIComponent(sFilters);
         if (sFilters) {
-            const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi(),
-                encodedFilterValue = encodeURIComponent(sFilters);
-            (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
+             (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                 .addCustomQueryParameters({
                     $filter: encodedFilterValue
                 }).middleware(resilience({ retry: 3, circuitBreaker: true }))
@@ -318,8 +323,24 @@ class RegulationComplianceBaseClass {
                 forEach((oData) => {
                     if (oData.regulationTypeRegulationType && oData.transactionCategoryCategory) {
                         aIMaintainRegulationTransactionTypeTsMAP.map[oData.regulationTypeRegulationType + oData.transactionCategoryCategory] = oData;
+                        aIMaintainRegulationTransactionTypeTsMAP.data.push(oData);
                     }
                 });
+        }
+        else{
+            (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
+            .middleware(resilience({ retry: 3, circuitBreaker: true }))
+            .addCustomQueryParameters({
+                $expand:  'transactionCategory',
+            }).execute({
+                destinationName: "RegulationComplianceMasterService"
+            })).
+            forEach((oData) => {
+                if (oData.regulationTypeRegulationType && oData.transactionCategoryCategory) {
+                    aIMaintainRegulationTransactionTypeTsMAP.map[oData.regulationTypeRegulationType + oData.transactionCategoryCategory] = oData;
+                    aIMaintainRegulationTransactionTypeTsMAP.data.push(oData);
+                }
+            });
         }
         return aIMaintainRegulationTransactionTypeTsMAP;
     }
@@ -506,7 +527,14 @@ class RegulationComplianceBaseClass {
                 destinationName: "RegulationComplianceMasterService"
             });
     }
-
+    async getTransactionTypeData(): Promise<TransactionCategory[]> {
+        const { transactionCategoryApi } = regulationcompliancemasterserviceApi();
+        return await transactionCategoryApi.requestBuilder().getAll()
+            .middleware(resilience({ retry: 3, circuitBreaker: true }))
+            .execute({
+                destinationName: "RegulationComplianceMasterService"
+            });
+    }
 
 }
 

@@ -2,33 +2,54 @@ using {com.sap.chs.com.regulationcompliancetransaction as transaction} from '../
 using {RegulationComplianceMasterService as master} from './external/RegulationComplianceMasterService';
 
 
-service RegulationComplianceTransactionService {    
+service RegulationComplianceTransactionService {
     action processEvent(eventData : many transaction.EventData);
-    entity RegulationComplianceTransaction 
-    @(Capabilities: {
-        InsertRestrictions: {
+
+    entity RegulationComplianceTransaction @(Capabilities: {
+        InsertRestrictions          : {
             $Type: 'Capabilities.InsertRestrictionsType',
             Insertable
         },
 
         DeleteRestrictions.Deletable: false,
         UpdateRestrictions.Updatable: false
-    })as projection on transaction.RegulationComplianceTransaction order by objectId desc ;
+    })                                              as projection on transaction.RegulationComplianceTransaction
+                                                       order by
+                                                           objectId desc;
 
     @odata.draft.enabled
-    entity ManualAdjRegulationComplianceTransaction as projection on transaction.RegulationComplianceTransaction order by objectId desc;
-    
-    entity AdjustmentBaseValuelist as projection on transaction.AdjustmentBaseValuelist;
+    entity ManualAdjRegulationComplianceTransaction as projection on transaction.RegulationComplianceTransaction
+                                                       order by
+                                                           objectId desc;
+
+    entity AdjustmentBaseValuelist                  as projection on transaction.AdjustmentBaseValuelist;
     // Master data entities
-   
-    entity MaintainRegulationType as projection on master.MaintainRegulationType;
+
+    entity MaintainRegulationType                   as projection on master.MaintainRegulationType;
+
     // entity MaintainTransactionType as projection on master.MaintainRegulationTransactionTypeTS;
-    entity MaintainRegulationTransactionType as projection on master.MaintainRegulationTransactionTypeTS;
-    entity MaintainRegulationObjecttype as projection on master.MaintainRegulationObjecttype;
-    entity MaintainRenewableMaterialConfiguration as projection on master.MaintainRenewableMaterialConfiguration;
-    entity GetFuelCategory as projection on master.FuelCategory;
-    entity GetReasonCode as projection on master.MaintainAdjustmentReasonCode;
-    entity GetObjectCategory as projection on master.ObjectCategory;
-    entity GetUOM   as projection on master.UOM;
-    entity GetImpact as projection on master.Impact;
+    entity GetMaintainRegulationTransactionTypeTs   as
+        projection on master.MaintainRegulationTransactionTypeTS 
+        {
+            *,
+            transactionCategory.category as categorytrans
+        }
+
+        //         *,
+        //     transactionCategory.category as Category,
+        //     transactionCategory :  Association to master.TransactionCategory on transactionCategory.category = transactionCategory_category,
+        //     // {
+        //     //     "expand":
+        //     // }
+        // }
+        ;
+
+    entity TransactionType                          as projection on master.TransactionCategory;
+    entity MaintainRegulationObjecttype             as projection on master.MaintainRegulationObjecttype;
+    entity MaintainRenewableMaterialConfiguration   as projection on master.MaintainRenewableMaterialConfiguration;
+    entity GetFuelCategory                          as projection on master.FuelCategory;
+    entity GetReasonCode                            as projection on master.MaintainAdjustmentReasonCode;
+    entity GetObjectCategory                        as projection on master.ObjectCategory;
+    entity GetUOM                                   as projection on master.UOM;
+    entity GetImpact                                as projection on master.Impact;
 }

@@ -35,7 +35,7 @@ export class MaintainRegulationMaterialGroupView<
   /**
    * All key fields of the MaintainRegulationMaterialGroupView entity
    */
-  static _keys: any = [];
+  static _keys = [];
   /**
    * Regulation Type.
    * Maximum length: 5.

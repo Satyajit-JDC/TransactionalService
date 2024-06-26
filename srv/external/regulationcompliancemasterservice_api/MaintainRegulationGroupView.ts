@@ -35,7 +35,7 @@ export class MaintainRegulationGroupView<
   /**
    * All key fields of the MaintainRegulationGroupView entity
    */
-  static _keys: any = [];
+  static _keys = [];
   /**
    * Regulation Type.
    * Maximum length: 5.

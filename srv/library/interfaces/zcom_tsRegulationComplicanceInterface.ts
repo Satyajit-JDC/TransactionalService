@@ -56,6 +56,7 @@ export interface IMaintainRegulationSubscenariotoScenario{
 
 export interface IMaintainRegulationTransactionTypeTs{
     map:{[index:string]: MaintainRegulationTransactionTypeTs};
+    data: MaintainRegulationTransactionTypeTs[]
 }
 
 export interface IRfs2DebitType{

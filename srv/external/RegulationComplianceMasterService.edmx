@@ -1467,6 +1467,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationType">
                 <Annotation Term="Common.DraftRoot">
@@ -1506,6 +1517,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.Text" Path="description"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/regulationCategory">
@@ -1529,6 +1541,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/region">
                 <Annotation Term="Common.Label" String="Region"/>
@@ -1536,6 +1549,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/region_code">
                 <Annotation Term="Common.Label" String="Region"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="Label" String="Region"/>
@@ -1561,6 +1575,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/country_code">
                 <Annotation Term="Common.Label" String="Country"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="Label" String="Country"/>
@@ -1582,15 +1597,18 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/materialYearly">
                 <Annotation Term="Common.Label" String="Material Yearly"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/fuelUom">
-                <Annotation Term="Common.Label" String="Fuel Uom"/>
+                <Annotation Term="Common.Label" String="Fuel UoM"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/fuelAlternateUom">
-                <Annotation Term="Common.Label" String="Fuel Alternate Uom"/>
+                <Annotation Term="Common.Label" String="Fuel Alternate UoM"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/regulationUoM">
                 <Annotation Term="Common.Label" String="Regulation UoM"/>
@@ -1613,6 +1631,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationType/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -1660,6 +1679,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="transactionType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainTransactionType">
                 <Annotation Term="Common.DraftRoot">
@@ -1699,9 +1729,11 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainTransactionType/transactionType">
                 <Annotation Term="Common.Label" String="Transaction Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainTransactionType/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainTransactionType/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -1714,6 +1746,64 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainTransactionType/DraftAdministrativeData">
                 <Annotation Term="UI.Hidden" Bool="true"/>
+            </Annotations>
+            <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS">
+                <Annotation Term="UI.FieldGroup" Qualifier="GeneratedGroup">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="transactionType"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="transactionCategory_category"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="description"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="GeneratedFacet1"/>
+                            <PropertyValue Property="Label" String="General Information"/>
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#GeneratedGroup"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="transactionType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="transactionCategory_category"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="description"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="transactionType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationTransactionTypeTS">
                 <Annotation Term="Common.DraftRoot">
@@ -1753,24 +1843,89 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/transactionType">
                 <Annotation Term="Common.Label" String="Transaction Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/regulationType_ID">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="MaintainRegulationType"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="regulationType_regulationType"/>
+                                    <PropertyValue Property="ValueListProperty" String="regulationType"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="regulationCategory_category"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="region_code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="country_code"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="MaintainRegulationType"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="regulationType_regulationType"/>
+                                    <PropertyValue Property="ValueListProperty" String="regulationType"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="regulationCategory_category"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="region_code"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="country_code"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/transactionCategory">
                 <Annotation Term="Common.Label" String="Transaction Category"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/transactionCategory_category">
                 <Annotation Term="Common.Label" String="Transaction Category"/>
+                <Annotation Term="Common.ValueList">
+                    <Record Type="Common.ValueListType">
+                        <PropertyValue Property="CollectionPath" String="TransactionCategory"/>
+                        <PropertyValue Property="Parameters">
+                            <Collection>
+                                <Record Type="Common.ValueListParameterInOut">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="transactionCategory_category"/>
+                                    <PropertyValue Property="ValueListProperty" String="category"/>
+                                </Record>
+                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="ValueListProperty" String="description"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -1818,8 +1973,106 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="fuelType_category"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+                    <Record Type="UI.SelectionPresentationVariantType">
+                        <PropertyValue Property="PresentationVariant">
+                            <Record Type="UI.PresentationVariantType">
+                                <PropertyValue Property="Visualizations">
+                                    <Collection>
+                                        <AnnotationPath>@UI.LineItem</AnnotationPath>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="SelectionVariant">
+                            <Record Type="UI.SelectionVariantType">
+                                <PropertyValue Property="SelectOptions">
+                                    <Collection/>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Text" String="Table View"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem" Qualifier="tableView">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView1">
+                    <Record Type="UI.SelectionPresentationVariantType">
+                        <PropertyValue Property="PresentationVariant">
+                            <Record Type="UI.PresentationVariantType">
+                                <PropertyValue Property="Visualizations">
+                                    <Collection>
+                                        <AnnotationPath>@UI.LineItem#tableView</AnnotationPath>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="SelectionVariant">
+                            <Record Type="UI.SelectionVariantType">
+                                <PropertyValue Property="SelectOptions">
+                                    <Collection/>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Text" String="Table View 1"/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainFuelMapping">
+                <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView">
+                    <Record Type="UI.SelectionPresentationVariantType">
+                        <PropertyValue Property="PresentationVariant">
+                            <Record Type="UI.PresentationVariantType">
+                                <PropertyValue Property="Visualizations">
+                                    <Collection>
+                                        <AnnotationPath>@UI.LineItem</AnnotationPath>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="SelectionVariant">
+                            <Record Type="UI.SelectionVariantType">
+                                <PropertyValue Property="SelectOptions">
+                                    <Collection/>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Text" String="Table View"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.SelectionPresentationVariant" Qualifier="tableView1">
+                    <Record Type="UI.SelectionPresentationVariantType">
+                        <PropertyValue Property="PresentationVariant">
+                            <Record Type="UI.PresentationVariantType">
+                                <PropertyValue Property="Visualizations">
+                                    <Collection>
+                                        <AnnotationPath>@UI.LineItem#tableView</AnnotationPath>
+                                    </Collection>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="SelectionVariant">
+                            <Record Type="UI.SelectionVariantType">
+                                <PropertyValue Property="SelectOptions">
+                                    <Collection/>
+                                </PropertyValue>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="Text" String="Table View 1"/>
+                    </Record>
+                </Annotation>
                 <Annotation Term="Common.DraftRoot">
                     <Record Type="Common.DraftRootType">
                         <PropertyValue Property="ActivationAction" String="RegulationComplianceMasterService.draftActivate"/>
@@ -1876,6 +2129,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainFuelMapping/fuelSubType">
                 <Annotation Term="Common.Label" String="Fuel Sub Type"/>
@@ -1898,6 +2152,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainFuelMapping/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -1956,6 +2211,17 @@
                             <PropertyValue Property="Value" Path="description"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationObjecttype">
@@ -2022,6 +2288,7 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationObjecttype/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -2048,12 +2315,14 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationObjecttype/objectType">
                 <Annotation Term="Common.Label" String="Object Type"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationObjecttype/objectType_code">
                 <Annotation Term="Common.Label" String="Object Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="Label" String="Object Type"/>
@@ -2093,9 +2362,11 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationObjecttype/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationObjecttype/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -2167,6 +2438,17 @@
                                 <AnnotationPath>@UI.LineItem</AnnotationPath>
                             </Collection>
                         </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationGroup"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
                     </Record>
                 </Annotation>
             </Annotations>
@@ -2293,6 +2575,17 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationMaterialGroup"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationMaterialGroup">
                 <Annotation Term="UI.PresentationVariant">
@@ -2347,9 +2640,11 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationMaterialGroup/regulationMaterialGroup">
                 <Annotation Term="Common.Label" String="Regulation Material Group"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationMaterialGroup/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationMaterialGroup/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -2397,6 +2692,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="reasonCode"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainAdjustmentReasonCode">
                 <Annotation Term="Common.DraftRoot">
@@ -2439,6 +2745,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainAdjustmentReasonCode/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainAdjustmentReasonCode/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -2497,6 +2804,17 @@
                             <PropertyValue Property="Value" Path="storageLocation"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainInventoryPostingPlant">
@@ -2562,6 +2880,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainInventoryPostingPlant/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -2587,15 +2906,19 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainInventoryPostingPlant/companyId">
-                <Annotation Term="Common.Label" String="Company Id"/>
+                <Annotation Term="Common.Label" String="Company ID"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainInventoryPostingPlant/plant">
                 <Annotation Term="Common.Label" String="Plant"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainInventoryPostingPlant/storageLocation">
                 <Annotation Term="Common.Label" String="Storage Location"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainInventoryPostingPlant/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -2643,6 +2966,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="incoTerm"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainIncotermsImpactForImportOrExport">
                 <Annotation Term="Common.DraftRoot">
@@ -2682,6 +3016,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIncotermsImpactForImportOrExport/incoTerm">
                 <Annotation Term="Common.Label" String="Inco Term"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIncotermsImpactForImportOrExport/impact">
                 <Annotation Term="Common.Label" String="Impact"/>
@@ -2704,6 +3039,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIncotermsImpactForImportOrExport/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -2750,6 +3086,17 @@
                             <PropertyValue Property="Value" Path="noOfDays"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationToleranceForDateMatch">
@@ -2816,6 +3163,7 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationToleranceForDateMatch/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -2842,9 +3190,11 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationToleranceForDateMatch/noOfDays">
                 <Annotation Term="Common.Label" String="No Of Days"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationToleranceForDateMatch/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -2891,6 +3241,17 @@
                             <PropertyValue Property="Value" Path="range"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulatonToleranceForVolumeMatch">
@@ -2959,6 +3320,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulatonToleranceForVolumeMatch/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -2987,9 +3349,11 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulatonToleranceForVolumeMatch/range">
                 <Annotation Term="Common.Label" String="Range"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulatonToleranceForVolumeMatch/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -3054,6 +3418,17 @@
                             <PropertyValue Property="Value" Path="passRetainIndicator_category"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="transactionType_transactionType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationTransactionTypeBU">
@@ -3158,10 +3533,7 @@
                         <PropertyValue Property="Parameters">
                             <Collection>
                                 <Record Type="Common.ValueListParameterInOut">
-                                    <PropertyValue Property="LocalDataProperty" PropertyPath="transactionType_ID"/>
-                                    <PropertyValue Property="ValueListProperty" String="ID"/>
-                                </Record>
-                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="transactionType_transactionType"/>
                                     <PropertyValue Property="ValueListProperty" String="transactionType"/>
                                 </Record>
                                 <Record Type="Common.ValueListParameterDisplayOnly">
@@ -3171,6 +3543,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeBU/transactionType_transactionType">
                 <Annotation Term="Common.Label" String="Transaction Type"/>
@@ -3180,10 +3553,7 @@
                         <PropertyValue Property="Parameters">
                             <Collection>
                                 <Record Type="Common.ValueListParameterInOut">
-                                    <PropertyValue Property="LocalDataProperty" PropertyPath="transactionType_ID"/>
-                                    <PropertyValue Property="ValueListProperty" String="ID"/>
-                                </Record>
-                                <Record Type="Common.ValueListParameterDisplayOnly">
+                                    <PropertyValue Property="LocalDataProperty" PropertyPath="transactionType_transactionType"/>
                                     <PropertyValue Property="ValueListProperty" String="transactionType"/>
                                 </Record>
                                 <Record Type="Common.ValueListParameterDisplayOnly">
@@ -3193,6 +3563,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationTransactionTypeBU/transactionCategory">
                 <Annotation Term="Common.Label" String="Transaction Category"/>
@@ -3279,6 +3650,7 @@
                             <Collection>
                                 <Record Type="UI.DataField">
                                     <PropertyValue Property="Value" Path="movementType"/>
+                                    <PropertyValue Property="Label" String="Movement Type"/>
                                 </Record>
                                 <Record Type="UI.DataField">
                                     <PropertyValue Property="Value" Path="regulationType_regulationType"/>
@@ -3332,7 +3704,27 @@
                         <Record Type="UI.DataField">
                             <PropertyValue Property="Value" Path="impact_category"/>
                         </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="negativeImpact"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="sourceScenario"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="withReference"/>
+                        </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="movementType"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainMovementType">
@@ -3373,6 +3765,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/movementType">
                 <Annotation Term="Common.Label" String="MovementType"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -3402,6 +3795,7 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="false"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -3428,12 +3822,14 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="false"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/objectType">
                 <Annotation Term="Common.Label" String="Object Type"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/objectType_code">
                 <Annotation Term="Common.Label" String="Object Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="Label" String="Object Type"/>
@@ -3454,6 +3850,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/subObjectScenario">
                 <Annotation Term="Common.Label" String="Sub Object Scenario"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/impact">
                 <Annotation Term="Common.Label" String="Impact"/>
@@ -3476,15 +3873,19 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/sourceScenario">
                 <Annotation Term="Common.Label" String="Source Scenario"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/negativeImpact">
                 <Annotation Term="Common.Label" String="Negative Impact"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/withReference">
                 <Annotation Term="Common.Label" String="With Reference"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainMovementType/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -3563,7 +3964,33 @@
                         <Record Type="UI.DataField">
                             <PropertyValue Property="Value" Path="originMaterialRelevant"/>
                         </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="destinationMaterialRelevant"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="destinationRelevant"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="impact_category"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="mode_code"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="transactionCategory_category"/>
+                        </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="movementType_movementType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainMovementTypeToTransactionCategoryImpact">
@@ -3881,6 +4308,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRenewableMovementType">
                 <Annotation Term="Common.DraftRoot">
@@ -3948,6 +4386,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -3976,12 +4415,14 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/ObjectType">
                 <Annotation Term="Common.Label" String="Object Type"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/ObjectType_code">
                 <Annotation Term="Common.Label" String="Object Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="Label" String="Object Type"/>
@@ -4001,10 +4442,10 @@
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/inventoryMovementType">
-                <Annotation Term="Common.Label" String="inventoryMovementType"/>
+                <Annotation Term="Common.Label" String="Inventory Movement Type"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/inventoryMovementType_ID">
-                <Annotation Term="Common.Label" String="inventoryMovementType"/>
+                <Annotation Term="Common.Label" String="Inventory Movement Type"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="CollectionPath" String="MaintainMovementType"/>
@@ -4030,9 +4471,10 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/inventoryMovementType_movementType">
-                <Annotation Term="Common.Label" String="inventoryMovementType"/>
+                <Annotation Term="Common.Label" String="Inventory Movement Type"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="CollectionPath" String="MaintainMovementType"/>
@@ -4058,15 +4500,19 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/contractRelevant">
-                <Annotation Term="Common.Label" String="contractRelevant"/>
+                <Annotation Term="Common.Label" String="Contract Relevant"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/contractSide">
-                <Annotation Term="Common.Label" String="contractSide"/>
+                <Annotation Term="Common.Label" String="Contract Side"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/relevantMovementType">
-                <Annotation Term="Common.Label" String="relevantMovementType"/>
+                <Annotation Term="Common.Label" String="Relevant Movement Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMovementType/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -4142,7 +4588,30 @@
                         <Record Type="UI.DataField">
                             <PropertyValue Property="Value" Path="dCode_category"/>
                         </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="rinMultiplier"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="obligationPercent"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="description"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="material"/>
+                        </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRenewableMaterialConfiguration">
@@ -4211,6 +4680,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -4239,12 +4709,14 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/objectType">
                 <Annotation Term="Common.Label" String="Object Type"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/objectType_code">
                 <Annotation Term="Common.Label" String="Object Type"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
                 <Annotation Term="Common.ValueList">
                     <Record Type="Common.ValueListType">
                         <PropertyValue Property="Label" String="Object Type"/>
@@ -4265,6 +4737,7 @@
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/year">
                 <Annotation Term="Common.Label" String="Year"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/rvoType">
                 <Annotation Term="Common.Label" String="RVO Type"/>
@@ -4287,6 +4760,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/dCode">
                 <Annotation Term="Common.Label" String="DCode"/>
@@ -4317,10 +4791,11 @@
                 <Annotation Term="Common.Label" String="Obligation Percent"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/rinMultiplier">
-                <Annotation Term="Common.Label" String="rinMultiplyer"/>
+                <Annotation Term="Common.Label" String="RIN Multiplyer"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRenewableMaterialConfiguration/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -4368,6 +4843,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="companyId"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainCompanyIdToPlant">
                 <Annotation Term="Common.DraftRoot">
@@ -4406,10 +4892,12 @@
                 <Annotation Term="Common.Label" String="Changed By"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdToPlant/companyId">
-                <Annotation Term="Common.Label" String="Company Id"/>
+                <Annotation Term="Common.Label" String="Company ID"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdToPlant/plant">
                 <Annotation Term="Common.Label" String="Plant"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdToPlant/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -4463,6 +4951,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="facilityId"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainCompanyIdOrPlantToFacilityId">
                 <Annotation Term="Common.DraftRoot">
@@ -4501,13 +5000,16 @@
                 <Annotation Term="Common.Label" String="Changed By"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId/companyId">
-                <Annotation Term="Common.Label" String="Company Id"/>
+                <Annotation Term="Common.Label" String="Company ID"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId/plant">
                 <Annotation Term="Common.Label" String="Plant"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId/facilityId">
-                <Annotation Term="Common.Label" String="Facility Id"/>
+                <Annotation Term="Common.Label" String="Facility ID"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -4534,6 +5036,7 @@
                                 </Record>
                                 <Record Type="UI.DataField">
                                     <PropertyValue Property="Value" Path="objectCategory_category"/>
+                                    <PropertyValue Property="Label" String="Object Category"/>
                                 </Record>
                                 <Record Type="UI.DataField">
                                     <PropertyValue Property="Value" Path="regulationSubScenario_category"/>
@@ -4564,6 +5067,7 @@
                         </Record>
                         <Record Type="UI.DataField">
                             <PropertyValue Property="Value" Path="objectCategory_category"/>
+                            <PropertyValue Property="Label" String="Object Category"/>
                         </Record>
                         <Record Type="UI.DataField">
                             <PropertyValue Property="Value" Path="regulationSubScenario_category"/>
@@ -4572,6 +5076,17 @@
                             <PropertyValue Property="Value" Path="description"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationSubScenarioToScenario">
@@ -4614,6 +5129,7 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioToScenario/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -4640,6 +5156,7 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioToScenario/transactionSourceScenario">
                 <Annotation Term="Common.Label" String="Transaction Source Scenario"/>
@@ -4662,6 +5179,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioToScenario/objectCategory">
                 <Annotation Term="Common.Label" String="objectCategory "/>
@@ -4684,6 +5202,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioToScenario/regulationSubScenario">
                 <Annotation Term="Common.Label" String="Regulation Sub Scenario"/>
@@ -4706,9 +5225,11 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioToScenario/description">
                 <Annotation Term="Common.Label" String="Description"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioToScenario/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -4756,6 +5277,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationSubScenario_category"/>
+                            </Record>
+                        </PropertyValue>
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainRegulationSubScenarioAction">
                 <Annotation Term="Common.DraftRoot">
@@ -4790,6 +5322,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioAction/action">
                 <Annotation Term="Common.Label" String="Action"/>
@@ -4812,6 +5345,7 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainRegulationSubScenarioAction/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>
@@ -4865,17 +5399,16 @@
                                     <PropertyValue Property="ValueListProperty" String="description"/>
                                 </Record>
                                 <Record Type="Common.ValueListParameterDisplayOnly">
-                                    <PropertyValue Property="ValueListProperty" String="regulationCategory_category"/>
+                                    <PropertyValue Property="ValueListProperty" String="region_code"/>
                                 </Record>
                                 <Record Type="Common.ValueListParameterDisplayOnly">
                                     <PropertyValue Property="ValueListProperty" String="country_code"/>
                                 </Record>
                             </Collection>
                         </PropertyValue>
-                        <PropertyValue Property="Label" String="Regulation Type"/>
                     </Record>
                 </Annotation>
-                <Annotation Term="Common.ValueListWithFixedValues" Bool="false"/>
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.ManageRegulationTypeAndActive/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -4892,17 +5425,16 @@
                                     <PropertyValue Property="ValueListProperty" String="description"/>
                                 </Record>
                                 <Record Type="Common.ValueListParameterDisplayOnly">
-                                    <PropertyValue Property="ValueListProperty" String="regulationCategory_category"/>
+                                    <PropertyValue Property="ValueListProperty" String="region_code"/>
                                 </Record>
                                 <Record Type="Common.ValueListParameterDisplayOnly">
                                     <PropertyValue Property="ValueListProperty" String="country_code"/>
                                 </Record>
                             </Collection>
                         </PropertyValue>
-                        <PropertyValue Property="Label" String="Regulation Type"/>
                     </Record>
                 </Annotation>
-                <Annotation Term="Common.ValueListWithFixedValues" Bool="false"/>
+                <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.ManageRegulationTypeAndActive/active">
                 <Annotation Term="Common.Label" String="Active"/>
@@ -5084,6 +5616,17 @@
                         </Record>
                     </Collection>
                 </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationSubScenario_category"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainIdRangeForRenewableObjects">
                 <Annotation Term="Capabilities.InsertRestrictions">
@@ -5134,12 +5677,15 @@
                         </PropertyValue>
                     </Record>
                 </Annotation>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForRenewableObjects/numberOfStart">
                 <Annotation Term="Common.Label" String="Number Of Start"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForRenewableObjects/numberOfEnd">
                 <Annotation Term="Common.Label" String="Number Of End"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForRenewableObjects/inActive">
                 <Annotation Term="Common.Label" String="In Active"/>
@@ -5196,6 +5742,17 @@
                             <PropertyValue Property="Value" Path="numberOfEnd"/>
                         </Record>
                     </Collection>
+                </Annotation>
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String=""/>
+                        <PropertyValue Property="TypeNamePlural" String=""/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="regulationType_regulationType"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.EntityContainer/MaintainIdRangeForReconciliationGroups">
@@ -5254,6 +5811,7 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForReconciliationGroups/regulationType_regulationType">
                 <Annotation Term="Common.Label" String="Regulation Type"/>
@@ -5280,12 +5838,15 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="Common.ValueListWithFixedValues" Bool="true"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForReconciliationGroups/numberOfStart">
                 <Annotation Term="Common.Label" String="Number Of Start"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForReconciliationGroups/numberOfEnd">
                 <Annotation Term="Common.Label" String="Number Of End"/>
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Mandatory"/>
             </Annotations>
             <Annotations Target="RegulationComplianceMasterService.MaintainIdRangeForReconciliationGroups/IsActiveEntity">
                 <Annotation Term="UI.Hidden" Bool="true"/>

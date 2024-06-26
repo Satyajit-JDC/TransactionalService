@@ -32,7 +32,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     aMovementTypes: IMaintainMovementType = { map: {}, movementTypeMovementType: "", movementType_movementType: "", data: [] },
                     aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
                     aMvtTypeRelevance: IMaintainMovementTypeToTransactionCategoryImpact = { map: {}, transactionCategoryCategory: "", data: [] },
-                    aIMaintainRegulationTransactionTypeTsMAP: IMaintainRegulationTransactionTypeTs = { map: {} },
+                    aIMaintainRegulationTransactionTypeTsMAP: IMaintainRegulationTransactionTypeTs = { map: {},data: [] },
                     aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {} };
 
                 const aFinalData: RegulationComplianceTransaction[] = [];
@@ -574,7 +574,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
             let aFinalData: RegulationComplianceTransaction[] = [],
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
-                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
+                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {}, data: [] },
                 aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {} },
                 aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] };
@@ -797,9 +797,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
         //     return oRegulationTransactionTypeTsData;
         // })
-        this.on('READ', 'MaintainRegulationTransactionType', async () => {
-            const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
-            return oRegulationTransactionTypeTsData;
+        this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
+            const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs('');
+            return oRegulationTransactionTypeTsData.data;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('')
@@ -830,6 +830,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'GetImpact', async () => {
             const oImpact = await oRegulationComplianceBaseInstance.getImpact();
+            return oImpact;
+        })
+        this.on('READ', 'TransactionType', async () => {
+            const oImpact = await oRegulationComplianceBaseInstance.getTransactionTypeData();
             return oImpact;
         })
         // this.on('READ', 'MaterialCharacteristics', async (request) => {
