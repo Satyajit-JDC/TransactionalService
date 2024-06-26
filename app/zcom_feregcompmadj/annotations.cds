@@ -525,6 +525,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                     LocalDataProperty : transactionCategory,
                     ValueListProperty : 'transactionCategory/category',
                 },
+                
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType/regulationType',
+                    LocalDataProperty : regulationType,
+                },
             ],
             Label : '{i18n>TransactionType}',
         },
