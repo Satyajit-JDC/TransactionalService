@@ -646,7 +646,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             let aFinalData: RegulationComplianceTransaction[] = [],
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
                 aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
-                aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {} },
+                aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {},data:[] },
                 aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
                 logObjectID:string = "";
@@ -676,7 +676,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             } = ODataRequest.data;
             // Get regulations( This would be needed when we UOM conversion to happen currently using for regulation object type and category)
             const sFilterUom = `regulationType eq '${regulationType}' and regulationCategory_category eq '${regulationType}'`;// and fuelAlternateUom eq 'BBL'`;
-            aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom);
+            aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
+                {} as ILogUtility);
             const oRegulationType = aRegulationType.map[regulationType];
 
             //Get object Type code i.e RIN or RVO
@@ -687,17 +688,22 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
                 
                 // read RFS2DebitType
-                const aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("");
+                const aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("",
+                {} as ILogUtility);
                 if (oRegObjectCateory.objectCategoryCategory) {
 
                     //Maintain Regulation Transaction Types
-                    aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" + regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'");
+                    aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" + 
+                        regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
+                        {} as ILogUtility);
                     const oTransactionTypeTs = aTransactionTypeTs.map[regulationType + transactionCategory];
 
                     if (oTransactionTypeTs.transactionCategoryCategory) {
                         // Fetch regulation subscenario
                         // const sfilterSubObjectScenario = "regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'";
-                        aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'");
+                        aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" + 
+                            regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
+                            {} as ILogUtility);
                         const oRegualtionSubscenario = aRegulationSubscenario.map[regulationType + "MDJ" + objectType]
 
                        
@@ -737,7 +743,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 // Fetch material configuration
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
                                     const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear;
-                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig);
+                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+                                        {} as ILogUtility);
                                 }
                                 if (aMaterialConfig.length > 0) {
                                     // Get Fuel Unit of Measure if alternate UOM is BBL
@@ -811,7 +818,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
                                     const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsCompanyMaterialNumber + "'";
-                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig);
+                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+                                        {} as ILogUtility);
                                 }
                                 if (aMaterialConfig.length > 0) {
                                     // oObjectID = 435;
@@ -864,7 +872,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return ODataRequest.data;
         })
         this.on('READ', 'MaintainRegulationType', async () => {
-            const oRegulationTypes = await oRegulationComplianceBaseInstance.getRegulationTypes('');
+            const oRegulationTypes = await oRegulationComplianceBaseInstance.getRegulationTypes('',
+            {} as ILogUtility);
             return oRegulationTypes.data;
         })
         // this.on('READ', 'MaintainTransactionTyp', async (request) => {
@@ -880,14 +889,16 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return oRegulaionObjectType.data;
         })
         this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
-            return await oRegulationComplianceBaseInstance.getMaterialConfiguration('');
+            return await oRegulationComplianceBaseInstance.getMaterialConfiguration('',
+            {} as ILogUtility);
         })
         // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
         //     return oManualAdjustment;
         // })
         this.on('READ', 'GetFuelCategory', async () => {
-            const oFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory('');
+            const oFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory('',
+            {} as ILogUtility);
             return oFuelCategory.data;
         })
         this.on('READ', 'GetReasonCode', async () => {
@@ -992,11 +1003,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
 
         this.on('READ', 'GetFuelSubCategory', async () => {
-            const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('');
+            const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
+            {} as ILogUtility);
             return oFuelSubCategory.data;
         })
         this.on('READ', 'GetMovementType', async () => {
-            const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('');
+            const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('',
+            {} as ILogUtility);
             return oMovementTypes.data;
         })
         
