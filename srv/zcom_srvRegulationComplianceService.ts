@@ -8,24 +8,26 @@ import { Quarter, Month } from '@cds-models';
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
-    IMaintainMovementType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario, IMaintainRegulationTransactionTypeTs
+    IMaintainMovementType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario, IMaintainRegulationTransactionTypeTs,
+    IRfs2DebitType,IFuelCategory,IFuelSubCategory
 } from './library/interfaces/zcom_tsRegulationComplicanceInterface';
 import {
     MaintainRenewableMaterialConfiguration
 } from './external/regulationcompliancemasterservice_api';
-// import { resilience } from '@sap-cloud-sdk/resilience';
+import { ILogUtility } from './library/interfaces/zcom_tsRegulationComplicanceInterface';
+
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
         // const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction')
         // this.on("processEvent", async ({ data: EventData }) => {
-        messaging.on("zcom/Renewable/RaiseEvent/v1", async msg => {
+        messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
             if (msg.data) {
                 const oEventData = msg.data;
                 let oYear: string = "", sRegGroups: string = "",
                     aRegulationGroups: IMaintainRegulationGroupView = {
                         map: {}, regulationType: "", regulationType_regulationType: "",
-                        regulationTypeRegulationType: ""
+                        regulationTypeRegulationType: "", data: []
                     },
                     aRegulationMaterialGrp: IMaintainRegulationMaterialGroupView = { map: {}, objectCategory: "", objectCategory_category: "" },
                     aRegObjectType: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
@@ -33,96 +35,223 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
                     aMvtTypeRelevance: IMaintainMovementTypeToTransactionCategoryImpact = { map: {}, transactionCategoryCategory: "", data: [] },
                     aIMaintainRegulationTransactionTypeTsMAP: IMaintainRegulationTransactionTypeTs = { map: {} },
-                    aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {} };
+                    aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {},data:[] },
+                    logObjectID:string = "",
+                    oLogData: ILogUtility = {} as ILogUtility,
+                    aRFS2DebitType = { map: {}, data: [] } as IRfs2DebitType,
+                    aFuelCategory = { map: {}, data: [] } as IFuelCategory,
+                    aFuelSubCategory = { map: {}, data: [] } as IFuelSubCategory;
 
                 const aFinalData: RegulationComplianceTransaction[] = [];
                 oEventData.documentDate = "2024-06-19"; //HC
                 oEventData.postingDate = "2024-06-19"; //HC
                 oYear = new Date(oEventData.documentDate).getFullYear().toString(); //HC
+                if(oEventData.RenewableEventType && oEventData._RenewableMaterialDocument){
+                    logObjectID = oEventData.RenewableEventType + oEventData._RenewableMaterialDocument.RenwableMaterialDocument +
+                                oEventData._RenewableMaterialDocument.RenwableMaterialDocumentItem;
+                }
 
-                // build regulation group array
-                // EventData.eventData.forEach(function (oEventData: EventData) {
-                //     sRegGroups = sRegGroups ? sRegGroups + ' and ' : "";
-                //     sRegGroups += "regulationGroup_regulationGroup eq '" + oEventData.RegulationGroupName + "'";
-                //     if (!oYear && oEventData.documentDate) {
-                //         oYear = new Date(oEventData.documentDate).getFullYear().toString();
-                //     }
-                // });
                 if (oEventData.RegulationGroupName) {
                     sRegGroups += "regulationGroup_regulationGroup eq '" + oEventData.RegulationGroupName + "'";
+                } else {    //regulation group not populated from API
+                    oLogData = {
+                        object: logObjectID,
+                        message: "RegulationGroupValueIsEmptyInEventMessage",
+                        messageType: "E",
+                        regulationType: "",
+                        regulationSubObjectType: "",
+                        applicationModule: "",
+                        applicationSubModule: "",
+                        technicalMessage: ""
+                    };
                 }
 
                 // read regulation groups
-                if (sRegGroups) {
-                    aRegulationGroups = await oRegulationComplianceBaseInstance.getRegulations(sRegGroups);
+                if (sRegGroups && !oLogData.messageType) {
+                    aRegulationGroups = await oRegulationComplianceBaseInstance.getRegulations(sRegGroups,{
+                        object: logObjectID,
+                        message: "RegulationGroupValueIsEmptyInEventMessage",
+                        messageType: "E",
+                        regulationType: "",
+                        regulationSubObjectType: "",
+                        applicationModule: "",
+                        applicationSubModule: "",
+                        technicalMessage: ""
+                    });
                 }
 
                 // get material group code
-                if (aRegulationGroups.regulationType) {
-                    aRegulationMaterialGrp = await oRegulationComplianceBaseInstance.getRegulationMaterialGroup(aRegulationGroups.regulationType);//"regulationType eq 'RFS2'");
+                if (aRegulationGroups.regulationType && !oLogData.messageType) {
+                    aRegulationMaterialGrp = await oRegulationComplianceBaseInstance.getRegulationMaterialGroup(aRegulationGroups.regulationType,{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: "",
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: "",
+                        technicalMessage: ""
+                    });
+                }
+
+                // get sub scenario
+                const sfilterSubObjectScenario = aRegulationGroups.regulationType_regulationType + " and transactionSourceScenario_category eq 'GM' and " + aRegulationMaterialGrp.objectCategory_category;
+                if(aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category && !oLogData.messageType){
+                    aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario(sfilterSubObjectScenario,{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: "",
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: "",
+                        technicalMessage: ""
+                    });
                 }
 
                 // get reg object type
-                // aRegulationGroups.regulationType_regulationType = "regulationType_regulationType eq 'RFS2'";
-                // aRegulationMaterialGrp.objectCategory_category = "objectCategory_category eq 'D'";
-
-                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category) {
-                    aRegObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType(aRegulationGroups.regulationType_regulationType + " and " + aRegulationMaterialGrp.objectCategory_category);//"regulationType_regulationType eq 'RFS2' and objectCategory eq 'RVO'");
+                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category && 
+                        !oLogData.messageType && aRegulationSubscenario.data.length>0) {
+                    aRegObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType(aRegulationGroups.regulationType_regulationType + " and " +
+                     aRegulationMaterialGrp.objectCategory_category,{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: "",
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
                 }
 
                 // get movement type
-                if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType) {
-                    aMovementTypes = await oRegulationComplianceBaseInstance.getMovementType(aRegulationGroups.regulationType_regulationType + " and " + aRegObjectType.objectType); //"regulationType_regulationType eq 'RFS2' and objectType_code eq 'RIN'");
+                if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType && !oLogData.messageType
+                    && aRegulationSubscenario.data.length>0
+                ) {
+                    aMovementTypes = await oRegulationComplianceBaseInstance.getMovementType(aRegulationGroups.regulationType_regulationType + " and " + 
+                    aRegObjectType.objectType,{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
                 }
 
                 // get mvt type relevance
-                // aRegulationGroups.regulationType_regulationType = "regulationType_regulationType eq 'RFS2'";
-                if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType && aMovementTypes.movementType_movementType) {
-                    aMvtTypeRelevance = await oRegulationComplianceBaseInstance.readMvtTypeTransationRelevance(aRegulationGroups.regulationType_regulationType + " and " + aRegObjectType.objectType + " and " + aMovementTypes.movementType_movementType); //"regulationTypeRegulationType eq 'RFS2' and objectTypeCode eq 'RIN and movementTypeMovementType eq '101'");
+                if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType && aMovementTypes.movementType_movementType 
+                    && !oLogData.messageType && aRegulationSubscenario.data.length>0) {
+                    aMvtTypeRelevance = await oRegulationComplianceBaseInstance.readMvtTypeTransationRelevance(aRegulationGroups.regulationType_regulationType + " and " +
+                     aRegObjectType.objectType + " and " + aMovementTypes.movementType_movementType,{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
                 }
 
                 // // read mat config
                 let aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [];
                 // if(aRegulationGroups.regType.length>0 && aRegulationMaterialGrp.objectCategory.length>0 && oYear){
-                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory && oYear) {
-                    // const sMatConfigFilters = "regulationType_regulationType eq 'RFS2' and objectType_code eq 'RIN and year eq '" + oYear + "'";
-                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(aRegulationGroups.regulationType_regulationType +" and "+ aRegulationMaterialGrp.objectCategory +" and year eq '"+ oYear + "'");
-                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(aRegulationGroups.regulationType_regulationType + " and objectType_code eq 'RVO' and year eq " + oYear);
+                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory && oYear && !oLogData.messageType
+                    && aRegulationSubscenario.data.length>0
+                ) {
+                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(aRegulationGroups.regulationType_regulationType + 
+                        " and objectType_code eq 'RVO' and year eq " + oYear,{
+                            object: logObjectID,
+                            message: "FailedToReadRegulationTypeFromMasterData",
+                            messageType: "E",
+                            regulationType: aRegulationGroups.data[0].regulationType as string,
+                            regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                            applicationModule: aRegulationGroups.data[0].regulationType as string,
+                            applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                            technicalMessage: ""
+                        });
                 }
 
                 // get regulation type
-                // aRegulationGroups.regulationType = "regulationType eq 'RFS2'";
-                if (aRegulationGroups.regulationType) {
-                    aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(aRegulationGroups.regulationType); //"regulationType eq 'RFS2'");
+                if (aRegulationGroups.regulationType && !oLogData.messageType
+                    && aRegulationSubscenario.data.length>0
+                ) {
+                    aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(aRegulationGroups.regulationType,{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
                 }
 
                 // get Regulation Transaction Types
-                if (aMvtTypeRelevance.transactionCategoryCategory && aRegulationGroups.regulationType_regulationType) {
-                    aIMaintainRegulationTransactionTypeTsMAP = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs(aRegulationGroups.regulationType_regulationType + " and " + aMvtTypeRelevance.transactionCategoryCategory);
+                if (aMvtTypeRelevance.transactionCategoryCategory && aRegulationGroups.regulationType_regulationType && !oLogData.messageType
+                    && aRegulationSubscenario.data.length>0
+                ) {
+                    aIMaintainRegulationTransactionTypeTsMAP = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs(aRegulationGroups.regulationType_regulationType + 
+                        " and " + aMvtTypeRelevance.transactionCategoryCategory,{
+                            object: logObjectID,
+                            message: "FailedToReadRegulationTypeFromMasterData",
+                            messageType: "E",
+                            regulationType: aRegulationGroups.data[0].regulationType as string,
+                            regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                            applicationModule: aRegulationGroups.data[0].regulationType as string,
+                            applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                            technicalMessage: ""
+                        });
                 }
-
-                // get sub scenario
-                // aRegulationMaterialGrp.objectCategory_category = "objectCategory_category eq 'D'";
-                const sfilterSubObjectScenario = aRegulationGroups.regulationType_regulationType + " and transactionSourceScenario_category eq 'GM' and " + aRegulationMaterialGrp.objectCategory_category;
-                aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario(sfilterSubObjectScenario);
-
-                // const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_RVO_RF"); //"RFS2_RVO_RF");
+                
+                if(aRegulationGroups.data.length>0 && aRegObjectType.data.length>0 && aRegulationSubscenario.data.length>0){
+                    // read RFS2DebitType
+                    aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("",{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
+                    // read FuelCategory
+                    aFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory("",{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
+                    // read SubFuelCategory
+                    aFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory("",{
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
+                }
 
                 // build output array
                 if (aMaterialConfig.length > 0 && aRegulationGroups.regulationType && aRegulationMaterialGrp.objectCategory &&
-                    aRegObjectType.objectType && aMovementTypes.movementTypeMovementType && aMvtTypeRelevance && aRegulationType) {
-                    // read RFS2DebitType
-                    const aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("");
-                    // read FuelCategory
-                    const aFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory("");
-                    // read SubFuelCategory
-                    const aFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory("");
+                    aRegObjectType.objectType && aMovementTypes.movementTypeMovementType && aMvtTypeRelevance && aRegulationType && !oLogData.messageType
+                    && aRFS2DebitType.data.length>0 && aFuelCategory.data.length>0 && aFuelSubCategory.data.length>0
+                ) {
 
-                    // for (let eventIndex = 0; eventIndex < EventData.eventData.length; eventIndex++) {
-                    //     const oEventData = EventData.eventData[eventIndex];
-
-                    // }
-                    // EventData.eventData.forEach(function (oEventData: EventData) {
                     // read reg group data
                     if (oEventData.RegulationGroupName) {
                         const oRegulationGroupsData = aRegulationGroups.map[oEventData.RegulationGroupName];
@@ -163,7 +292,6 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                         // get FuelSubCategoryDes
                                         let sFuelSubCategoryDes: RegulationComplianceTransaction["fuelSubCategoryDesc"];
                                         try {
-                                            // sFuelSubCategoryDes = aFuelSubCategory.map[oEventData.fuelSubCategory].description;
                                             sFuelSubCategoryDes = aFuelSubCategory.map["BD"].description;
                                         } catch (error) {
 
@@ -172,7 +300,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                         // get material doc data
                                         let oMatDocData;
                                         if (oEventData._RenewableMaterialDocument) {
-                                            oMatDocData = oEventData._RenewableMaterialDocument[0];
+                                            oMatDocData = oEventData._RenewableMaterialDocument;
                                         }
 
                                         let sMonthDes;
@@ -235,7 +363,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(oRegulationSubscenario.regulationSubScenarioCategory); //"RFS2_RVO_RF");
                                                 if (oObjectID && oMaterialConfig.obligationPercent) {
                                                     aFinalData.push({
-                                                        objectId: oObjectID,
+                                                        // objectId: oObjectID,
                                                         regulationType: oRegulationGroupsData.regulationType,
                                                         regulationTypeDesc: oRegulationGroupsData.description,
                                                         regulationCategory: oRegulationMaterialGrpData.category,
@@ -495,78 +623,21 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                         // oilFieldsForRenewablesDestinationRegion
                                                     });
                                                 }
-                                                // aFinalData.push({
-                                                //     regulationObjectNumber: JSON.stringify(iReneableNumber),
-                                                //     complianceYear: oEventData.regYear,
-                                                //     transactionCategory: oMvtTypeRelevanceData.transactionCategory, //'PROD',
-                                                //     plant: oEventData.regPlant,
-                                                //     storage: oEventData.regStorage,
-                                                //     status: '01',
-                                                //     statusDes: 'Created',
-                                                //     RVOType: oMaterialConfig.type,
-                                                //     RVOTypeDes: oMaterialConfig.description,
-                                                //     RVOMaterial: oMaterialConfig.material,
-                                                //     RVOMaterialDescription: oMaterialConfig.description,
-                                                //     RVOPercentage: oMaterialConfig.obligationPercent,
-                                                //     RVOUnit: oRegulationTypeData.regUoM, //'RIN',
-                                                //     fuelAltUom: oRegulationTypeData.fuelAltUom, //'BBL',
-                                                //     fuelVolume: (oEventData.fuelVolume * oMaterialConfig.obligationPercent) / 100,
-                                                //     fuelUnit: oEventData.fuelUnit,
-                                                //     fuelMaterial: oEventData.fuelMaterial,
-                                                //     materialDocument: oEventData.materialDocument,
-                                                //     productionOrder: oEventData.productionOrder,
-                                                //     productionDate: oEventData.productionDate
-                                                // });
-
-
-
-                                                // const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_RVO_RF");
-                                                // if (oObjectID) {
-                                                // aFinalData.push({
-                                                //     objectId: oObjectID,    //'800',
-                                                //     regulationType: 'RFS2',
-                                                //     regulationCategory: 'RFS2',
-                                                //     objectCategory: 'D',
-                                                //     objectType: 'RVO',
-                                                //     sourceScenario: 'GM',
-                                                //     subObjectScenario: 'RFS2_RVO',
-                                                //     transactionCategory: 'PUR',
-                                                //     transactionType: 'PUR1',
-                                                //     impact: 'I',
-                                                //     movementType: '101',
-                                                //     fuelLogisticsCompanyMaterialNumber: '5000',
-                                                //     fuelQuantity: 10,
-                                                //     fuelQuantityRaw: '10',
-                                                //     fuelUnitofMeasurement: 'RIN',
-                                                //     fuelQuantityinAlternateUOM: 10,
-                                                //     regulationQuantity: 10,
-                                                //     regulationUnitOfMeasurement: 'RIN'
-                                                // });
-                                                // }
-
-
-                                                //                 iReneableNumber++;
-                                                //             }
-                                                //         });
-                                                //     });
-                                                // }
 
                                             }
-                                            // });
                                         }
                                     }
                                 }
 
                             }
                         }
-                        // }
-                        // }
-
-                        // });
                     }
                 }
                 if (aFinalData.length > 0) {
-                    await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData);
+                    await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData,logObjectID);
+                }
+                if(oLogData.messageType){   //log message
+                    oRegulationComplianceBaseInstance.addLog(oLogData);
                 }
             }
         })
@@ -577,7 +648,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
                 aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {} },
                 aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
-                aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] };
+                aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
+                logObjectID:string = "";
             let oObjectID: number;
             // comment while deploy
             //SourceScenario.manualAdjustment;
@@ -609,7 +681,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
             //Get object Type code i.e RIN or RVO
             if (regulationType && objectType) {
-                aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'");
+                aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
+                {} as ILogUtility
+                );
                 const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
                 
                 // read RFS2DebitType
@@ -785,7 +859,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }//if (oRegObjectCateory
             }//if (regulationType
             if (aFinalData.length > 0) {
-                await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData);
+                await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData,logObjectID);
             }
             return ODataRequest.data;
         })
@@ -802,7 +876,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return oRegulationTransactionTypeTsData;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
-            const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('')
+            const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('',{} as ILogUtility)
             return oRegulaionObjectType.data;
         })
         this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
@@ -844,6 +918,79 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //             // jwt: sJWT
         //         }));
         // })
+
+        // this.on('sendMessage', async () => {
+        //     // const { message } = req.data;
+        //     await messaging.emit('sap/dev/1/zcom/Renewable/RaiseEvent/v1', {
+        //         "type":"zcom.Renewable.RaiseEvent.v1",
+        //         "specversion":"1.0",
+        //         "source":"/default/sap.s4.custom/DN1CLNT300",
+        //         "id":"332351c2-6acc-1edf-8bc5-8a853f66cb82",
+        //         "time":"2024-06-19T11:08:59Z",
+        //         "datacontenttype":"application/json",
+        //         "data":
+        //         {
+        //           "MaterialUUID":"00000000-0000-0000-0000-000000000000",
+        //           "RenewableMaterial":"300003",
+        //           "RenewableEventType":"GM-CR-ET",
+        //           "RenewableFuelCategory":"GS",
+        //           "RenewableTransactionType":"PROD",
+        //           "RegulationGroupName":"R001",
+        //           "RegulationMateGroup":"M001",
+        //           "_RenewableContract":
+        //           [],
+        //           "_RenewableDeal":
+        //           [],
+        //           "_RenewableDelivery":
+        //           [],
+        //           "_RenewableMaterialDocument":
+        //           [
+        //            {
+        //             "RenewableMaterial":"300003",
+        //             "RenewableEventType":"WA",
+        //             "RenwableMaterialDocument":"4900000071",
+        //             "RenwableMaterialDocumentItem":"1",
+        //             "DocumentType":"",
+        //             "MovementType":"101",
+        //             "Quantity":1.000,
+        //             "UnitOfMeasure":"UG6"
+        //            }
+        //           ],
+        //           "_RenewableNominationData":
+        //           [],
+        //           "_RenewableProductionOrder":
+        //           [
+        //            {
+        //             "RenewableMaterial":"300003",
+        //             "RenewableEventType":"WA",
+        //             "RenwableProductionOrder":"",
+        //             "RenwableProductionOrderItem":"0",
+        //             "DocumentType":"",
+        //             "MovementType":"101",
+        //             "Quantity":1.000,
+        //             "UnitOfMeasure":"UG6"
+        //            }
+        //           ],
+        //           "_RenewablePurchaseOrder":
+        //           [],
+        //           "_RenewableSalesOrder":
+        //           [],
+        //           "_RenewableTicketData":
+        //           []
+        //         }
+        //         });
+        //     return 'Message sent to Event Mesh';
+        // })
+
+        this.after("CREATE", 'RegulationComplianceTransaction', async (data,req) => {
+           debugger;
+            // console.log("debugging")
+            for (let index = 0; index < data.length; index++) {
+                const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);
+                data[index].objectId = oObjectID;
+            }
+        })
+
         this.on('READ', 'GetFuelSubCategory', async () => {
             const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('');
             return oFuelSubCategory.data;

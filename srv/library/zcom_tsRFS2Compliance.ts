@@ -4,29 +4,33 @@ import { oRegulationComplianceBaseInstance } from '../library/zcom_tsRegulationC
 import { ILogUtility } from '../library/interfaces/zcom_tsRegulationComplicanceInterface';
 
 class oRFS2ComplianceClass {
-    async addRegulationCompliances(data:RegulationComplianceTransaction[]){
+    async addRegulationCompliances(data:RegulationComplianceTransaction[],logObjectID:string){
         const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction');
         const srv = await cds.connect.to ('RegulationComplianceTransactionService');
-        let postMessage: string = '', successErrorFlag : string = 'S';
+        let postMessage: string = "", successErrorFlag : string = "S", technicalMessage: string = "";
+        var TextBundle = require('@sap/textbundle').TextBundle;
+        var bundle = new TextBundle('test/properties/i18n', 'en_EN');
         try {
-            await srv.post(RegulationComplianceTransaction, data);
-            postMessage = "RINS Created Successfully";
+            await srv.post('RegulationComplianceTransaction', data);
+            // postMessage = bundle.getText("RINSCreatedSuccessfully");
             
         } catch (error) {
             console.log(error);
-            postMessage = "Error during inserting data";
+            // postMessage = bundle.getText("ErrorDuringInsertingData");
             successErrorFlag = "E";
+            technicalMessage = error as string;
         }
         data.forEach(element => {
             if(element.objectId){
                 const oLogData: ILogUtility = {
-                    object: element.objectId.toString(),
+                    object: logObjectID,
                     message: postMessage,
                     messageType: successErrorFlag,
                     regulationType: element.regulationType as ILogUtility["regulationType"],
                     regulationSubObjectType: element.objectType as ILogUtility["regulationSubObjectType"], //'RVO',
                     applicationModule: element.regulationType as ILogUtility["applicationModule"], //'RFS2',
-                    applicationSubModule: element.subObjectScenario as ILogUtility["applicationSubModule"] //'RFS2_RVO'
+                    applicationSubModule: element.subObjectScenario as ILogUtility["applicationSubModule"], //'RFS2_RVO'
+                    technicalMessage: technicalMessage
                 };
                 oRegulationComplianceBaseInstance.addLog(oLogData);
             }
