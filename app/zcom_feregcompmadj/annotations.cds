@@ -301,33 +301,15 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                     ValueListProperty : 'material',
                 },
                 {
-                    $Type : 'Common.ValueListParameterIn',
-                    ValueListProperty : 'regulationType/regulationType',
+                    $Type : 'Common.ValueListParameterOut',
+                    ValueListProperty : 'regulationType_regulationType',
                     LocalDataProperty : regulationType,
                 },
             ],
-            Label : 'RVO Material',
+            Label : '{i18n>RVOMaterial}',
         },
-        Common.ValueListWithFixedValues : false
+        Common.ValueListWithFixedValues : true
 )};
-annotate service.MaintainRenewableMaterialConfiguration with @(
-    UI.PresentationVariant #vh_ManualAdjRegulationComplianceTransaction_sourceOrgCompanyMaterialNumber : {
-        $Type : 'UI.PresentationVariantType',
-        SortOrder : [
-            {
-                $Type : 'Common.SortOrderType',
-                Property : material,
-                Descending : false,
-            },
-        ],
-    }
-);
-annotate service.MaintainRenewableMaterialConfiguration with {
-    material @Common.Text : {
-            $value : description,
-            ![@UI.TextArrangement] : #TextFirst,
-        }
-};
 annotate service.ManualAdjRegulationComplianceTransaction with {
     regulationCompanyName @(Common.ValueList : {
             $Type : 'Common.ValueListType',
@@ -479,21 +461,21 @@ annotate service.GetUOM with {
         ![@UI.TextArrangement] : #TextFirst,
     }
 };
-// annotate service.ManualAdjRegulationComplianceTransaction with {
-//     fuelUnitofMeasurement @(Common.ValueList : {
-//             $Type : 'Common.ValueListType',
-//             CollectionPath : 'GetUOM',
-//             Parameters : [
-//                 {
-//                     $Type : 'Common.ValueListParameterInOut',
-//                     LocalDataProperty : fuelUnitofMeasurement,
-//                     ValueListProperty : 'category',
-//                 },
-//             ],
-//             Label : '{i18n>UoM}',
-//         },
-//         Common.ValueListWithFixedValues : true
-// )};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    fuelUnitofMeasurement @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetUOM',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : fuelUnitofMeasurement,
+                    ValueListProperty : 'category',
+                },
+            ],
+            Label : '{i18n>UoM}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
 annotate service.ManualAdjRegulationComplianceTransaction with {
     objectType @(Common.ValueList : {
             $Type : 'Common.ValueListType',
