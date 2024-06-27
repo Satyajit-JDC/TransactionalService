@@ -2,6 +2,11 @@
 ###
 GET http://localhost:4004/odata/v4/regulation-compliance-transaction/RegulationComplianceTransaction 
 
+# Create Message on Event Mesh
+###
+POST http://localhost:4004/odata/v4/regulation-compliance-transaction/sendMessage
+Content-Type: application/json
+
 
 # Call Action processEvent 
 ###
