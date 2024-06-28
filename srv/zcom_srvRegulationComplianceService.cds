@@ -33,4 +33,30 @@ service RegulationComplianceTransactionService {
     entity GetImpact as projection on master.Impact;
     entity GetFuelSubCategory as projection on master.FuelSubCategory;
     entity GetMovementType as projection on master.MaintainMovementType;
+    entity GetTransactionType as projection on master.MaintainTransactionType;
+
+    // CDs View for aggregating Regulation Quantity by Plant
+    @cds.persistence.skip
+    define view MaintainWorkplaceAgggregationByPlantView as select from RegulationComplianceTransaction {
+    sourceOrgCompanyPlant,
+    regulationQuantity,
+    sum(regulationQuantity) as TotalRegQuantityByPlant:Integer
+    } group by sourceOrgCompanyPlant;
+
+   // CDs View for aggregating Regulation Quantity by Month
+   @cds.persistence.skip
+    define view MaintainWorkplaceAgggregationByMonthView as select from RegulationComplianceTransaction {
+    renewablesDocumentMonth,
+    regulationQuantity,
+    sum(regulationQuantity) as TotalRegQuantityByMonth:Integer
+    } group by renewablesDocumentMonthDes;
+
+   // CDS View for aggregating Regulation Quantity by Category
+   @cds.persistence.skip
+    define view MaintainWorkplaceAgggregationByCategoryView as select from RegulationComplianceTransaction {
+    rfs2ObligationType,
+    regulationQuantity,
+    sum(regulationQuantity) as TotalRegQuantityByCategory:Integer
+    } group by rfs2ObligationTypeDesc;
+
 }
