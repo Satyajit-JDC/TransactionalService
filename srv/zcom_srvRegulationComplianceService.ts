@@ -1005,8 +1005,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
 
         this.on('READ', 'GetFuelSubCategory', async (req) => {
-            // const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
-            {} as ILogUtility);
+            //const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
+           // {} as ILogUtility);
             // return oFuelSubCategory.data;
             const service = await cds.connect.to('RegulationComplianceMasterService');
             return await service.run(req.query);
