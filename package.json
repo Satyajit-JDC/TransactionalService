@@ -16,6 +16,7 @@
     "@sap-cloud-sdk/resilience": "^3.15.0",
     "@sap-cloud-sdk/util": "^3.15.0",
     "@sap/cds-hana": "^2",
+    "@sap/textbundle": "^5.1.0",
     "@sap/xb-msg-amqp-v100": "^0.9.58",
     "@sap/xssec": "^3",
     "@types/global-npm": "^0.4.4",
@@ -54,6 +55,7 @@
   "scripts": {
     "start": "cds-serve",
     "start-service:ts": "cds-ts run --with-mocks --in-memory",
+    "start-service-hybrid:ts": "cds-ts watch --profile hybrid",
     "build:cf": "npm run build:cds && npm run cleanup:ts && npm run build:ts",
     "build:ts": "tsc",
     "build:cds": "cds build --production",

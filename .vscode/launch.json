@@ -33,7 +33,7 @@
       }
     },
     {
-      "name": "Run zcom_capRegulationComplianceTransactionalService-4",
+      "name": "Run TransactionalService",
       "command": "cds-ts watch --profile hybrid",
       "request": "launch",
       "type": "node-terminal",
@@ -45,7 +45,7 @@
       "envFile": "${workspaceFolder}/.env4",
       "env": {
         "NODE_ENV": "development",
-        "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/CHS_JDC_Project/zcom_capRegulationComplianceTransactionalService\\\",\\\"profileName\\\":\\\"development\\\"}\"}"
+        "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/TransactionalService\\\",\\\"profileName\\\":\\\"development\\\"}\"}"
       }
     }
   ]

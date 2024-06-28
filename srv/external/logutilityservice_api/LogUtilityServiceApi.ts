@@ -174,6 +174,13 @@ export class LogUtilityServiceApi<
       true,
       true
     >;
+    TECHNICAL_MESSAGE: OrderableEdmTypeField<
+      LogUtilityService<DeSerializers>,
+      DeSerializersT,
+      'Edm.String',
+      true,
+      true
+    >;
     ALL_FIELDS: AllFields<LogUtilityService<DeSerializers>>;
   };
 
@@ -274,6 +281,15 @@ export class LogUtilityServiceApi<
          */
         APPLICATION_SUB_MODULE: fieldBuilder.buildEdmTypeField(
           'applicationSubModule',
+          'Edm.String',
+          true
+        ),
+        /**
+         * Static representation of the {@link technicalMessage} property for query construction.
+         * Use to reference this property in query operations such as 'select' in the fluent request API.
+         */
+        TECHNICAL_MESSAGE: fieldBuilder.buildEdmTypeField(
+          'technicalMessage',
           'Edm.String',
           true
         ),
