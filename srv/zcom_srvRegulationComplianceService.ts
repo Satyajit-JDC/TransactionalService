@@ -1,4 +1,5 @@
 import cds from '@sap/cds';
+import { Request } from '@sap/cds';
 import { oRFS2ComplianceInstance } from './library/zcom_tsRFS2Compliance';
 import { oRegulationComplianceBaseInstance } from './library/zcom_tsRegulationComplianceBase';
 
@@ -14,6 +15,7 @@ import {
 import {
     MaintainRenewableMaterialConfiguration
 } from './external/regulationcompliancemasterservice_api';
+import { queryObjects } from 'v8';
 import { ILogUtility } from './library/interfaces/zcom_tsRegulationComplicanceInterface';
 
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
@@ -896,10 +898,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
         //     return oManualAdjustment;
         // })
-        this.on('READ', 'GetFuelCategory', async () => {
-            const oFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory('',
+        this.on('READ', 'GetFuelCategory', async (req:Request) => {
+            const service = await cds.connect.to('RegulationComplianceMasterService',
             {} as ILogUtility);
-            return oFuelCategory.data;
+            return await service.run(req.query);
         })
         this.on('READ', 'GetReasonCode', async () => {
             const oReasonCode = await oRegulationComplianceBaseInstance.getAdjustmentReasonCode();
@@ -1002,15 +1004,21 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             }
         })
 
-        this.on('READ', 'GetFuelSubCategory', async () => {
-            const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
+        this.on('READ', 'GetFuelSubCategory', async (req) => {
+            // const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
             {} as ILogUtility);
-            return oFuelSubCategory.data;
+            // return oFuelSubCategory.data;
+            const service = await cds.connect.to('RegulationComplianceMasterService');
+            return await service.run(req.query);
         })
         this.on('READ', 'GetMovementType', async () => {
             const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('',
             {} as ILogUtility);
             return oMovementTypes.data;
+        })
+        this.on('READ', 'GetTransactionType', async () => {
+            const oTransactionTypes = await oRegulationComplianceBaseInstance.getTransactiontype('');
+            return oTransactionTypes;
         })
         
         return super.init()
