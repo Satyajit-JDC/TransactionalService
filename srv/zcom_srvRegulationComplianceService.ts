@@ -899,8 +899,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     return oManualAdjustment;
         // })
         this.on('READ', 'GetFuelCategory', async (req:Request) => {
-            const service = await cds.connect.to('RegulationComplianceMasterService',
-            {} as ILogUtility);
+            const service = await cds.connect.to('RegulationComplianceMasterService')
+           // {} as ILogUtility);
             return await service.run(req.query);
         })
         this.on('READ', 'GetReasonCode', async () => {
