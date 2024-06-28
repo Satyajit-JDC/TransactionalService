@@ -28,6 +28,7 @@ using {
     Rfs2ObligationType
 } from './types/zcom_schRegulationComplianceTypes';
 
+
 @EndUserText.label: 'Renewable Object Common Data'
 
 entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, ABTBenzeneAndSulphur, LCFS, CapAndTradeStructure, Valuation, managed {
@@ -115,4 +116,140 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
 entity AdjustmentBaseValuelist {
     adjustmentBase : AdjustmentBase @title: '{i18n>adjustmentBase}';
     descriptionAdj : String(20)     @title: '{i18n>adjustmentBasedesc}';
+}
+
+type EventData {
+    RenewableMaterial                  : String;
+    RenewableEventType                 : String;
+    RenewableFuelCategory              : String;
+    RenewableTransactionType           : String;
+    RegulationGroupName                : String;
+    RegulationMateGroup                : String;
+    MaterialDescription                : String;
+    _RenewableContract                 : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableContract               : String;
+        RenwableCotractItem            : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+    };
+    _RenewableDeal                     : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableDealDocument           : String;
+        RenwableDealItem               : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        AttachedIndicator              : String;
+        Dcode                          : String;
+        VintageYear                    : String;
+        Multiplier                     : String;
+        RINObligation                  : String;
+        RINsGenerator                  : String;
+        RINspriced                     : String;
+        QAPcertified                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+        RenewablePassRetainIndicator   : Boolean;
+        RenewableDealNumber            : String;
+        RenewableDcodeription          : String;
+        RenewableVintageYearription    : String;
+        RenewableRinMultiplierription  : String;
+        RenewableQapCertifiedription   : String;
+    };
+    _RenewableDelivery                 : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableDelivery               : String;
+        RenwableDeliveryItem           : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+    };
+    _RenewableMaterialDocument         : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableMaterialDocument       : String;
+        RenwableMaterialDocumentItem   : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Plant                          : String;
+        StorageLocation                : String;
+        CompanyCode                    : String;
+        DocumentDate                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+        RenewableMaterialDocDocDte     : String;
+        RenewableMaterialDocPostgDte   : String;
+        RenewableBillOfLading          : String;
+        RenewableReasonReasonCode      : String;
+        RenewableReversalPostingDate   : String;
+    };
+    _RenewableNominationData           : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableNomination             : String;
+        NominationKey                  : String;
+        RenwableNominationItem         : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+    };
+    _RenewableProductionOrder          : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableProductionOrder        : String;
+        RenwableProductionOrderItem    : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+        RenewableBusinessPartnerNumber : String;
+        RenewableBusinessPartnerDesc   : String;
+        RenewableIncoTerms1            : String;
+        RenewableIncoTerms2            : String;
+        RenewableContract              : String;
+        RenewableContractItem          : String;
+    };
+    _RenewablePurchaseOrder            : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwablePurchaseOrder          : String;
+        RenwablePurchaseOrderItem      : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+    };
+    _RenewableSalesOrder               : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableSalesOrder             : String;
+        RenwableSalesOrderItem         : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+    };
+    _RenewableTicketData               : {
+        RenewableMaterial              : String;
+        RenewableEventType             : String;
+        RenwableTicket                 : String;
+        RenwableTicketItem             : String;
+        Ticketkey                      : String;
+        TicketVersion                  : String;
+        TicketPurpose                  : String;
+        Tickettype                     : String;
+        ExternalTicketNumber           : String;
+        ExternalPositionNumber         : String;
+        DocumentType                   : String;
+        MovementType                   : String;
+        Quantity                       : String;
+        UnitOfMeasure                  : String;
+    }
 }

@@ -3,7 +3,7 @@ using {RegulationComplianceMasterService as master} from './external/RegulationC
 
 
 service RegulationComplianceTransactionService {    
-    action sendMessage();
+    action sendMessage(data: transaction.EventData);
     entity RegulationComplianceTransaction 
     @(Capabilities: {
         InsertRestrictions: {

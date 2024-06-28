@@ -1,9 +1,21 @@
 import cds from '@sap/cds';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { oRegulationComplianceBaseInstance } from '../library/zcom_tsRegulationComplianceBase';
-import { ILogUtility } from '../library/interfaces/zcom_tsRegulationComplicanceInterface';
+import { RegulationComplianceBaseClass } from '../library/zcom_tsRegulationComplianceBase';
+import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
 
-class oRFS2ComplianceClass {
+export class RFS2ComplianceClass {
+
+    // private elements
+
+    // public elements
+    public regulationComplianceBaseClass: RegulationComplianceBaseClass;
+
+    //-------- Start of RFS2 constructor ------------------
+    constructor(oRegulationComplianceBaseClassInstance:RegulationComplianceBaseClass){
+        this.regulationComplianceBaseClass = oRegulationComplianceBaseClassInstance;
+    }
+    //-------- End of RFS2 constructor ------------------
+
     async addRegulationCompliances(data:RegulationComplianceTransaction[],logObjectID:string){
         const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction');
         const srv = await cds.connect.to ('RegulationComplianceTransactionService');
@@ -32,12 +44,12 @@ class oRFS2ComplianceClass {
                     applicationSubModule: element.subObjectScenario as ILogUtility["applicationSubModule"], //'RFS2_RVO'
                     technicalMessage: technicalMessage
                 };
-                oRegulationComplianceBaseInstance.addLog(oLogData);
+                // oRegulationComplianceBaseInstance.addLog(oLogData);
             }
         });
     }
    
 }
 
-const oRFS2ComplianceInstance = new oRFS2ComplianceClass();
-export { oRFS2ComplianceInstance };
+// const oRFS2ComplianceInstance = new oRFS2ComplianceClass();
+// export { oRFS2ComplianceInstance };
