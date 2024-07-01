@@ -543,7 +543,7 @@ class RegulationComplianceBaseClass {
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
         // i18n.getRe
         return (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
-            .middleware(resilience({ retry: 3, circuitBreaker: true, timeout: 360000 }))
+            .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .execute({
                 destinationName: "dn1clnt300-BAS-RINS"
             }));

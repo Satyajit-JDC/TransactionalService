@@ -131,7 +131,7 @@
         "[hybrid]": {
           "credentials": {
             "path": "/sap/opu/odata4/sap/zapi_materialcharcs_r_o4/srvd_a2x/sap/zmaterialcharacteristics_r/0001",
-            "destination": "dn1clnt300-BAS-RINS"
+            "destination": "dn1clnt300-BAS-RINS"            
           }
         },
         "[production]": {
