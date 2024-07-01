@@ -13,6 +13,10 @@ import {
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
 import { ILogUtility } from '../library/interfaces/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
+// import { i18n } from '@sap/'
+import { Destination, getDestination } from '@sap-cloud-sdk/connectivity';
+import { Za_MaterialCharacteristics_R, materialcharacteristicsApi } from '../external/materialcharacteristics_api';
+import { destinationCache } from '@sap-cloud-sdk/connectivity/internal';
 // import { Impact, ObjectCategory } from '@cds-models';
 
 class RegulationComplianceBaseClass {
@@ -534,6 +538,16 @@ class RegulationComplianceBaseClass {
             .execute({
                 destinationName: "RegulationComplianceMasterService"
             });
+    }
+    async getFuelMaterialS4API(): Promise<Za_MaterialCharacteristics_R[]>{
+        const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
+        // i18n.getRe
+        return (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
+            .middleware(resilience({ retry: 3, circuitBreaker: true, timeout: 360000 }))
+            .execute({
+                destinationName: "dn1clnt300-BAS-RINS"
+            }));
+
     }
 
 }

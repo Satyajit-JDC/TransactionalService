@@ -1,7 +1,7 @@
 using {com.sap.chs.com.regulationcompliancetransaction as transaction} from '../db/zcom_schRegulationComplianceTransaction';
 using {RegulationComplianceMasterService as master} from './external/RegulationComplianceMasterService';
-
-
+// using {Za_}
+using {MaterialCharacteristics as s4h} from './external/MaterialCharacteristics';
 service RegulationComplianceTransactionService {
     action processEvent(eventData : many transaction.EventData);
 
@@ -34,14 +34,6 @@ service RegulationComplianceTransactionService {
             *,
             transactionCategory.category as categorytrans
         }
-
-        //         *,
-        //     transactionCategory.category as Category,
-        //     transactionCategory :  Association to master.TransactionCategory on transactionCategory.category = transactionCategory_category,
-        //     // {
-        //     //     "expand":
-        //     // }
-        // }
         ;
 
     entity TransactionType                          as projection on master.TransactionCategory;
@@ -52,4 +44,7 @@ service RegulationComplianceTransactionService {
     entity GetObjectCategory                        as projection on master.ObjectCategory;
     entity GetUOM                                   as projection on master.UOM;
     entity GetImpact                                as projection on master.Impact;
+
+    //S4 API 
+    entity GetFuelMaterialS4 as projection on s4h.ZA_MaterialCharacteristics_R;
 }

@@ -835,19 +835,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'TransactionType', async () => {
             const oImpact = await oRegulationComplianceBaseInstance.getTransactionTypeData();
             return oImpact;
-        })
-        // this.on('READ', 'MaterialCharacteristics', async (request) => {
-        //     debugger;
-        //     let sJWT: any ;
-        //     // sJWT = getJwtPair();
-        //     const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
-        //     return (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
-        //         .middleware(resilience({ retry: 3, circuitBreaker: true }))
-        //         .execute({
-        //             destinationName: "dn1clnt200-bas"
-        //             // jwt: sJWT
-        //         }));
-        // })
+        })        
         this.on('READ', 'GetFuelSubCategory', async () => {
             const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('');
             return oFuelSubCategory.data;
@@ -856,7 +844,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('');
             return oMovementTypes.data;
         })
-        
+        this.on('READ', 'GetFuelMaterialS4', async (request) => {
+            debugger;
+           const oFuelMat =  await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
+           return oFuelMat;
+        })
         return super.init()
     }
 }

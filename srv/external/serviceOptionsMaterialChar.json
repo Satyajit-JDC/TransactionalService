@@ -1,0 +1,7 @@
+{
+  "srv/external/MaterialCharacteristics.edmx": {
+    "packageName": "materialcharacteristics_api",
+    "directoryName": "materialcharacteristics_api",
+    "basePath": "/sap/opu/odata4/sap/zapi_materialcharcs_r_o4/srvd_a2x/sap/zmaterialcharacteristics_r/0001"
+  }
+}
