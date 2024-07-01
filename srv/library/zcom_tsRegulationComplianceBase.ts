@@ -2,7 +2,9 @@ import cds from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import {
     MaintainRenewableMaterialConfiguration, MaintainTransactionType, MaintainAdjustmentReasonCode, Uom,
-    Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView
+    Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView, MaintainRegulationObjecttype,
+    MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryImpact,
+    MaintainRegulationTransactionTypeTs, MaintainRegulationType
 } from '../external/regulationcompliancemasterservice_api';
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
@@ -16,7 +18,7 @@ import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
 // import { Impact, ObjectCategory } from '@cds-models';
 import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
-import { RFS2ConstantValues,destinationNames } from './utilities/zcom_tsConstants';
+import { RFS2ConstantValues, destinationNames, messageTypes } from './utilities/zcom_tsConstants';
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -28,18 +30,42 @@ export class RegulationComplianceBaseClass {
     public oRegulationDataIsReady!: Promise<unknown>;
     public oRFS2CreditData!: MaintainRegulationMaterialGroupView;
     public oRFS2DebitData!: MaintainRegulationMaterialGroupView;
+    public oMaintainRegulationObjecttype: MaintainRegulationObjecttype;
+    public aMaintainRegulationObjecttype: MaintainRegulationObjecttype[];
+    public oMaintainRegulationSubScenarioToScenarioType: MaintainRegulationSubScenarioToScenarioType;
+    public oMaintainMovementType: MaintainMovementType;
+    public aMaintainMovementType: MaintainMovementType[];
+    public oMaintainMovementTypeToTransactionCategoryImpact: MaintainMovementTypeToTransactionCategoryImpact;
+    public aMaintainMovementTypeToTransactionCategoryImpact: MaintainMovementTypeToTransactionCategoryImpact[];
+    public aMaintainRenewableMaterialConfiguration: MaintainRenewableMaterialConfiguration[];
+    public oMaintainRegulationTransactionTypeTs: MaintainRegulationTransactionTypeTs;
+    public oMaintainRegulationType: MaintainRegulationType;
+    public aMaintainRegulationType: MaintainRegulationType[];
+    public aMaintainTransactionType: MaintainTransactionType[];
 
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
-        
+
         // initialize the data
         this.oRFS2RegulationData = {} as MaintainRegulationGroupView;
+        this.oMaintainRegulationObjecttype = {} as MaintainRegulationObjecttype;
+        this.aMaintainRegulationObjecttype = [] as MaintainRegulationObjecttype[];
+        this.oMaintainRegulationSubScenarioToScenarioType = {} as MaintainRegulationSubScenarioToScenarioType;
+        this.oMaintainMovementType = {} as MaintainMovementType;
+        this.aMaintainMovementType = [] as MaintainMovementType[];
+        this.oMaintainMovementTypeToTransactionCategoryImpact = {} as MaintainMovementTypeToTransactionCategoryImpact;
+        this.aMaintainMovementTypeToTransactionCategoryImpact = [] as MaintainMovementTypeToTransactionCategoryImpact[];
+        this.aMaintainRenewableMaterialConfiguration = [] as MaintainRenewableMaterialConfiguration[];
+        this.oMaintainRegulationTransactionTypeTs = {} as MaintainRegulationTransactionTypeTs;
+        this.oMaintainRegulationType = {} as MaintainRegulationType;
+        this.aMaintainRegulationType = [] as MaintainRegulationType[];
+        this.aMaintainTransactionType = [] as MaintainTransactionType[];
 
         // regulation group present then set Regulation Type to class object
         if (oEventPayloadData.RegulationGroupName) {
-            this.oRegulationDataIsReady = new Promise( async (resolve) => {
-                await this.setRegulations(oEventPayloadData.RegulationGroupName);
+            this.oRegulationDataIsReady = new Promise(async (resolve) => {
+                await this.setRegulations();
                 resolve(undefined);
             });
         }
@@ -47,15 +73,14 @@ export class RegulationComplianceBaseClass {
     //-------- End of Base constructor ------------------
 
     // --------- Start of Setter methods ------------------
-    
     // set RFS2 Class Instance Object
     set setRFS2ComplianceClassObject(oRFS2ClassObject: RFS2ComplianceClass) {
         this._oRFS2Compliance = oRFS2ClassObject;
     }
 
     // method to set regulation to object
-    private async setRegulations(sRegulationGroup: string) {
-        if (sRegulationGroup) { // Regulation type available
+    async setRegulations() {
+        if (this.oEventPayloadData.RegulationGroupName) { // Regulation type available
             try {
                 // create object
                 const { maintainRegulationGroupViewApi } = regulationcompliancemasterserviceApi();
@@ -63,29 +88,33 @@ export class RegulationComplianceBaseClass {
                 // call master with cloud SDK
                 (await maintainRegulationGroupViewApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent("regulationGroup_regulationGroup eq '" + sRegulationGroup + "'")
+                        $filter: encodeURIComponent("regulationGroup_regulationGroup eq '" + this.oEventPayloadData.RegulationGroupName + "'")
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        if(oData.regulationType === RFS2ConstantValues.RFS2){   // RFS2 compliances
+                        if (oData.regulationType === RFS2ConstantValues.RFS2) {   // RFS2 compliances
                             this.oRFS2RegulationData = oData;  //set data for RFS2 regulation
                         }
-                    });RFS2ConstantValues.RFS2
+                    }); RFS2ConstantValues.RFS2
             } catch (error) {
-
+                console.log(error);
+                // in case of S4 event log the message
+                if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                    this.addLog("FailedToReadRegulationGroupFromMasterData", error as string, messageTypes.error);
+                }
             }
         }
     }
 
     // set material group data and object category
-    async setRegulationMaterialGroup(){
+    async setRegulationMaterialGroup() {
         try {
-            if (this.oRFS2RegulationData.regulationType) {
+            if (this.oRFS2RegulationData) {
                 // create object
                 const { maintainRegulationMaterialGroupViewApi } = regulationcompliancemasterserviceApi();
-                
+
                 // call master with cloud SDK
                 (await maintainRegulationMaterialGroupViewApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -95,13 +124,13 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         // RFS2 
-                        if(this.oRFS2RegulationData.regulationType === RFS2ConstantValues.RFS2){
+                        if (this.oRFS2RegulationData.regulationType === RFS2ConstantValues.RFS2) {
                             // RFS2 Credit Scenario
-                            if(oData.category === RFS2ConstantValues.credit){
+                            if (oData.category === RFS2ConstantValues.credit) {
                                 this.oRFS2CreditData = oData;
                             }
                             // RFS2 Debit Scenario
-                            if(oData.category === RFS2ConstantValues.debit){
+                            if (oData.category === RFS2ConstantValues.debit) {
                                 this.oRFS2DebitData = oData;
                             }
                         }
@@ -109,75 +138,204 @@ export class RegulationComplianceBaseClass {
             }
         } catch (error) {
             console.log(error);
-            // oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadObjectCategoryFromMasterData", error as string, messageTypes.error);
+            }
         }
     }
 
-    // --------- End of Setter methods ------------------
-
-    async getRegulations(sFilters: string, oLogData: ILogUtility): Promise<IMaintainRegulationGroupView> {
-        const aRegulationGroupMAP = { map: {}, regulationType_regulationType: "", regulationType: "", regulationTypeRegulationType: "", data: [] } as IMaintainRegulationGroupView;
-        if (sFilters) {
-            try {
-                const { maintainRegulationGroupViewApi } = regulationcompliancemasterserviceApi(),
-                    encodedFilterValue = encodeURIComponent(sFilters);
-                (await maintainRegulationGroupViewApi.requestBuilder().getAll()
+    // set sub scenario data
+    async setRgulationSubScnario() {
+        try {
+            if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+                const sFilterSubObjectScenario = this.oRFS2RegulationData.regulationType 
+                    + " and transactionSourceScenario_category eq 'GM' and '" 
+                    + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'",
+                    { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
+                
+                    // call Cloud SDK
+                (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodedFilterValue
+                        $filter: encodeURIComponent(sFilterSubObjectScenario)
+                    })
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.oMaintainRegulationSubScenarioToScenarioType = oData;
+                    });
+            }
+        } catch (error) {
+            console.log(error);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadRegulationSubScenarioToScenarioFromMasterData", error as string, messageTypes.error);
+            }
+        }
+    }
+
+    // set reg object type data
+    async setRegulationObjectType() {
+        const { maintainRegulationObjecttypeApi } = regulationcompliancemasterserviceApi();
+        try {
+            if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
+                                "objectCategory_category eq '" + 
+                                (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
+                    
+                (await maintainRegulationObjecttypeApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        if (oData.regulationType && oData.regulationGroupRegulationGroup) {
-                            aRegulationGroupMAP.map[oData.regulationGroupRegulationGroup] = oData;
-                            const sRegulationType_regulationType = "regulationType_regulationType eq '" + oData.regulationType + "'";
-                            const sRegulationType = "regulationType eq '" + oData.regulationType + "'";
-                            const sRegulationTypeRegulationType = "regulationTypeRegulationType eq '" + oData.regulationType + "'";
-                            aRegulationGroupMAP.regulationType_regulationType = aRegulationGroupMAP.regulationType_regulationType ? aRegulationGroupMAP.regulationType_regulationType + " or " + sRegulationType_regulationType : sRegulationType_regulationType;
-                            aRegulationGroupMAP.regulationType = aRegulationGroupMAP.regulationType ? aRegulationGroupMAP.regulationType + " or " + sRegulationType : sRegulationType;
-                            aRegulationGroupMAP.regulationTypeRegulationType = aRegulationGroupMAP.regulationTypeRegulationType ? aRegulationGroupMAP.regulationTypeRegulationType + " or " + sRegulationTypeRegulationType : sRegulationTypeRegulationType;
-                            aRegulationGroupMAP.data.push(oData);
-                        }
+                        this.oMaintainRegulationObjecttype = oData;
                     });
-            } catch (error) {
-                console.log(error);
-                // let oLogData: ILogUtility = {
-                //     object: "",
-                //     message: "Failed to read MaintainRegulationGroupView for " + sFilters,
-                //     messageType: "E",
-                //     regulationType: "RFS2",
-                //     regulationSubObjectType: 'RVO',
-                //     applicationModule: 'RFS2',
-                //     applicationSubModule: 'RFS2_RVO'
-                // }
-                oLogData.technicalMessage = error as string;
-                // oRegulationComplianceBaseInstance.addLog(oLogData);
+            } else {
+                (await maintainRegulationObjecttypeApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.aMaintainRegulationObjecttype.push(oData);
+                    });
+            }
+        } catch (error) {
+            console.log(error);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadObjectTypeFromMasterData", error as string, messageTypes.error);
             }
         }
-        return aRegulationGroupMAP;
     }
 
-    async getRegulationTypes(sFilters: string, oLogData: ILogUtility): Promise<IMaintainRegulationType> {
-        const { maintainRegulationTypeApi } = regulationcompliancemasterserviceApi(),
-            aRegulationTypeMAP = { map: {}, data: [] } as IMaintainRegulationType;
+    // set movement type data
+    async setMovementType() {
+        const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (sFilters) {
-                const encodedFilterValue = encodeURIComponent(sFilters);
-                // const encodedFilterValue = encodeURIComponent("regulationType eq 'RFS2'");
-                // const data = 
-                (await maintainRegulationTypeApi.requestBuilder().getAll()
+            if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype) {
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
+                                "objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "'";
+
+                (await maintainMovementTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodedFilterValue
+                        $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
-                        if (oData.regulationType) {
-                            aRegulationTypeMAP.map[oData.regulationType] = oData;
-                            aRegulationTypeMAP.data.push(oData);
-                        }
+                        this.oMaintainMovementType = oData;
+                    });
+            } else {
+                (await maintainMovementTypeApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).forEach((oData) => {
+                        this.aMaintainMovementType.push(oData);
+                    });
+            }
+        } catch (error) {
+            console.log(error);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadMovementTypeFromMasterData", error as string, messageTypes.error);
+            }
+        }
+    }
+
+    // set mvt type relevance data
+    async setMvtTypeTransationRelevance() {
+        const aMvtTypeTransactionCatMappingMAP = { map: {}, transactionCategoryCategory: "" } as IMaintainMovementTypeToTransactionCategoryImpact;
+        const { maintainMovementTypeToTransactionCategoryImpactApi } = regulationcompliancemasterserviceApi();
+        try {
+            if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oMaintainMovementType) {
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
+                                "objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "'" + 
+                                "movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
+                                
+                (await maintainMovementTypeToTransactionCategoryImpactApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent(sFilters)
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.oMaintainMovementTypeToTransactionCategoryImpact = oData;
+                    });
+            } else {
+                (await maintainMovementTypeToTransactionCategoryImpactApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.aMaintainMovementTypeToTransactionCategoryImpact.push(oData);
+                    });
+            }
+        } catch (error) {
+            console.log(error);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadMovementTypeRelevanceFromMasterData", error as string, messageTypes.error);
+            }
+        }
+        return aMvtTypeTransactionCatMappingMAP;
+    }
+
+    // set mat config data
+    async setMaterialConfiguration() {
+        const { maintainRenewableMaterialConfigurationApi } = regulationcompliancemasterserviceApi();
+        try {
+            if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oEventPayloadData._RenewableMaterialDocument.DocumentDate) {
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
+                                " and objectType_code eq '"+this.oMaintainRegulationObjecttype.objectTypeCode+"' and year eq " + 
+                                new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString() + "'";
+                
+                await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent(sFilters)
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    });
+            } else {
+                await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    });
+            }
+        } catch (error) {
+            console.log(error);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadMaterialConfigurationFromMasterData", error as string, messageTypes.error);
+            }
+        }
+    }
+
+    // set regulation type
+    async setRegulationTypes() {
+        const { maintainRegulationTypeApi } = regulationcompliancemasterserviceApi();
+        try {
+            if (this.oRFS2RegulationData) {
+                const sFilters = "regulationType eq '"+this.oRFS2RegulationData.regulationType+"'";
+                
+                (await maintainRegulationTypeApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent(sFilters)
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).forEach((oData) => {
+                        this.oMaintainRegulationType = oData;
                     });
             }
             else {
@@ -186,303 +344,62 @@ export class RegulationComplianceBaseClass {
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
-                        if (oData.regulationType) {
-                            aRegulationTypeMAP.map[oData.regulationType] = oData;
-                            aRegulationTypeMAP.data.push(oData);
-                        }
+                        this.aMaintainRegulationType.push(oData);
                     });
             }
         } catch (error) {
             console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aRegulationTypeMAP;
-    }
-
-    async getRegulationMaterialGroup(sFilters: string, oLogData: ILogUtility): Promise<IMaintainRegulationMaterialGroupView> {
-        const aRegulartionMaterialGroupMAP = { map: {}, objectCategory: "" } as IMaintainRegulationMaterialGroupView;
-        try {
-            if (sFilters) {
-                const { maintainRegulationMaterialGroupViewApi } = regulationcompliancemasterserviceApi();
-                const encodedFilterValue = encodeURIComponent(sFilters);
-                (await maintainRegulationMaterialGroupViewApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).forEach((oData) => {
-                        if (oData.category && oData.regulationMaterialGroupRegulationMaterialGroup && oData.regulationType) {
-                            aRegulartionMaterialGroupMAP.map[oData.regulationType] = oData;
-                            const sObjectCategory = "objectCategory eq '" + oData.category + "'";
-                            aRegulartionMaterialGroupMAP.objectCategory = aRegulartionMaterialGroupMAP.objectCategory ? aRegulartionMaterialGroupMAP.objectCategory + " or " + sObjectCategory : sObjectCategory;
-                            const sObjectCategory_category = "objectCategory_category eq '" + oData.category + "'";
-                            aRegulartionMaterialGroupMAP.objectCategory_category = aRegulartionMaterialGroupMAP.objectCategory_category ? aRegulartionMaterialGroupMAP.objectCategory + " or " + sObjectCategory_category : sObjectCategory_category;
-                        }
-                    });
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadRegulationTypeFromMasterData", error as string, messageTypes.error);
             }
-        } catch (error) {
-            console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
         }
-        return aRegulartionMaterialGroupMAP;
     }
 
-    async getRegulationObjectType(sFilters: string, oLogData: ILogUtility): Promise<IMaintainRegulationObjecttype> {
-        const aRegulartionObjectTypeMAP = { map: {}, objectType: "", data: [] } as IMaintainRegulationObjecttype,
-            { maintainRegulationObjecttypeApi } = regulationcompliancemasterserviceApi();
+    // set Regulation Transaction Types data
+    async setRegulationTransactionTypeTs() {
         try {
-            if (sFilters) {
-                const encodedFilterValue = encodeURIComponent(sFilters);
-                (await maintainRegulationObjecttypeApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectCategoryCategory && oData.objectTypeCode) {
-                            aRegulartionObjectTypeMAP.map[oData.regulationTypeRegulationType + oData.objectCategoryCategory] = oData;
-                            const sObjectType = "objectType_code eq '" + oData.objectTypeCode + "'";
-                            aRegulartionObjectTypeMAP.objectType = aRegulartionObjectTypeMAP.objectType = aRegulartionObjectTypeMAP.objectType ? aRegulartionObjectTypeMAP.objectType + " or " + sObjectType : sObjectType;
-                            aRegulartionObjectTypeMAP.data.push(oData);
-                        }
-                    });
-            } else {
-                const { maintainRegulationObjecttypeApi } = regulationcompliancemasterserviceApi();
-                (await maintainRegulationObjecttypeApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectCategoryCategory && oData.objectTypeCode) {
-                            aRegulartionObjectTypeMAP.map[oData.regulationTypeRegulationType + oData.objectCategoryCategory] = oData;
-                            aRegulartionObjectTypeMAP.data.push(oData);
-                        }
-                    });
-            }
-        } catch (error) {
-            console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aRegulartionObjectTypeMAP;
-    }
-
-    async getMovementType(sFilters: string, oLogData: ILogUtility): Promise<IMaintainMovementType> {
-        const aMovementTypeMAP = { map: {}, movementTypeMovementType: "", movementType_movementType: "", data: [] } as IMaintainMovementType;
-        try {
-            if (sFilters) {
-                const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi(),
-                    encodedFilterValue = encodeURIComponent(sFilters);
-                (await maintainMovementTypeApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectTypeCode) {
-                            aMovementTypeMAP.map[oData.regulationTypeRegulationType + oData.objectTypeCode] = oData;
-                            const sMovementTypeMovementType = "movementTypeMovementType eq '" + oData.movementType + "'";
-                            aMovementTypeMAP.movementTypeMovementType = aMovementTypeMAP.movementTypeMovementType ? aMovementTypeMAP.movementTypeMovementType + " or " + sMovementTypeMovementType : sMovementTypeMovementType;
-                            const sMovementType_movementType = "movementType_movementType eq '" + oData.movementType + "'";
-                            aMovementTypeMAP.movementType_movementType = aMovementTypeMAP.movementType_movementType ? aMovementTypeMAP.movementType_movementType + " or " + sMovementType_movementType : sMovementType_movementType;
-                            aMovementTypeMAP.data.push(oData);
-                        }
-                    });
-            } else {
-                const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi();
-                (await maintainMovementTypeApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectTypeCode) {
-                            aMovementTypeMAP.map[oData.regulationTypeRegulationType + oData.objectTypeCode] = oData;
-                            aMovementTypeMAP.data.push(oData);
-                        }
-                    });
-            }
-        } catch (error) {
-            console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aMovementTypeMAP;
-    }
-
-    async readMvtTypeTransationRelevance(sFilters: string, oLogData: ILogUtility): Promise<IMaintainMovementTypeToTransactionCategoryImpact> {
-        const aMvtTypeTransactionCatMappingMAP = { map: {}, transactionCategoryCategory: "" } as IMaintainMovementTypeToTransactionCategoryImpact;
-        try {
-            if (sFilters) {
-                const { maintainMovementTypeToTransactionCategoryImpactApi } = regulationcompliancemasterserviceApi(),
-                    encodedFilterValue = encodeURIComponent(sFilters);
-                (await maintainMovementTypeToTransactionCategoryImpactApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectTypeCode && oData.movementTypeMovementType) {
-                            aMvtTypeTransactionCatMappingMAP.map[oData.regulationTypeRegulationType + oData.objectTypeCode + oData.movementTypeMovementType] = oData;
-                            const sTransactionCategoryCategory = "transactionCategory_category eq '" + oData.transactionCategoryCategory + "'";
-                            aMvtTypeTransactionCatMappingMAP.transactionCategoryCategory = aMvtTypeTransactionCatMappingMAP.transactionCategoryCategory ? aMvtTypeTransactionCatMappingMAP.transactionCategoryCategory + " or " + sTransactionCategoryCategory : sTransactionCategoryCategory;
-                        }
-                    });
-            } else {
-                const { maintainMovementTypeToTransactionCategoryImpactApi } = regulationcompliancemasterserviceApi();
-                (await maintainMovementTypeToTransactionCategoryImpactApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        if (oData) {
-                            aMvtTypeTransactionCatMappingMAP.data.push(oData);
-                        }
-                    });
-            }
-        } catch (error) {
-            console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aMvtTypeTransactionCatMappingMAP;
-    }
-
-    async getRgulationSubScnario(sFilters: string, oLogData: ILogUtility): Promise<IMaintainRegulationSubscenariotoScenario> {
-        const aMaintainRegulationSubscenariotoScenarioMAP = { map: {}, data: [] } as IMaintainRegulationSubscenariotoScenario;
-        try {
-            if (sFilters) {
-                const { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi(),
-                    encodedFilterValue = encodeURIComponent(sFilters);
-                (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    })
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectCategoryCategory) {
-                            aMaintainRegulationSubscenariotoScenarioMAP.map[oData.regulationTypeRegulationType + oData.transactionSourceScenarioCategory + oData.objectCategoryCategory] = oData;
-                            aMaintainRegulationSubscenariotoScenarioMAP.data.push(oData);
-                        }
-                    });
-            } else {
-                const { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
-                (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.objectCategoryCategory) {
-                            aMaintainRegulationSubscenariotoScenarioMAP.map[oData.regulationTypeRegulationType + oData.objectCategoryCategory] = oData;
-                            aMaintainRegulationSubscenariotoScenarioMAP.data.push(oData);
-                        }
-                    });
-            }
-        } catch (error) {
-            console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aMaintainRegulationSubscenariotoScenarioMAP;
-    }
-
-    async getMaterialConfiguration(sFilters: string, oLogData: ILogUtility): Promise<MaintainRenewableMaterialConfiguration[]> {
-        let aMaintainRenewableMaterialConfiguration = [] as MaintainRenewableMaterialConfiguration[];
-        try {
-            if (sFilters) {
-                const { maintainRenewableMaterialConfigurationApi } = regulationcompliancemasterserviceApi();
-                const encodedFilterValue = encodeURIComponent(sFilters);
-                // const data = 
-                aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    });
-            } else {
-                const { maintainRenewableMaterialConfigurationApi } = regulationcompliancemasterserviceApi();
-                aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    });
-            }
-        } catch (error) {
-            console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aMaintainRenewableMaterialConfiguration;
-    }
-
-    async getTransactiontype(sFilters: string): Promise<MaintainTransactionType[]> {
-        const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
-        let aMaintainTransactionType = [] as MaintainTransactionType[];
-        try {
-            if (sFilters) {
-                const encodedFilterValue = encodeURIComponent(sFilters);
-                // const data = 
-                aMaintainTransactionType = await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
-                    .addCustomQueryParameters({
-                        $filter: encodedFilterValue
-                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    });
-            } else {
-                aMaintainTransactionType = await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                    .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
-                    });
-            }
-        } catch (error) {
-            console.log(error);
-            // oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
-        }
-        return aMaintainTransactionType;
-    }
-
-    async getRegulationTransactionTypeTs(sFilters: string, oLogData: ILogUtility): Promise<IMaintainRegulationTransactionTypeTs> {
-        const aIMaintainRegulationTransactionTypeTsMAP = { map: {} } as IMaintainRegulationTransactionTypeTs;
-        try {
-            if (sFilters) {
+            if (this.oRFS2RegulationData) {
                 const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi(),
-                    encodedFilterValue = encodeURIComponent(sFilters);
+                    sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
+                                "transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory + "'";
+                
                 (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodedFilterValue
+                        $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        if (oData.regulationTypeRegulationType && oData.transactionCategoryCategory) {
-                            aIMaintainRegulationTransactionTypeTsMAP.map[oData.regulationTypeRegulationType + oData.transactionCategoryCategory] = oData;
-                        }
-                    });
+                        this.oMaintainRegulationTransactionTypeTs = oData;
+                });
             }
         } catch (error) {
             console.log(error);
-            oLogData.technicalMessage = error as string;
-            // oRegulationComplianceBaseInstance.addLog(oLogData);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadRegulationTransactionTypesFromMasterData", error as string, messageTypes.error);
+            }
         }
-        return aIMaintainRegulationTransactionTypeTsMAP;
+    }
+    
+    // set Transaction Type Data
+    async setTransactiontype() {
+        const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
+        try {
+            this.aMaintainTransactionType = await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
+                .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                .execute({
+                    destinationName: destinationNames.regulationComplianceMasterService
+            });
+        } catch (error) {
+            console.log(error);
+            // in case of S4 event log the message
+            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                this.addLog("FailedToReadTransactionTypeFromMasterData", error as string, messageTypes.error);
+            }
+        }
     }
 
     async getRFS2DebitType(sFilters: string, oLogData: ILogUtility): Promise<IRfs2DebitType> {
@@ -626,8 +543,28 @@ export class RegulationComplianceBaseClass {
         }
     }
 
-    async addLog(LogUtilityService: ILogUtility) {
-        if (LogUtilityService) {
+    async addLog(message: string, technicalMessage: string, messageType: string) {
+        if (message && 
+            messageType && 
+            this.oEventPayloadData.RenewableEventType && 
+            this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument &&
+            this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem
+        ) {
+            const logObjectID = this.oEventPayloadData.RenewableEventType + 
+                                this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument +
+                                this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem;
+
+            const oLogData: ILogUtility = {
+                object: logObjectID,
+                message: message,
+                messageType: messageType,
+                regulationType: this.oRFS2RegulationData.regulationType as string,
+                regulationSubObjectType: this.oMaintainRegulationObjecttype.objectTypeCode as string,
+                applicationModule: this.oRFS2RegulationData.regulationType as string,
+                applicationSubModule: this.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory as string,
+                technicalMessage: technicalMessage
+            };
+
             const { logUtilityServiceApi } = logutilityserviceApi();
             const payload: LogUtilityService = logUtilityServiceApi.entityBuilder().fromJson(LogUtilityService);
             await logUtilityServiceApi.requestBuilder().create(payload).middleware(resilience({ retry: 3, circuitBreaker: true })).execute({
@@ -689,4 +626,6 @@ export class RegulationComplianceBaseClass {
                 destinationName: destinationNames.regulationComplianceMasterService
             });
     }
+
+    // --------- End of Setter methods ------------------
 }

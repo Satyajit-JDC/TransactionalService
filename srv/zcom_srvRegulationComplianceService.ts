@@ -1025,9 +1025,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'MaintainRegulationType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oRegulationTypes = await oRegulationComplianceBaseInstance.getRegulationTypes('',
-                {} as ILogUtility);
-            return oRegulationTypes.data;
+            await oRegulationComplianceBaseInstance.setRegulationTypes();
+            return oRegulationComplianceBaseInstance.aMaintainRegulationType;
         })
         // this.on('READ', 'MaintainTransactionTyp', async (request) => {
         //     const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
@@ -1040,13 +1039,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('', {} as ILogUtility)
-            return oRegulaionObjectType.data;
+            await oRegulationComplianceBaseInstance.setRegulationObjectType();
+            return oRegulationComplianceBaseInstance.aMaintainRegulationObjecttype;
         })
         this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            return await oRegulationComplianceBaseInstance.getMaterialConfiguration('',
-                {} as ILogUtility);
+            await oRegulationComplianceBaseInstance.setMaterialConfiguration();
+            return oRegulationComplianceBaseInstance.aMaintainRenewableMaterialConfiguration;
         })
         // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
@@ -1172,9 +1171,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'GetMovementType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('',
-                {} as ILogUtility);
-            return oMovementTypes.data;
+            await oRegulationComplianceBaseInstance.setMovementType();
+            return oRegulationComplianceBaseInstance.aMaintainMovementType;
         })
 
         return super.init()
