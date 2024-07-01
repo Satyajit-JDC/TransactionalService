@@ -167,7 +167,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 // wait for promise to get regulations
                 oRFS2ComplianceClassInstance.oRegulationDataIsReady.then(()=>{
                     // RFS2 Regulation is Active
-                    if(oRFS2ComplianceClassInstance.oRFS2RegulationActive){
+                    if(oRFS2ComplianceClassInstance.oRFS2RegulationData.regulationType){
                         oRFS2ComplianceClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRFS2ComplianceClassInstance);
                     }
                 });
