@@ -20,12 +20,12 @@ export class RFS2ComplianceClass {
         new Promise( async (resolve) => {
             await this.regulationComplianceBaseClassInstance.setRegulationMaterialGroup();
             
-            //RFS2 Credit(RVO) Scenario
+            //RFS2 Credit(RIN) Scenario
             if(this.regulationComplianceBaseClassInstance.oRFS2CreditData){
                 this._oRFS2CreditCompliance = new RFS2CreditCompliance(this.regulationComplianceBaseClassInstance);
             }
 
-            // RFS2 Debit (RIN Obligation) Scenario
+            // RFS2 Debit (RVO Obligation) Scenario
             if(this.regulationComplianceBaseClassInstance.oRFS2DebitData){
                 this._oRFS2DebitCompliance = new RFS2DeditCompliance(this.regulationComplianceBaseClassInstance);
             }
