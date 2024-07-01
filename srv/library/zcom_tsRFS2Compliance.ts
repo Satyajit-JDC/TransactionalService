@@ -1,18 +1,36 @@
 import cds from '@sap/cds';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { RegulationComplianceBaseClass } from '../library/zcom_tsRegulationComplianceBase';
+import { RFS2CreditCompliance } from '../library/zcom_tsRFS2CreditCompliance';
+import { RFS2DeditCompliance } from '../library/zcom_tsRFS2DebitCompliance';
 import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
 
 export class RFS2ComplianceClass {
-
     // private elements
+    private _oRFS2CreditCompliance!: RFS2CreditCompliance;
+    private _oRFS2DebitCompliance!: RFS2DeditCompliance;
 
     // public elements
-    public regulationComplianceBaseClass: RegulationComplianceBaseClass;
+    public regulationComplianceBaseClassInstance: RegulationComplianceBaseClass;
 
     //-------- Start of RFS2 constructor ------------------
     constructor(oRegulationComplianceBaseClassInstance:RegulationComplianceBaseClass){
-        this.regulationComplianceBaseClass = oRegulationComplianceBaseClassInstance;
+        this.regulationComplianceBaseClassInstance = oRegulationComplianceBaseClassInstance;
+        // promise to set material group and object category
+        new Promise( async (resolve) => {
+            await this.regulationComplianceBaseClassInstance.setRegulationMaterialGroup();
+            
+            //RFS2 Credit(RVO) Scenario
+            if(this.regulationComplianceBaseClassInstance.oRFS2CreditData){
+                this._oRFS2CreditCompliance = new RFS2CreditCompliance(this.regulationComplianceBaseClassInstance);
+            }
+
+            // RFS2 Debit (RIN Obligation) Scenario
+            if(this.regulationComplianceBaseClassInstance.oRFS2DebitData){
+                this._oRFS2DebitCompliance = new RFS2DeditCompliance(this.regulationComplianceBaseClassInstance);
+            }
+            resolve(undefined);
+        });
     }
     //-------- End of RFS2 constructor ------------------
 

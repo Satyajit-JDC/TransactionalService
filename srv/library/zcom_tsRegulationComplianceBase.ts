@@ -2,7 +2,7 @@ import cds from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import {
     MaintainRenewableMaterialConfiguration, MaintainTransactionType, MaintainAdjustmentReasonCode, Uom,
-    Impact, ObjectCategory, MaintainRegulationGroupView
+    Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView
 } from '../external/regulationcompliancemasterservice_api';
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
@@ -16,23 +16,25 @@ import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
 // import { Impact, ObjectCategory } from '@cds-models';
 import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
-import { RFS2ConstantValues } from './utilities/zcom_tsConstants';
+import { RFS2ConstantValues,destinationNames } from './utilities/zcom_tsConstants';
 
 export class RegulationComplianceBaseClass {
+    // private elements
+    private _oRFS2Compliance!: RFS2ComplianceClass;
+
     // public elements
     public oEventPayloadData: EventPayload;
-    public oRFS2RegulationActive: boolean;
+    public oRFS2RegulationData: MaintainRegulationGroupView;
     public oRegulationDataIsReady!: Promise<unknown>;
-
-    // privaye elements
-    private _oRFS2Compliance!: RFS2ComplianceClass;
+    public oRFS2CreditData!: MaintainRegulationMaterialGroupView;
+    public oRFS2DebitData!: MaintainRegulationMaterialGroupView;
 
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
         
         // initialize the data
-        this.oRFS2RegulationActive = false;
+        this.oRFS2RegulationData = {} as MaintainRegulationGroupView;
 
         // regulation group present then set Regulation Type to class object
         if (oEventPayloadData.RegulationGroupName) {
@@ -51,11 +53,11 @@ export class RegulationComplianceBaseClass {
         this._oRFS2Compliance = oRFS2ClassObject;
     }
 
-    // method to set regualtion to object
+    // method to set regulation to object
     private async setRegulations(sRegulationGroup: string) {
         if (sRegulationGroup) { // Regulation type available
             try {
-                // create filter and object
+                // create object
                 const { maintainRegulationGroupViewApi } = regulationcompliancemasterserviceApi();
 
                 // call master with cloud SDK
@@ -64,18 +66,51 @@ export class RegulationComplianceBaseClass {
                         $filter: encodeURIComponent("regulationGroup_regulationGroup eq '" + sRegulationGroup + "'")
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        if (oData.regulationType && oData.regulationGroupRegulationGroup) {
-                            if(oData.regulationType === RFS2ConstantValues.RFS2){   // RFS2 compliances
-                                this.oRFS2RegulationActive = true;  //set flag for RFS2 regulation
-                            }
+                        if(oData.regulationType === RFS2ConstantValues.RFS2){   // RFS2 compliances
+                            this.oRFS2RegulationData = oData;  //set data for RFS2 regulation
                         }
-                    });
+                    });RFS2ConstantValues.RFS2
             } catch (error) {
 
             }
+        }
+    }
+
+    // set material group data and object category
+    async setRegulationMaterialGroup(){
+        try {
+            if (this.oRFS2RegulationData.regulationType) {
+                // create object
+                const { maintainRegulationMaterialGroupViewApi } = regulationcompliancemasterserviceApi();
+                
+                // call master with cloud SDK
+                (await maintainRegulationMaterialGroupViewApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent("regulationType eq '" + this.oRFS2RegulationData.regulationType + "'")
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).forEach((oData) => {
+                        // RFS2 
+                        if(this.oRFS2RegulationData.regulationType === RFS2ConstantValues.RFS2){
+                            // RFS2 Credit Scenario
+                            if(oData.category === RFS2ConstantValues.credit){
+                                this.oRFS2CreditData = oData;
+                            }
+                            // RFS2 Debit Scenario
+                            if(oData.category === RFS2ConstantValues.debit){
+                                this.oRFS2DebitData = oData;
+                            }
+                        }
+                    });
+            }
+        } catch (error) {
+            console.log(error);
+            // oLogData.technicalMessage = error as string;
+            // oRegulationComplianceBaseInstance.addLog(oLogData);
         }
     }
 
@@ -92,7 +127,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationType && oData.regulationGroupRegulationGroup) {
@@ -137,7 +172,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         if (oData.regulationType) {
                             aRegulationTypeMAP.map[oData.regulationType] = oData;
@@ -149,7 +184,7 @@ export class RegulationComplianceBaseClass {
                 (await maintainRegulationTypeApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         if (oData.regulationType) {
                             aRegulationTypeMAP.map[oData.regulationType] = oData;
@@ -176,7 +211,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         if (oData.category && oData.regulationMaterialGroupRegulationMaterialGroup && oData.regulationType) {
                             aRegulartionMaterialGroupMAP.map[oData.regulationType] = oData;
@@ -206,7 +241,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectCategoryCategory && oData.objectTypeCode) {
@@ -221,7 +256,7 @@ export class RegulationComplianceBaseClass {
                 (await maintainRegulationObjecttypeApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectCategoryCategory && oData.objectTypeCode) {
@@ -249,7 +284,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectTypeCode) {
                             aMovementTypeMAP.map[oData.regulationTypeRegulationType + oData.objectTypeCode] = oData;
@@ -265,7 +300,7 @@ export class RegulationComplianceBaseClass {
                 (await maintainMovementTypeApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectTypeCode) {
                             aMovementTypeMAP.map[oData.regulationTypeRegulationType + oData.objectTypeCode] = oData;
@@ -292,7 +327,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectTypeCode && oData.movementTypeMovementType) {
@@ -306,7 +341,7 @@ export class RegulationComplianceBaseClass {
                 (await maintainMovementTypeToTransactionCategoryImpactApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData) {
@@ -334,7 +369,7 @@ export class RegulationComplianceBaseClass {
                     })
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectCategoryCategory) {
@@ -347,7 +382,7 @@ export class RegulationComplianceBaseClass {
                 (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.objectCategoryCategory) {
@@ -376,14 +411,14 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     });
             } else {
                 const { maintainRenewableMaterialConfigurationApi } = regulationcompliancemasterserviceApi();
                 aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     });
             }
         } catch (error) {
@@ -406,13 +441,13 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     });
             } else {
                 aMaintainTransactionType = await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     });
             }
         } catch (error) {
@@ -434,7 +469,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodedFilterValue
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.transactionCategoryCategory) {
@@ -462,7 +497,7 @@ export class RegulationComplianceBaseClass {
                     })
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.category) {
@@ -474,7 +509,7 @@ export class RegulationComplianceBaseClass {
                 (await rfs2DebitTypeApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.category) {
@@ -503,7 +538,7 @@ export class RegulationComplianceBaseClass {
                     })
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.category) {
@@ -515,7 +550,7 @@ export class RegulationComplianceBaseClass {
                 (await fuelCategoryApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.category) {
@@ -544,7 +579,7 @@ export class RegulationComplianceBaseClass {
                     })
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.category) {
@@ -556,7 +591,7 @@ export class RegulationComplianceBaseClass {
                 (await fuelSubCategoryApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: "RegulationComplianceMasterService"
+                        destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
                         if (oData.category) {
@@ -582,7 +617,7 @@ export class RegulationComplianceBaseClass {
                 "regulationSubScenario": RegulationSubScenario
             };
             const oCurrentSeqence = await getNextRenewableId(payload).middleware(resilience({ retry: 3, circuitBreaker: true })).execute({
-                destinationName: "RegulationComplianceMasterService"
+                destinationName: destinationNames.regulationComplianceMasterService
             });
 
             return Number(oCurrentSeqence);
@@ -624,7 +659,7 @@ export class RegulationComplianceBaseClass {
         return await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .execute({
-                destinationName: "RegulationComplianceMasterService"
+                destinationName: destinationNames.regulationComplianceMasterService
             });
     }
 
@@ -633,7 +668,7 @@ export class RegulationComplianceBaseClass {
         return await objectCategoryApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .execute({
-                destinationName: "RegulationComplianceMasterService"
+                destinationName: destinationNames.regulationComplianceMasterService
             });
     }
 
@@ -642,7 +677,7 @@ export class RegulationComplianceBaseClass {
         return await uomApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .execute({
-                destinationName: "RegulationComplianceMasterService"
+                destinationName: destinationNames.regulationComplianceMasterService
             });
     }
 
@@ -651,7 +686,7 @@ export class RegulationComplianceBaseClass {
         return await impactApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .execute({
-                destinationName: "RegulationComplianceMasterService"
+                destinationName: destinationNames.regulationComplianceMasterService
             });
     }
 }
