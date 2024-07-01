@@ -792,6 +792,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             // }
         })
         // On crreate of Manual adjustment for RVO/RIN
+        // code revamp
         this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
             let aFinalData: RegulationComplianceTransaction[] = [],
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
