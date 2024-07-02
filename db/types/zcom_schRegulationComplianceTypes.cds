@@ -498,7 +498,7 @@ aspect Enterprise {
     regulationLogisticsPlant                      : String(4)    @title: '{i18n>regulationLogisticsPlant}';
     regulationLogisticsStorageLocation            : String(4)    @title: '{i18n>regulationLogisticsStorageLocation}';
     regulationLogisticsMaterialNumber             : String(40)   @title: '{i18n>regulationLogisticsMaterialNumber}';
-    regulationLogisticsMaterialNumberDesc          : String(100)  @title: '{i18n>regulationLogisticsMaterialNumberDes}';
+    regulationLogisticsMaterialNumberDesc          : String(100)  @title: '{i18n>regulationLogisticsMaterialNumberDesc}';
     regulationLogisticsCountryKey                 : String(10)   @title: '{i18n>regulationLogisticsCountryKey}';
     regulationLogisticsRegion                     : String(3)    @title: '{i18n>regulationLogisticsRegion}';
     nominationNumber                              : String(20)   @assert.unique  @title: '{i18n>NominationNumber}';
