@@ -6,17 +6,10 @@ import {
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryImpact,
     MaintainRegulationTransactionTypeTs, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory
 } from '../external/regulationcompliancemasterservice_api';
-import {
-    IMaintainRegulationGroupView, IMaintainRegulationType,
-    IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
-    IMaintainMovementType, IMaintainRegulationObjecttype, IMaintainRegulationTransactionTypeTs,
-    IMaintainRegulationSubscenariotoScenario, IRfs2DebitType, IFuelCategory, IFuelSubCategory,
-    EventPayload
-} from './utilities/zcom_tsRegulationComplicanceInterface';
+import { EventPayload } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
 import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
-// import { Impact, ObjectCategory } from '@cds-models';
 import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes,language } from './utilities/zcom_tsConstants';
 import { ResourceManager } from '@sap/textbundle';
@@ -146,7 +139,8 @@ export class RegulationComplianceBaseClass {
                 // call master with cloud SDK
                 (await maintainRegulationMaterialGroupViewApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent("regulationType eq '" + this.oRFS2RegulationData.regulationType + "'")
+                        $filter: encodeURIComponent("regulationType eq '" + this.oRFS2RegulationData.regulationType +
+                         "' and regulationMaterialGroup eq '"+this.oEventPayloadData.RegulationMateGroup+"'")
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -299,7 +293,6 @@ export class RegulationComplianceBaseClass {
 
     // set mvt type relevance data
     async setMvtTypeTransationRelevance() {
-        const aMvtTypeTransactionCatMappingMAP = { map: {}, transactionCategoryCategory: "" } as IMaintainMovementTypeToTransactionCategoryImpact;
         const { maintainMovementTypeToTransactionCategoryImpactApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oMaintainMovementType) {
@@ -339,7 +332,6 @@ export class RegulationComplianceBaseClass {
                 this.addLog("FailedToReadMovementTypeRelevanceFromMasterData", sErrorMsg, messageTypes.error);
             }
         }
-        return aMvtTypeTransactionCatMappingMAP;
     }
 
     // set mat config data

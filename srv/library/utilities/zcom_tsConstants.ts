@@ -21,3 +21,9 @@ export const messageTypes = {
 
 // language
 export const language = "en_EN";
+
+// Created Status
+export const createdStatus = {
+    key: "01",
+    value: "Created"
+} as const;
