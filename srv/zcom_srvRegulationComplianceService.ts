@@ -791,6 +791,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             //     }
             // }
         })
+        
         // On crreate of Manual adjustment for RVO/RIN
         this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
             let aFinalData: RegulationComplianceTransaction[] = [],
@@ -828,15 +829,15 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             const oRFS2ComplianceInstance = new RFS2ComplianceClass(oRegulationComplianceBaseInstance);
             // Get regulations( This would be needed when we UOM conversion to happen currently using for regulation object type and category)
             const sFilterUom = `regulationType eq '${regulationType}' and regulationCategory_category eq '${regulationType}'`;// and fuelAlternateUom eq 'BBL'`;
-            aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
-                {} as ILogUtility);
+            // aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
+            //     {} as ILogUtility);
             const oRegulationType = aRegulationType.map[regulationType];
 
             //Get object Type code i.e RIN or RVO
             if (regulationType && objectType) {
-                aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
-                    {} as ILogUtility
-                );
+                // aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
+                //     {} as ILogUtility
+                // );
                 const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
 
                 // read RFS2DebitType
@@ -845,17 +846,17 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 if (oRegObjectCateory.objectCategoryCategory) {
 
                     //Maintain Regulation Transaction Types
-                    aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
-                        regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
-                        {} as ILogUtility);
+                    // aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
+                    //     regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
+                    //     {} as ILogUtility);
                     const oTransactionTypeTs = aTransactionTypeTs.map[regulationType + transactionCategory];
 
                     if (oTransactionTypeTs.transactionCategoryCategory) {
                         // Fetch regulation subscenario
                         // const sfilterSubObjectScenario = "regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'";
-                        aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
-                            regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
-                            {} as ILogUtility);
+                        // aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
+                        //     regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
+                        //     {} as ILogUtility);
                         const oRegualtionSubscenario = aRegulationSubscenario.map[regulationType + "MDJ" + objectType]
 
 
@@ -895,8 +896,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 // Fetch material configuration
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
                                     const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear;
-                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
-                                        {} as ILogUtility);
+                                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+                                    //     {} as ILogUtility);
                                 }
                                 if (aMaterialConfig.length > 0) {
                                     // Get Fuel Unit of Measure if alternate UOM is BBL
@@ -970,8 +971,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
                                     const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsCompanyMaterialNumber + "'";
-                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
-                                        {} as ILogUtility);
+                                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+                                    //     {} as ILogUtility);
                                 }
                                 if (aMaterialConfig.length > 0) {
                                     // oObjectID = 435;
