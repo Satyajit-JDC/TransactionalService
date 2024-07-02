@@ -43,9 +43,13 @@ export class RegulationComplianceBaseClass {
     public oMaintainRegulationType: MaintainRegulationType;
     public aMaintainRegulationType: MaintainRegulationType[];
     public aMaintainTransactionType: MaintainTransactionType[];
+    public mMaintainTransactionType: { [index: string]: MaintainRegulationTransactionTypeTs };
     public aRfs2DebitType: Rfs2DebitType[];
+    public mRfs2DebitType: { [index: string]: Rfs2DebitType };
     public aFuelCategory: FuelCategory[];
+    public mFuelCategory: { [index: string]: FuelCategory };
     public aFuelSubCategory: FuelSubCategory[];
+    public mFuelSubCategory: { [index: string]: FuelSubCategory };
     public aObjectCategory: ObjectCategory[];
     public aMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode[];
     public aUom: Uom[];
@@ -69,9 +73,13 @@ export class RegulationComplianceBaseClass {
         this.oMaintainRegulationType = {} as MaintainRegulationType;
         this.aMaintainRegulationType = [] as MaintainRegulationType[];
         this.aMaintainTransactionType = [] as MaintainTransactionType[];
+        this.mMaintainTransactionType = {} as { [index: string]: MaintainRegulationTransactionTypeTs };
         this.aRfs2DebitType = [] as Rfs2DebitType[];
+        this.mRfs2DebitType = {} as { [index: string]: Rfs2DebitType };
         this.aFuelCategory = [] as FuelCategory[];
+        this.mFuelCategory = {} as { [index: string]: FuelCategory };
         this.aFuelSubCategory = [] as FuelSubCategory[];
+        this.mFuelSubCategory = {} as { [index: string]: FuelSubCategory };
         this.aObjectCategory = [] as ObjectCategory[];
         this.aMaintainAdjustmentReasonCode = [] as MaintainAdjustmentReasonCode[];
         this.aUom = [] as Uom[];
@@ -103,7 +111,7 @@ export class RegulationComplianceBaseClass {
                 // call master with cloud SDK
                 (await maintainRegulationGroupViewApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent("regulationGroup_regulationGroup11 eq '" + this.oEventPayloadData.RegulationGroupName + "'")
+                        $filter: encodeURIComponent("regulationGroup_regulationGroup eq '" + this.oEventPayloadData.RegulationGroupName + "'")
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -175,7 +183,7 @@ export class RegulationComplianceBaseClass {
         try {
             if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
                 const sFilterSubObjectScenario = this.oRFS2RegulationData.regulationType
-                    + " and transactionSourceScenario_category eq 'GM' and '"
+                    + " and transactionSourceScenario_category eq '"+this.oEventPayloadData.RenewableEventType+"' and '"
                     + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'",
                     { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
 
@@ -343,7 +351,7 @@ export class RegulationComplianceBaseClass {
                     " and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "' and year eq " +
                     new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString() + "'";
 
-                await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
+                this.aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
@@ -351,7 +359,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     });
             } else {
-                await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
+                this.aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -448,11 +456,17 @@ export class RegulationComplianceBaseClass {
     async setTransactiontype() {
         const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
         try {
-            this.aMaintainTransactionType = await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
+            (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                 .middleware(resilience({ retry: 3, circuitBreaker: true }))
                 .execute({
                     destinationName: destinationNames.regulationComplianceMasterService
-                });
+                })).
+            forEach(oData => {
+                this.aMaintainTransactionType.push(oData);
+                if(oData.regulationTypeRegulationType && oData.transactionCategoryCategory){
+                    this.mMaintainTransactionType[oData.regulationTypeRegulationType+oData.transactionCategoryCategory] = oData;
+                }
+            });
         } catch (error) {
             console.log(error);
             let sErrorMsg = "";
@@ -478,6 +492,7 @@ export class RegulationComplianceBaseClass {
                 })).
                 forEach((oData) => {
                     this.aRfs2DebitType.push(oData);
+                    this.mRfs2DebitType[oData.category] = oData;
                 });
         } catch (error) {
             console.log(error);
@@ -504,6 +519,7 @@ export class RegulationComplianceBaseClass {
                 })).
                 forEach((oData) => {
                     this.aFuelCategory.push(oData);
+                    this.mFuelCategory[oData.category] = oData;
                 });
         } catch (error) {
             console.log(error);
@@ -530,6 +546,7 @@ export class RegulationComplianceBaseClass {
                 })).
                 forEach((oData) => {
                     this.aFuelSubCategory.push(oData);
+                    this.mFuelSubCategory[oData.category] = oData;
                 });
         } catch (error) {
             console.log(error);
