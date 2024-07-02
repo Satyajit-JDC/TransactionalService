@@ -33,4 +33,6 @@ service RegulationComplianceTransactionService {
     entity GetImpact as projection on master.Impact;
     entity GetFuelSubCategory as projection on master.FuelSubCategory;
     entity GetMovementType as projection on master.MaintainMovementType;
+    // Manual adjustment Freestyle app service
+    action OnCreateManualAdjustment(data:transaction.EventData);
 }

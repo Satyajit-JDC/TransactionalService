@@ -10,7 +10,8 @@ modules:
       - name: zcom_capRegCompTransSrv-destination
       - name: zcom_capRegCompTransSrv-db
       - name: zcom_capRegCompTransSrv-auth
-      - name: emdev
+      - name: emdev      
+      - name: zcom_capRegCompTransSrv-conn
     provides:
       - name: srv-api
         properties:
@@ -95,7 +96,11 @@ resources:
       service: enterprise-messaging
       service-plan: default
       path: ./event-mesh.json
-
+  - name: zcom_capRegCompTransSrv-conn
+    type: org.cloudfoundry.managed-service
+    parameters:
+        service: connectivity
+        service-plan: lite
   - name: zcom_capRegCompTransSrv-destination
     type: org.cloudfoundry.managed-service
     parameters:
