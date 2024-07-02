@@ -18,3 +18,6 @@ export const messageTypes = {
     error: "E",
     success: "S"
 } as const;
+
+// language
+export const language = "en_EN";
