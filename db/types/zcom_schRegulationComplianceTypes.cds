@@ -414,7 +414,7 @@ aspect RFS2 {
 
 aspect Enterprise {
     organizationId                                : String(4)    @title: '{i18n>OrganizationId}';
-    OrganizationFacilityIdentifier                : String(5)    @title: '{i18n>OrganizationFacilityId}';
+    organizationFacilityIdentifier                : String(5)    @title: '{i18n>OrganizationFacilityId}';
     transactionPartnerOrgId                       : String(4)    @title: '{i18n>transactionPartnerOrgId}';
     transactionPartnerFacilityId                  : String(5)    @title: '{i18n>TransactionPartnerFacilityId}';
     generateOrganizationId                        : String(4)    @title: '{i18n>GenerateOrganizationId}';
@@ -498,7 +498,7 @@ aspect Enterprise {
     regulationLogisticsPlant                      : String(4)    @title: '{i18n>regulationLogisticsPlant}';
     regulationLogisticsStorageLocation            : String(4)    @title: '{i18n>regulationLogisticsStorageLocation}';
     regulationLogisticsMaterialNumber             : String(40)   @title: '{i18n>regulationLogisticsMaterialNumber}';
-    regulationLogisticsMaterialNumberDes          : String(100)  @title: '{i18n>regulationLogisticsMaterialNumberDes}';
+    regulationLogisticsMaterialNumberDesc          : String(100)  @title: '{i18n>regulationLogisticsMaterialNumberDes}';
     regulationLogisticsCountryKey                 : String(10)   @title: '{i18n>regulationLogisticsCountryKey}';
     regulationLogisticsRegion                     : String(3)    @title: '{i18n>regulationLogisticsRegion}';
     nominationNumber                              : String(20)   @assert.unique  @title: '{i18n>NominationNumber}';
