@@ -33,8 +33,8 @@ using {
 entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, ABTBenzeneAndSulphur, LCFS, CapAndTradeStructure, Valuation, managed {
     regulationType                               : String(4)             @title: '{i18n>RenewablesRegulationType}';
     regulationTypeDesc                           : String(100)           @title: '{i18n>RenewablesRegulationTypeDesc}';
-    regulationCategory                           : String(4)             @title: '{i18n>RenewablesRegulationCategory}';
-    objectCategory                               : ObjectCategory        @title: '{i18n>RenewablesObjectCategory}';
+    regulationCategory                           : String(5)             @title: '{i18n>RenewablesRegulationCategory}';
+    objectCategory                               : String(3)             @title: '{i18n>RenewablesObjectCategory}';
     objectCategoryDesc                           : String(100)           @title: '{i18n>RenewablesObjectCategoryDesc}';
     objectType                                   : String(3)             @title: '{i18n>RenewablesObjectType}';
     objectTypeDesc                               : String(100)           @title: '{i18n>RenewablesObjectTypeDesc}';
@@ -48,15 +48,15 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
     extTransactionNumber                         : String(50)            @title: '{i18n>RenewablesExtTransactionNumber}';
     matchedExtTransactionNumber                  : String(50)            @title: '{i18n>RenewablesMatchedExtTransactionNumber}';
     billofLading                                 : String(50)            @title: '{i18n>RenewablesBillOfLading}';
-    impact                                       : Impact                @title: '{i18n>RenewablesImpact}';
+    impact                                       : String(2)             @title: '{i18n>RenewablesImpact}';
     businessPartnerNumber                        : String(10)            @title: '{i18n>BusinessPartnerNumber}';
     businessPartnerDesc                          : String(100)           @title: '{i18n>BusinessPartnerDesc}';
     movementType                                 : String(3)             @title: '{i18n>MovementTypeInventoryManagement}';
     incotermsPart1                               : String(3)             @title: '{i18n>IncotermsPart1}';
     incotermsPart2                               : String(28)            @title: '{i18n>IncotermsPart2}';
-    fuelCategory                                 : String(2)             @title: '{i18n>RenewablesFuelCategory}';
+    fuelCategory                                 : String(3)             @title: '{i18n>RenewablesFuelCategory}';
     fuelCategoryDesc                             : String(100)           @title: '{i18n>RenewablesFuelCategoryDesc}';
-    fuelSubCategory                              : String(2)             @title: '{i18n>RenewablesFuelSubCategory}';
+    fuelSubCategory                              : String(3)             @title: '{i18n>RenewablesFuelSubCategory}';
     fuelSubCategoryDesc                          : String(100)           @title: '{i18n>RenewablesFuelSubCategoryDesc}';
     feedStock                                    : String(3)             @title: '{i18n>RenewablesFeedstock}';
     negativeImpact                               : Boolean               @title: '{i18n>RenewablesNegativeImpact}';
