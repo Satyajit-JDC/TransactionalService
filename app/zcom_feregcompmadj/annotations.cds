@@ -266,12 +266,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
     @Common.FilterDefaultValue : 'RFS2_MADJ_RVO'
     subObjectScenario
 };
-annotate service.MaintainRegulationTransactionType with {
-    transactionType @Common.Text : {
-            $value : description,
-            ![@UI.TextArrangement] : #TextFirst,
-        }
-};
+// annotate service.MaintainRegulationTransactionType with {
+//     transactionType @Common.Text : {
+//             $value : description,
+//             ![@UI.TextArrangement] : #TextFirst,
+//         }
+// };
 annotate service.ManualAdjRegulationComplianceTransaction with {
     regulationType @(Common.ValueList : {
             $Type : 'Common.ValueListType',
@@ -299,6 +299,11 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                     $Type : 'Common.ValueListParameterInOut',
                     LocalDataProperty : regulationLogisticsCompanyMaterialNumber,
                     ValueListProperty : 'material',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType/regulationType',
+                    LocalDataProperty : regulationType,
                 },
             ],
             Label : 'RVO Material',
@@ -510,3 +515,24 @@ annotate service.GetObjectCategory with {
         ![@UI.TextArrangement] : #TextFirst,
     }
 };
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    transactionCategory @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetMaintainRegulationTransactionTypeTs',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : transactionCategory,
+                    ValueListProperty : 'transactionCategory/category',
+                },
+                
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType/regulationType',
+                    LocalDataProperty : regulationType,
+                },
+            ],
+            Label : '{i18n>TransactionType}',
+        },
+        Common.ValueListWithFixedValues : true
+)};

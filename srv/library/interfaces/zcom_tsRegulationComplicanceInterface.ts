@@ -59,8 +59,9 @@ export interface IMaintainRegulationSubscenariotoScenario {
     data: MaintainRegulationSubScenarioToScenarioType[]
 }
 
-export interface IMaintainRegulationTransactionTypeTs {
-    map: { [index: string]: MaintainRegulationTransactionTypeTs };
+export interface IMaintainRegulationTransactionTypeTs{
+    map:{[index:string]: MaintainRegulationTransactionTypeTs};
+    data: MaintainRegulationTransactionTypeTs[]
 }
 
 export interface IRfs2DebitType {

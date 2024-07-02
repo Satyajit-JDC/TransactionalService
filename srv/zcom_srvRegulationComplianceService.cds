@@ -1,6 +1,7 @@
 using {com.sap.chs.com.regulationcompliancetransaction as transaction} from '../db/zcom_schRegulationComplianceTransaction';
 using {RegulationComplianceMasterService as master} from './external/RegulationComplianceMasterService';
-
+// using {Za_}
+using {MaterialCharacteristics as s4h} from './external/MaterialCharacteristics';
 
 service RegulationComplianceTransactionService {    
     action sendMessage();
@@ -13,16 +14,31 @@ service RegulationComplianceTransactionService {
 
         DeleteRestrictions.Deletable: false,
         UpdateRestrictions.Updatable: false
-    })as projection on transaction.RegulationComplianceTransaction order by objectId desc ;
+    })                                              as projection on transaction.RegulationComplianceTransaction
+                                                       order by
+                                                           objectId desc;
 
     @odata.draft.enabled
-    entity ManualAdjRegulationComplianceTransaction as projection on transaction.RegulationComplianceTransaction order by objectId desc;
-    
-    entity AdjustmentBaseValuelist as projection on transaction.AdjustmentBaseValuelist;
+    entity ManualAdjRegulationComplianceTransaction as projection on transaction.RegulationComplianceTransaction
+                                                       order by
+                                                           objectId desc;
+
+    entity AdjustmentBaseValuelist                  as projection on transaction.AdjustmentBaseValuelist;
     // Master data entities
-   
-    entity MaintainRegulationType as projection on master.MaintainRegulationType;
+
+    entity MaintainRegulationType                   as projection on master.MaintainRegulationType;
+
     // entity MaintainTransactionType as projection on master.MaintainRegulationTransactionTypeTS;
+    entity GetMaintainRegulationTransactionTypeTs   as
+        projection on master.MaintainRegulationTransactionTypeTS 
+        {
+            *,
+            transactionCategory.category as categorytrans
+        }
+        ;
+
+    entity TransactionType                          as projection on master.TransactionCategory;
+ 
     entity MaintainRegulationTransactionType as projection on master.MaintainRegulationTransactionTypeTS;
     entity MaintainRegulationObjecttype as projection on master.MaintainRegulationObjecttype;
     entity MaintainRenewableMaterialConfiguration as projection on master.MaintainRenewableMaterialConfiguration;
@@ -34,7 +50,8 @@ service RegulationComplianceTransactionService {
     entity GetFuelSubCategory as projection on master.FuelSubCategory;
     entity GetMovementType as projection on master.MaintainMovementType;
     entity GetTransactionType as projection on master.MaintainTransactionType;
-
+    //S4 API 
+    entity GetFuelMaterialS4 as projection on s4h.ZA_MaterialCharacteristics_R;
     // CDs View for aggregating Regulation Quantity by Plant
     @cds.persistence.skip
     define view MaintainWorkplaceAgggregationByPlantView as select from RegulationComplianceTransaction {
@@ -58,5 +75,8 @@ service RegulationComplianceTransactionService {
     regulationQuantity,
     sum(regulationQuantity) as TotalRegQuantityByCategory:Integer
     } group by rfs2ObligationTypeDesc;
+
+  
+   
 
 }
