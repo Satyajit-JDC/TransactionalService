@@ -141,13 +141,13 @@ export interface EventPayload {
         StorageLocation: string;
         CompanyCode: string;
         DocumentDate: string;
-        Quantity: string;
+        Quantity: number;
         UnitOfMeasure: string;
-        RenewableMaterialDocDocDte: string;
-        RenewableMaterialDocPostgDte: string;
+        RenewableMaterialDocDocDte: Date;
+        RenewableMaterialDocPostgDte: Date;
         RenewableBillOfLading: string;
         RenewableReasonReasonCode: string;
-        RenewableReversalPostingDate: string;
+        RenewableReversalPostingDate: Date;
     },
     _RenewableNominationData: {
         RenewableMaterial: string;
