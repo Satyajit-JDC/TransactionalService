@@ -343,7 +343,7 @@ class RegulationComplianceBaseClass {
             return await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                 .addCustomQueryParameters({
                     $filter: encodedFilterValue,
-                    $expand: typeof TransactionCategory
+                    $expand: 'TransactionCategory'
                 }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                 .execute({
                     destinationName: "RegulationComplianceMasterService"
@@ -352,7 +352,7 @@ class RegulationComplianceBaseClass {
             return await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                 .middleware(resilience({ retry: 3, circuitBreaker: true }))
                 .addCustomQueryParameters({
-                    $expand: typeof TransactionCategory
+                    $expand: 'TransactionCategory'
                 }).execute({
                     destinationName: "RegulationComplianceMasterService"
                 });
@@ -360,14 +360,16 @@ class RegulationComplianceBaseClass {
     }
 
     async getRegulationTransactionTypeTs(sFilters: string,oLogData:ILogUtility): Promise<IMaintainRegulationTransactionTypeTs> {
-        const aIMaintainRegulationTransactionTypeTsMAP = { map: {} } as IMaintainRegulationTransactionTypeTs;
+        const aIMaintainRegulationTransactionTypeTsMAP = { map: {}, data:[] } as IMaintainRegulationTransactionTypeTs;
         try {
+            const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
+               
             if (sFilters) {
-                const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi(),
-                    encodedFilterValue = encodeURIComponent(sFilters);
+                  const encodedFilterValue = encodeURIComponent(sFilters);
                 (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodedFilterValue
+                        $filter: encodedFilterValue,
+                        $expand: 'transactionCategory'
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: "RegulationComplianceMasterService"
@@ -375,8 +377,24 @@ class RegulationComplianceBaseClass {
                     forEach((oData) => {
                         if (oData.regulationTypeRegulationType && oData.transactionCategoryCategory) {
                             aIMaintainRegulationTransactionTypeTsMAP.map[oData.regulationTypeRegulationType + oData.transactionCategoryCategory] = oData;
+                            aIMaintainRegulationTransactionTypeTsMAP.data.push(oData);
                         }
                     });
+            }
+            else{
+                (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
+                .addCustomQueryParameters({
+                    $expand: 'transactionCategory'
+                }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                .execute({
+                    destinationName: "RegulationComplianceMasterService"
+                })).
+                forEach((oData) => {
+                    if (oData.regulationTypeRegulationType && oData.transactionCategoryCategory) {
+                        aIMaintainRegulationTransactionTypeTsMAP.map[oData.regulationTypeRegulationType + oData.transactionCategoryCategory] = oData;
+                        aIMaintainRegulationTransactionTypeTsMAP.data.push(oData);
+                    }
+                });
             }
         } catch (error) {
             console.log(error);
