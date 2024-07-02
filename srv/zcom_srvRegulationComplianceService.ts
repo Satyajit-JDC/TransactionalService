@@ -21,7 +21,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
         // const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction')
-        // this.on("sendMessage", async msg => {
+        this.on("sendMessage", async msg => {
         // // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
         //     if (msg.data.data) {
         //         const oManualAdjustmentData = msg.data.data;
@@ -779,18 +779,19 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     //                         }
         //     //                     }
 
-        //     //                 }
-        //     //             }
-        //     //         }
-        //     //     }
-        //     //     if (aFinalData.length > 0) {
-        //     //         await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData,logObjectID);
-        //     //     }
-        //     //     if(oLogData.messageType){   //log message
-        //     //         oRegulationComplianceBaseInstance.addLog(oLogData);
-        //     //     }
-        //     // }
-        // })
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     if (aFinalData.length > 0) {
+            //         await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData,logObjectID);
+            //     }
+            //     if(oLogData.messageType){   //log message
+            //         oRegulationComplianceBaseInstance.addLog(oLogData);
+            //     }
+            // }
+        })
+        
         // On crreate of Manual adjustment for RVO/RIN
         // code revamp
         // this.on("OnCreateManualAdjustment", async (oDatarequest)=> {
@@ -849,34 +850,34 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             const oRFS2ComplianceInstance = new RFS2ComplianceClass(oRegulationComplianceBaseInstance);
             // Get regulations( This would be needed when we UOM conversion to happen currently using for regulation object type and category)
             const sFilterUom = `regulationType eq '${regulationType}' and regulationCategory_category eq '${regulationType}'`;// and fuelAlternateUom eq 'BBL'`;
-            aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
-                {} as ILogUtility);
+            // aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
+            //     {} as ILogUtility);
             const oRegulationType = aRegulationType.map[regulationType];
 
             //Get object Type code i.e RIN or RVO
             if (regulationType && objectType) {
-                aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
-                    {} as ILogUtility
-                );
+                // aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
+                //     {} as ILogUtility
+                // );
                 const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
 
                 // read RFS2DebitType
-                const aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("",
-                    {} as ILogUtility);
+                await oRegulationComplianceBaseInstance.setRFS2DebitType();
+                const aRFS2DebitType = oRegulationComplianceBaseInstance.aRfs2DebitType;
                 if (oRegObjectCateory.objectCategoryCategory) {
 
                     //Maintain Regulation Transaction Types
-                    aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
-                        regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
-                        {} as ILogUtility);
+                    // aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
+                    //     regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
+                    //     {} as ILogUtility);
                     const oTransactionTypeTs = aTransactionTypeTs.map[regulationType + transactionCategory];
 
                     if (oTransactionTypeTs.transactionCategoryCategory) {
                         // Fetch regulation subscenario
                         // const sfilterSubObjectScenario = "regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'";
-                        aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
-                            regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
-                            {} as ILogUtility);
+                        // aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
+                        //     regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
+                        //     {} as ILogUtility);
                         const oRegualtionSubscenario = aRegulationSubscenario.map[regulationType + "MDJ" + objectType]
 
 
@@ -916,8 +917,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 // Fetch material configuration
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
                                     const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear;
-                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
-                                        {} as ILogUtility);
+                                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+                                    //     {} as ILogUtility);
                                 }
                                 if (aMaterialConfig.length > 0) {
                                     // Get Fuel Unit of Measure if alternate UOM is BBL
@@ -991,8 +992,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
                                     const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsCompanyMaterialNumber + "'";
-                                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
-                                        {} as ILogUtility);
+                                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+                                    //     {} as ILogUtility);
                                 }
                                 if (aMaterialConfig.length > 0) {
                                     // oObjectID = 435;
@@ -1046,9 +1047,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'MaintainRegulationType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oRegulationTypes = await oRegulationComplianceBaseInstance.getRegulationTypes('',
-                {} as ILogUtility);
-            return oRegulationTypes.data;
+            await oRegulationComplianceBaseInstance.setRegulationTypes();
+            return oRegulationComplianceBaseInstance.aMaintainRegulationType;
         })
         // this.on('READ', 'MaintainTransactionTyp', async (request) => {
         //     const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
@@ -1056,18 +1056,18 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         // })
         this.on('READ', 'MaintainRegulationTransactionType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
-            return oRegulationTransactionTypeTsData;
+            await oRegulationComplianceBaseInstance.setTransactiontype();
+            return oRegulationComplianceBaseInstance.aMaintainTransactionType;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('', {} as ILogUtility)
-            return oRegulaionObjectType.data;
+            await oRegulationComplianceBaseInstance.setRegulationObjectType();
+            return oRegulationComplianceBaseInstance.aMaintainRegulationObjecttype;
         })
         this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            return await oRegulationComplianceBaseInstance.getMaterialConfiguration('',
-                {} as ILogUtility);
+            await oRegulationComplianceBaseInstance.setMaterialConfiguration();
+            return oRegulationComplianceBaseInstance.aMaintainRenewableMaterialConfiguration;
         })
         // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
@@ -1075,29 +1075,28 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         // })
         this.on('READ', 'GetFuelCategory', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory('',
-                {} as ILogUtility);
-            return oFuelCategory.data;
+            await oRegulationComplianceBaseInstance.setFuelCategory();
+            return oRegulationComplianceBaseInstance.aFuelCategory;
         })
         this.on('READ', 'GetReasonCode', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oReasonCode = await oRegulationComplianceBaseInstance.getAdjustmentReasonCode();
-            return oReasonCode;
+            await oRegulationComplianceBaseInstance.setAdjustmentReasonCode();
+            return oRegulationComplianceBaseInstance.aMaintainAdjustmentReasonCode;
         })
         this.on('READ', 'GetObjectCategory', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oObjectCategory = await oRegulationComplianceBaseInstance.getObjectCategory();
-            return oObjectCategory;
+            await oRegulationComplianceBaseInstance.setObjectCategory();
+            return oRegulationComplianceBaseInstance.aObjectCategory;
         })
         this.on('READ', 'GetUOM', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oUnitofMeasure = await oRegulationComplianceBaseInstance.getUOM();
-            return oUnitofMeasure;
+            await oRegulationComplianceBaseInstance.setUOM();
+            return oRegulationComplianceBaseInstance.aUom;
         })
         this.on('READ', 'GetImpact', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oImpact = await oRegulationComplianceBaseInstance.getImpact();
-            return oImpact;
+            await oRegulationComplianceBaseInstance.setImpact();
+            return oRegulationComplianceBaseInstance.aImpact;
         })
         // this.on('READ', 'MaterialCharacteristics', async (request) => {
         //     debugger;
@@ -1187,15 +1186,14 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
         this.on('READ', 'GetFuelSubCategory', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
-                {} as ILogUtility);
-            return oFuelSubCategory.data;
+            await oRegulationComplianceBaseInstance.setFuelSubCategory();
+            return oRegulationComplianceBaseInstance.aFuelSubCategory;
         })
+
         this.on('READ', 'GetMovementType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('',
-                {} as ILogUtility);
-            return oMovementTypes.data;
+            await oRegulationComplianceBaseInstance.setMovementType();
+            return oRegulationComplianceBaseInstance.aMaintainMovementType;
         })
 
         return super.init()

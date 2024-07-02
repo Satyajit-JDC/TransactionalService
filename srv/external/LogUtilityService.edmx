@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+        <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="LogUtilityService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="LogUtilityService" EntityType="LogUtilityService.LogUtilityService"/>
+            </EntityContainer>
+            <EntityType Name="LogUtilityService">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="modifiedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="modifiedBy" Type="Edm.String" MaxLength="255"/>
+                <Property Name="object" Type="Edm.String" MaxLength="50"/>
+                <Property Name="message" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="messageType" Type="Edm.String"/>
+                <Property Name="regulationType" Type="Edm.String" MaxLength="10"/>
+                <Property Name="regulationSubObjectType" Type="Edm.String" MaxLength="10"/>
+                <Property Name="applicationModule" Type="Edm.String" MaxLength="50"/>
+                <Property Name="applicationSubModule" Type="Edm.String" MaxLength="50"/>
+                <Property Name="technicalMessage" Type="Edm.String"/>
+            </EntityType>
+            <Annotations Target="LogUtilityService.LogUtilityService">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record Type="UI.HeaderInfoType">
+                        <PropertyValue Property="TypeName" String="Log entry"/>
+                        <PropertyValue Property="TypeNamePlural" String="Log entry"/>
+                        <PropertyValue Property="Title">
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="object"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="GeneratedGroup">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="object"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="message"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="messageType"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="regulationType"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="regulationSubObjectType"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="applicationModule"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="applicationSubModule"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="GeneratedFacet1"/>
+                            <PropertyValue Property="Label" String="General Information"/>
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#GeneratedGroup"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="object"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="message"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="messageType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="regulationType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="regulationSubObjectType"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="applicationModule"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="applicationSubModule"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Value" Path="technicalMessage"/>
+                            <Annotation Term="UI.Hidden" Bool="true"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>regulationType</PropertyPath>
+                        <PropertyPath>regulationSubObjectType</PropertyPath>
+                        <PropertyPath>applicationModule</PropertyPath>
+                        <PropertyPath>applicationSubModule</PropertyPath>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/createdAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Created On"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/createdBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Immutable" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Created By"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/modifiedAt">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Common.Label" String="Changed On"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/modifiedBy">
+                <Annotation Term="UI.HiddenFilter" Bool="true"/>
+                <Annotation Term="Core.Computed" Bool="true"/>
+                <Annotation Term="Core.Description" String="User's unique ID"/>
+                <Annotation Term="Common.Label" String="Changed By"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/object">
+                <Annotation Term="Common.Label" String="Object"/>
+                <Annotation Term="Core.Description" String="Object"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/message">
+                <Annotation Term="Common.Label" String="Message"/>
+                <Annotation Term="Core.Description" String="Message"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/messageType">
+                <Annotation Term="Common.Label" String="Message Type"/>
+                <Annotation Term="Core.Description" String="Message Type"/>
+                <Annotation Term="Validation.AllowedValues">
+                    <Collection>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Success"/>
+                            <PropertyValue Property="Value" String="S"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Error"/>
+                            <PropertyValue Property="Value" String="E"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Warning"/>
+                            <PropertyValue Property="Value" String="W"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="Information"/>
+                            <PropertyValue Property="Value" String="I"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/regulationType">
+                <Annotation Term="Common.Label" String="Regulation Type"/>
+                <Annotation Term="Core.Description" String="Regulation Type"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/regulationSubObjectType">
+                <Annotation Term="Common.Label" String="Regulation Sub Object Type"/>
+                <Annotation Term="Core.Description" String="Regulation Sub Object Type"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/applicationModule">
+                <Annotation Term="Common.Label" String="Application Module"/>
+                <Annotation Term="Core.Description" String="Application Module"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/applicationSubModule">
+                <Annotation Term="Common.Label" String="Application Sub Module"/>
+                <Annotation Term="Core.Description" String="Application Sub Module"/>
+            </Annotations>
+            <Annotations Target="LogUtilityService.LogUtilityService/technicalMessage">
+                <Annotation Term="Common.Label" String="technicalMessage"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
