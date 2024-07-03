@@ -9,188 +9,190 @@ import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
     IMaintainMovementType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario, IMaintainRegulationTransactionTypeTs,
-    IRfs2DebitType, IFuelCategory, IFuelSubCategory, EventPayload
+    IRfs2DebitType, IFuelCategory, IFuelSubCategory, EventPayload, ILogUtility
 } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import {
     MaintainRenewableMaterialConfiguration
 } from './external/regulationcompliancemasterservice_api';
-import { ILogUtility } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
-// import { ResourceManager } from '@sap/textbundle';
+import { messageTypes } from './library/utilities/zcom_tsConstants';
+
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
         // const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction')
         this.on("sendMessage", async msg => {
-        // // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
-        //     if (msg.data.data) {
-        //         const oManualAdjustmentData = msg.data.data;
-        //         // fill data from payload to object
-        //         const oEventPayloadData: EventPayload = {
-        //             RenewableMaterial: oEventData.RenewableMaterial,
-        //             RenewableEventType: oEventData.RenewableEventType,
-        //             RenewableFuelCategory: oEventData.RenewableFuelCategory,
-        //             RenewableTransactionType: oEventData.RenewableTransactionType,
-        //             RegulationGroupName: oEventData.RegulationGroupName,
-        //             RegulationMateGroup: oEventData.RegulationMateGroup,
-        //             MaterialDescription: oEventData.MaterialDescription,
-        //             _RenewableContract: {
-        //                 RenewableMaterial: oEventData._RenewableContract.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableContract.RenewableEventType,
-        //                 RenwableContract: oEventData._RenewableContract.RenwableContract,
-        //                 RenwableCotractItem: oEventData._RenewableContract.RenwableCotractItem,
-        //                 DocumentType: oEventData._RenewableContract.DocumentType,
-        //                 MovementType: oEventData._RenewableContract.MovementType,
-        //                 Quantity: oEventData._RenewableContract.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableContract.UnitOfMeasure
-        //             },
-        //             _RenewableDeal: {
-        //                 RenewableMaterial: oEventData._RenewableDeal.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableDeal.RenewableEventType,
-        //                 RenwableDealDocument: oEventData._RenewableDeal.RenwableDealDocument,
-        //                 RenwableDealItem: oEventData._RenewableDeal.RenwableDealItem,
-        //                 DocumentType: oEventData._RenewableDeal.DocumentType,
-        //                 MovementType: oEventData._RenewableDeal.MovementType,
-        //                 AttachedIndicator: oEventData._RenewableDeal.AttachedIndicator,
-        //                 Dcode: oEventData._RenewableDeal.Dcode,
-        //                 VintageYear: oEventData._RenewableDeal.VintageYear,
-        //                 Multiplier: oEventData._RenewableDeal.Multiplier,
-        //                 RINObligation: oEventData._RenewableDeal.RINObligation,
-        //                 RINsGenerator: oEventData._RenewableDeal.RINsGenerator,
-        //                 RINspriced: oEventData._RenewableDeal.RINspriced,
-        //                 QAPcertified: oEventData._RenewableDeal.QAPcertified,
-        //                 Quantity: oEventData._RenewableDeal.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableDeal.UnitOfMeasure,
-        //                 RenewablePassRetainIndicator: oEventData._RenewableDeal.RenewablePassRetainIndicator,
-        //                 RenewableDealNumber: oEventData._RenewableDeal.RenewableDealNumber,
-        //                 RenewableDcodeription: oEventData._RenewableDeal.RenewableDcodeription,
-        //                 RenewableVintageYearription: oEventData._RenewableDeal.RenewableVintageYearription,
-        //                 RenewableRinMultiplierription: oEventData._RenewableDeal.RenewableRinMultiplierription,
-        //                 RenewableQapCertifiedription: oEventData._RenewableDeal.RenewableQapCertifiedription
-        //             },
-        //             _RenewableDelivery: {
-        //                 RenewableMaterial: oEventData._RenewableDelivery.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableDelivery.RenewableEventType,
-        //                 RenwableDelivery: oEventData._RenewableDelivery.RenwableDelivery,
-        //                 RenwableDeliveryItem: oEventData._RenewableDelivery.RenwableDeliveryItem,
-        //                 DocumentType: oEventData._RenewableDelivery.DocumentType,
-        //                 MovementType: oEventData._RenewableDelivery.MovementType,
-        //                 Quantity: oEventData._RenewableDelivery.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableDelivery.UnitOfMeasure
-        //             },
-        //             _RenewableMaterialDocument: {
-        //                 RenewableMaterial: oEventData._RenewableMaterialDocument.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableMaterialDocument.RenewableEventType,
-        //                 RenwableMaterialDocument: oEventData._RenewableMaterialDocument.RenwableMaterialDocument,
-        //                 RenwableMaterialDocumentItem: oEventData._RenewableMaterialDocument.RenwableMaterialDocumentItem,
-        //                 DocumentType: oEventData._RenewableMaterialDocument.DocumentType,
-        //                 MovementType: oEventData._RenewableMaterialDocument.MovementType,
-        //                 Plant: oEventData._RenewableMaterialDocument.Plant,
-        //                 StorageLocation: oEventData._RenewableMaterialDocument.StorageLocation,
-        //                 CompanyCode: oEventData._RenewableMaterialDocument.CompanyCode,
-        //                 DocumentDate: oEventData._RenewableMaterialDocument.DocumentDate,
-        //                 Quantity: oEventData._RenewableMaterialDocument.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableMaterialDocument.UnitOfMeasure,
-        //                 RenewableMaterialDocDocDte: oEventData._RenewableMaterialDocument.RenewableMaterialDocDocDte,
-        //                 RenewableMaterialDocPostgDte: oEventData._RenewableMaterialDocument.RenewableMaterialDocPostgDte,
-        //                 RenewableBillOfLading: oEventData._RenewableMaterialDocument.RenewableBillOfLading,
-        //                 RenewableReasonReasonCode: oEventData._RenewableMaterialDocument.RenewableReasonReasonCode,
-        //                 RenewableReversalPostingDate: oEventData._RenewableMaterialDocument.RenewableReversalPostingDate
-        //             },
-        //             _RenewableNominationData: {
-        //                 RenewableMaterial: oEventData._RenewableNominationData.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableNominationData.RenewableEventType,
-        //                 RenwableNomination: oEventData._RenewableNominationData.RenwableNomination,
-        //                 NominationKey: oEventData._RenewableNominationData.NominationKey,
-        //                 RenwableNominationItem: oEventData._RenewableNominationData.RenwableNominationItem,
-        //                 DocumentType: oEventData._RenewableNominationData.DocumentType,
-        //                 MovementType: oEventData._RenewableNominationData.MovementType,
-        //                 Quantity: oEventData._RenewableNominationData.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableNominationData.UnitOfMeasure
-        //             },
-        //             _RenewableProductionOrder: {
-        //                 RenewableMaterial: oEventData._RenewableProductionOrder.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableProductionOrder.RenewableEventType,
-        //                 RenwableProductionOrder: oEventData._RenewableProductionOrder.RenwableProductionOrder,
-        //                 RenwableProductionOrderItem: oEventData._RenewableProductionOrder.RenwableProductionOrderItem,
-        //                 DocumentType: oEventData._RenewableProductionOrder.DocumentType,
-        //                 MovementType: oEventData._RenewableProductionOrder.MovementType,
-        //                 Quantity: oEventData._RenewableProductionOrder.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableProductionOrder.UnitOfMeasure,
-        //                 RenewableBusinessPartnerNumber: oEventData._RenewableProductionOrder.RenewableBusinessPartnerNumber,
-        //                 RenewableBusinessPartnerDesc: oEventData._RenewableProductionOrder.RenewableBusinessPartnerDesc,
-        //                 RenewableIncoTerms1: oEventData._RenewableProductionOrder.RenewableIncoTerms1,
-        //                 RenewableIncoTerms2: oEventData._RenewableProductionOrder.RenewableIncoTerms2,
-        //                 RenewableContract: oEventData._RenewableProductionOrder.RenewableContract,
-        //                 RenewableContractItem: oEventData._RenewableProductionOrder.RenewableContractItem
-        //             },
-        //             _RenewablePurchaseOrder: {
-        //                 RenewableMaterial: oEventData._RenewablePurchaseOrder.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewablePurchaseOrder.RenewableEventType,
-        //                 RenwablePurchaseOrder: oEventData._RenewablePurchaseOrder.RenwablePurchaseOrder,
-        //                 RenwablePurchaseOrderItem: oEventData._RenewablePurchaseOrder.RenwablePurchaseOrderItem,
-        //                 DocumentType: oEventData._RenewablePurchaseOrder.DocumentType,
-        //                 MovementType: oEventData._RenewablePurchaseOrder.MovementType,
-        //                 Quantity: oEventData._RenewablePurchaseOrder.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewablePurchaseOrder.UnitOfMeasure
-        //             },
-        //             _RenewableSalesOrder: {
-        //                 RenewableMaterial: oEventData._RenewableSalesOrder.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableSalesOrder.RenewableEventType,
-        //                 RenwableSalesOrder: oEventData._RenewableSalesOrder.RenwableSalesOrder,
-        //                 RenwableSalesOrderItem: oEventData._RenewableSalesOrder.RenwableSalesOrderItem,
-        //                 DocumentType: oEventData._RenewableSalesOrder.DocumentType,
-        //                 MovementType: oEventData._RenewableSalesOrder.MovementType,
-        //                 Quantity: oEventData._RenewableSalesOrder.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableSalesOrder.UnitOfMeasure
-        //             },
-        //             _RenewableTicketData: {
-        //                 RenewableMaterial: oEventData._RenewableTicketData.RenewableMaterial,
-        //                 RenewableEventType: oEventData._RenewableTicketData.RenewableEventType,
-        //                 RenwableTicket: oEventData._RenewableTicketData.RenwableTicket,
-        //                 RenwableTicketItem: oEventData._RenewableTicketData.RenwableTicketItem,
-        //                 Ticketkey: oEventData._RenewableTicketData.Ticketkey,
-        //                 TicketVersion: oEventData._RenewableTicketData.TicketVersion,
-        //                 TicketPurpose: oEventData._RenewableTicketData.TicketPurpose,
-        //                 Tickettype: oEventData._RenewableTicketData.Tickettype,
-        //                 ExternalTicketNumber: oEventData._RenewableTicketData.ExternalTicketNumber,
-        //                 ExternalPositionNumber: oEventData._RenewableTicketData.ExternalPositionNumber,
-        //                 DocumentType: oEventData._RenewableTicketData.DocumentType,
-        //                 MovementType: oEventData._RenewableTicketData.MovementType,
-        //                 Quantity: oEventData._RenewableTicketData.Quantity,
-        //                 UnitOfMeasure: oEventData._RenewableTicketData.UnitOfMeasure
-        //             }
-        //         };
-        //         // create Base Class Object with Event Data to identify Regulation
-        //         const oRFS2ComplianceClassInstance = await new RegulationComplianceBaseClass(oEventPayloadData);
+        // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+            if (msg.data.data) {
+                const oEventData = msg.data.data;
+                // fill data from payload to object
+                const oEventPayloadData: EventPayload = {
+                    RenewableMaterial: oEventData.RenewableMaterial,
+                    RenewableEventType: oEventData.RenewableEventType,
+                    RenewableFuelCategory: oEventData.RenewableFuelCategory,
+                    RenewableTransactionType: oEventData.RenewableTransactionType,
+                    RegulationGroupName: oEventData.RegulationGroupName,
+                    RegulationMateGroup: oEventData.RegulationMateGroup,
+                    MaterialDescription: oEventData.MaterialDescription,
+                    _RenewableContract: {
+                        RenewableMaterial: oEventData._RenewableContract.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableContract.RenewableEventType,
+                        RenwableContract: oEventData._RenewableContract.RenwableContract,
+                        RenwableCotractItem: oEventData._RenewableContract.RenwableCotractItem,
+                        DocumentType: oEventData._RenewableContract.DocumentType,
+                        MovementType: oEventData._RenewableContract.MovementType,
+                        Quantity: oEventData._RenewableContract.Quantity,
+                        UnitOfMeasure: oEventData._RenewableContract.UnitOfMeasure
+                    },
+                    _RenewableDeal: {
+                        RenewableMaterial: oEventData._RenewableDeal.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableDeal.RenewableEventType,
+                        RenwableDealDocument: oEventData._RenewableDeal.RenwableDealDocument,
+                        RenwableDealItem: oEventData._RenewableDeal.RenwableDealItem,
+                        DocumentType: oEventData._RenewableDeal.DocumentType,
+                        MovementType: oEventData._RenewableDeal.MovementType,
+                        AttachedIndicator: oEventData._RenewableDeal.AttachedIndicator,
+                        Dcode: oEventData._RenewableDeal.Dcode,
+                        VintageYear: oEventData._RenewableDeal.VintageYear,
+                        Multiplier: oEventData._RenewableDeal.Multiplier,
+                        RINObligation: oEventData._RenewableDeal.RINObligation,
+                        RINsGenerator: oEventData._RenewableDeal.RINsGenerator,
+                        RINspriced: oEventData._RenewableDeal.RINspriced,
+                        QAPcertified: oEventData._RenewableDeal.QAPcertified,
+                        Quantity: oEventData._RenewableDeal.Quantity,
+                        UnitOfMeasure: oEventData._RenewableDeal.UnitOfMeasure,
+                        RenewablePassRetainIndicator: oEventData._RenewableDeal.RenewablePassRetainIndicator,
+                        RenewableDealNumber: oEventData._RenewableDeal.RenewableDealNumber,
+                        RenewableDcodeription: oEventData._RenewableDeal.RenewableDcodeription,
+                        RenewableVintageYearription: oEventData._RenewableDeal.RenewableVintageYearription,
+                        RenewableRinMultiplierription: oEventData._RenewableDeal.RenewableRinMultiplierription,
+                        RenewableQapCertifiedription: oEventData._RenewableDeal.RenewableQapCertifiedription
+                    },
+                    _RenewableDelivery: {
+                        RenewableMaterial: oEventData._RenewableDelivery.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableDelivery.RenewableEventType,
+                        RenwableDelivery: oEventData._RenewableDelivery.RenwableDelivery,
+                        RenwableDeliveryItem: oEventData._RenewableDelivery.RenwableDeliveryItem,
+                        DocumentType: oEventData._RenewableDelivery.DocumentType,
+                        MovementType: oEventData._RenewableDelivery.MovementType,
+                        Quantity: oEventData._RenewableDelivery.Quantity,
+                        UnitOfMeasure: oEventData._RenewableDelivery.UnitOfMeasure
+                    },
+                    _RenewableMaterialDocument: {
+                        RenewableMaterial: oEventData._RenewableMaterialDocument.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableMaterialDocument.RenewableEventType,
+                        RenwableMaterialDocument: oEventData._RenewableMaterialDocument.RenwableMaterialDocument,
+                        RenwableMaterialDocumentItem: oEventData._RenewableMaterialDocument.RenwableMaterialDocumentItem,
+                        DocumentType: oEventData._RenewableMaterialDocument.DocumentType,
+                        MovementType: oEventData._RenewableMaterialDocument.MovementType,
+                        Plant: oEventData._RenewableMaterialDocument.Plant,
+                        StorageLocation: oEventData._RenewableMaterialDocument.StorageLocation,
+                        CompanyCode: oEventData._RenewableMaterialDocument.CompanyCode,
+                        DocumentDate: oEventData._RenewableMaterialDocument.DocumentDate,
+                        Quantity: oEventData._RenewableMaterialDocument.Quantity,
+                        UnitOfMeasure: oEventData._RenewableMaterialDocument.UnitOfMeasure,
+                        RenewableMaterialDocDocDte: oEventData._RenewableMaterialDocument.RenewableMaterialDocDocDte,
+                        RenewableMaterialDocPostgDte: oEventData._RenewableMaterialDocument.RenewableMaterialDocPostgDte,
+                        RenewableBillOfLading: oEventData._RenewableMaterialDocument.RenewableBillOfLading,
+                        RenewableReasonReasonCode: oEventData._RenewableMaterialDocument.RenewableReasonReasonCode,
+                        RenewableReversalPostingDate: oEventData._RenewableMaterialDocument.RenewableReversalPostingDate
+                    },
+                    _RenewableNominationData: {
+                        RenewableMaterial: oEventData._RenewableNominationData.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableNominationData.RenewableEventType,
+                        RenwableNomination: oEventData._RenewableNominationData.RenwableNomination,
+                        NominationKey: oEventData._RenewableNominationData.NominationKey,
+                        RenwableNominationItem: oEventData._RenewableNominationData.RenwableNominationItem,
+                        DocumentType: oEventData._RenewableNominationData.DocumentType,
+                        MovementType: oEventData._RenewableNominationData.MovementType,
+                        Quantity: oEventData._RenewableNominationData.Quantity,
+                        UnitOfMeasure: oEventData._RenewableNominationData.UnitOfMeasure
+                    },
+                    _RenewableProductionOrder: {
+                        RenewableMaterial: oEventData._RenewableProductionOrder.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableProductionOrder.RenewableEventType,
+                        RenwableProductionOrder: oEventData._RenewableProductionOrder.RenwableProductionOrder,
+                        RenwableProductionOrderItem: oEventData._RenewableProductionOrder.RenwableProductionOrderItem,
+                        DocumentType: oEventData._RenewableProductionOrder.DocumentType,
+                        MovementType: oEventData._RenewableProductionOrder.MovementType,
+                        Quantity: oEventData._RenewableProductionOrder.Quantity,
+                        UnitOfMeasure: oEventData._RenewableProductionOrder.UnitOfMeasure,
+                        RenewableBusinessPartnerNumber: oEventData._RenewableProductionOrder.RenewableBusinessPartnerNumber,
+                        RenewableBusinessPartnerDesc: oEventData._RenewableProductionOrder.RenewableBusinessPartnerDesc,
+                        RenewableIncoTerms1: oEventData._RenewableProductionOrder.RenewableIncoTerms1,
+                        RenewableIncoTerms2: oEventData._RenewableProductionOrder.RenewableIncoTerms2,
+                        RenewableContract: oEventData._RenewableProductionOrder.RenewableContract,
+                        RenewableContractItem: oEventData._RenewableProductionOrder.RenewableContractItem
+                    },
+                    _RenewablePurchaseOrder: {
+                        RenewableMaterial: oEventData._RenewablePurchaseOrder.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewablePurchaseOrder.RenewableEventType,
+                        RenwablePurchaseOrder: oEventData._RenewablePurchaseOrder.RenwablePurchaseOrder,
+                        RenwablePurchaseOrderItem: oEventData._RenewablePurchaseOrder.RenwablePurchaseOrderItem,
+                        DocumentType: oEventData._RenewablePurchaseOrder.DocumentType,
+                        MovementType: oEventData._RenewablePurchaseOrder.MovementType,
+                        Quantity: oEventData._RenewablePurchaseOrder.Quantity,
+                        UnitOfMeasure: oEventData._RenewablePurchaseOrder.UnitOfMeasure
+                    },
+                    _RenewableSalesOrder: {
+                        RenewableMaterial: oEventData._RenewableSalesOrder.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableSalesOrder.RenewableEventType,
+                        RenwableSalesOrder: oEventData._RenewableSalesOrder.RenwableSalesOrder,
+                        RenwableSalesOrderItem: oEventData._RenewableSalesOrder.RenwableSalesOrderItem,
+                        DocumentType: oEventData._RenewableSalesOrder.DocumentType,
+                        MovementType: oEventData._RenewableSalesOrder.MovementType,
+                        Quantity: oEventData._RenewableSalesOrder.Quantity,
+                        UnitOfMeasure: oEventData._RenewableSalesOrder.UnitOfMeasure
+                    },
+                    _RenewableTicketData: {
+                        RenewableMaterial: oEventData._RenewableTicketData.RenewableMaterial,
+                        RenewableEventType: oEventData._RenewableTicketData.RenewableEventType,
+                        RenwableTicket: oEventData._RenewableTicketData.RenwableTicket,
+                        RenwableTicketItem: oEventData._RenewableTicketData.RenwableTicketItem,
+                        Ticketkey: oEventData._RenewableTicketData.Ticketkey,
+                        TicketVersion: oEventData._RenewableTicketData.TicketVersion,
+                        TicketPurpose: oEventData._RenewableTicketData.TicketPurpose,
+                        Tickettype: oEventData._RenewableTicketData.Tickettype,
+                        ExternalTicketNumber: oEventData._RenewableTicketData.ExternalTicketNumber,
+                        ExternalPositionNumber: oEventData._RenewableTicketData.ExternalPositionNumber,
+                        DocumentType: oEventData._RenewableTicketData.DocumentType,
+                        MovementType: oEventData._RenewableTicketData.MovementType,
+                        Quantity: oEventData._RenewableTicketData.Quantity,
+                        UnitOfMeasure: oEventData._RenewableTicketData.UnitOfMeasure
+                    }
+                };
+                // create Base Class Object with Event Data to identify Regulation
+                const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oEventPayloadData);
 
-        //         // wait for promise to get regulations
-        //         oRFS2ComplianceClassInstance.oRegulationDataIsReady.then(()=>{
-        //             // RFS2 Regulation is Active
-        //             if(oRFS2ComplianceClassInstance.oRFS2RegulationData){
-        //                 oRFS2ComplianceClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRFS2ComplianceClassInstance);
-        //             }
-        //         });
-        //     }
-        //     // if (msg.data) {
-        //     //     const oEventData = msg.data;
-        //     //     let oYear: string = "", sRegGroups: string = "",
-        //     //         aRegulationGroups: IMaintainRegulationGroupView = {
-        //     //             map: {}, regulationType: "", regulationType_regulationType: "",
-        //     //             regulationTypeRegulationType: "", data: []
-        //     //         },
-        //     //         aRegulationMaterialGrp: IMaintainRegulationMaterialGroupView = { map: {}, objectCategory: "", objectCategory_category: "" },
-        //     //         aRegObjectType: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
-        //     //         aMovementTypes: IMaintainMovementType = { map: {}, movementTypeMovementType: "", movementType_movementType: "", data: [] },
-        //     //         aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
-        //     //         aMvtTypeRelevance: IMaintainMovementTypeToTransactionCategoryImpact = { map: {}, transactionCategoryCategory: "", data: [] },
-        //     //         aIMaintainRegulationTransactionTypeTsMAP: IMaintainRegulationTransactionTypeTs = { map: {} },
-        //     //         aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {},data:[] },
-        //     //         logObjectID:string = "",
-        //     //         oLogData: ILogUtility = {} as ILogUtility,
-        //     //         aRFS2DebitType = { map: {}, data: [] } as IRfs2DebitType,
-        //     //         aFuelCategory = { map: {}, data: [] } as IFuelCategory,
-        //     //         aFuelSubCategory = { map: {}, data: [] } as IFuelSubCategory;
+                // wait for promise to get regulations
+                oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved)=>{
+                    if(bResolved){
+                        // RFS2 Regulation is Active
+                        if(oRegulationComplianceBaseClassInstance.oRFS2RegulationData){
+                            oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
+                        }
+                    }
+                });
+            }
+            // if (msg.data) {
+            //     const oEventData = msg.data;
+            //     let oYear: string = "", sRegGroups: string = "",
+            //         aRegulationGroups: IMaintainRegulationGroupView = {
+            //             map: {}, regulationType: "", regulationType_regulationType: "",
+            //             regulationTypeRegulationType: "", data: []
+            //         },
+            //         aRegulationMaterialGrp: IMaintainRegulationMaterialGroupView = { map: {}, objectCategory: "", objectCategory_category: "" },
+            //         aRegObjectType: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
+            //         aMovementTypes: IMaintainMovementType = { map: {}, movementTypeMovementType: "", movementType_movementType: "", data: [] },
+            //         aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
+            //         aMvtTypeRelevance: IMaintainMovementTypeToTransactionCategoryImpact = { map: {}, transactionCategoryCategory: "", data: [] },
+            //         aIMaintainRegulationTransactionTypeTsMAP: IMaintainRegulationTransactionTypeTs = { map: {} },
+            //         aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {},data:[] },
+            //         logObjectID:string = "",
+            //         oLogData: ILogUtility = {} as ILogUtility,
+            //         aRFS2DebitType = { map: {}, data: [] } as IRfs2DebitType,
+            //         aFuelCategory = { map: {}, data: [] } as IFuelCategory,
+            //         aFuelSubCategory = { map: {}, data: [] } as IFuelSubCategory;
 
         //     //     const aFinalData: RegulationComplianceTransaction[] = [];
         //     //     oEventData.documentDate = "2024-06-19"; //HC
@@ -1047,7 +1049,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }//if (oRegObjectCateory
             }//if (regulationType
             if (aFinalData.length > 0) {
-                await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData, logObjectID);
+                // await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData);
             }
             return ODataRequest.data;
         })
@@ -1183,10 +1185,18 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.after("CREATE", 'RegulationComplianceTransaction', async (data, req) => {
             debugger;
             // console.log("debugging")
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload),
+                  oLogData: ILogUtility = {} as ILogUtility;
+            oLogData.message = "RINSCreatedSuccessfully";
+            oLogData.messageType = messageTypes.success;
+
             for (let index = 0; index < data.length; index++) {
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);
                 data[index].objectId = oObjectID;
+                oLogData.regulationType = oLogData.applicationModule = data[index].regulationType;
+                oLogData.regulationSubObjectType = data[index].objectType;
+                oLogData.applicationSubModule = data[index].subObjectScenario;
+                oRegulationComplianceBaseInstance.addLog(oLogData);
             }
         })
 

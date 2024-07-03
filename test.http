@@ -14,7 +14,7 @@ Content-Type: application/json
     "RenewableFuelCategory":"GS",
     "RenewableTransactionType":"PUR",
     "RegulationGroupName":"R001",
-    "RegulationMateGroup":"M001",
+    "RegulationMateGroup":"M003",
     "MaterialDescription":"UNLEADED PREMIUM 91",
     "_RenewableContract":{
       "RenewableMaterial":"",
@@ -23,7 +23,7 @@ Content-Type: application/json
       "RenwableCotractItem":"0",
       "DocumentType":"",
       "MovementType":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":""
     },
     "_RenewableDeal":{
@@ -41,7 +41,7 @@ Content-Type: application/json
       "RINsGenerator":"",
       "RINspriced":"",
       "QAPcertified":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":"",
       "RenewablePassRetainIndicator":false,
       "RenewableDealNumber":"",
@@ -57,7 +57,7 @@ Content-Type: application/json
       "RenwableDeliveryItem":"0",
       "DocumentType":"",
       "MovementType":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":""
     },
     "_RenewableMaterialDocument":{
@@ -71,7 +71,7 @@ Content-Type: application/json
       "StorageLocation":"",
       "CompanyCode":"",
       "DocumentDate":null,
-      "Quantity":"10000",
+      "Quantity": "10000",
       "UnitOfMeasure":"UG6",
       "RenewableMaterialDocDocDte":null,
       "RenewableMaterialDocPostgDte":null,
@@ -87,7 +87,7 @@ Content-Type: application/json
       "RenwableNominationItem":"0",
       "DocumentType":"",
       "MovementType":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":""
     },
     "_RenewableProductionOrder":{
@@ -97,7 +97,7 @@ Content-Type: application/json
       "RenwableProductionOrderItem":"0",
       "DocumentType":"",
       "MovementType":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":"",
       "RenewableBusinessPartnerNumber":"",
       "RenewableBusinessPartnerDesc":"",
@@ -113,7 +113,7 @@ Content-Type: application/json
       "RenwablePurchaseOrderItem":"0",
       "DocumentType":"",
       "MovementType":"521",
-      "Quantity":"10000",
+      "Quantity": "10000",
       "UnitOfMeasure":"UG6"
     },
     "_RenewableSalesOrder":{
@@ -123,7 +123,7 @@ Content-Type: application/json
       "RenwableSalesOrderItem":"0",
       "DocumentType":"",
       "MovementType":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":""
     },
     "_RenewableTicketData":{
@@ -139,7 +139,7 @@ Content-Type: application/json
       "ExternalPositionNumber":"",
       "DocumentType":"",
       "MovementType":"",
-      "Quantity":"0",
+      "Quantity": "0.000",
       "UnitOfMeasure":""
     }
  }
@@ -167,7 +167,7 @@ Content-Type: application/json
             "originRegion": "",
             "destinationRegion": "",
             "modeofTransport": "11",
-            "fuelQuantity": 420.000,
+            "fuelQuantity": "420.000",
             "fuelUnitofMeasurement": "UG6",
             "dcode": "",
             "vintageYear": "2024",
