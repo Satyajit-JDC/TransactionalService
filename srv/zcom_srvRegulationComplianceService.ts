@@ -47,6 +47,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 const aFinalData: RegulationComplianceTransaction[] = [];
                 oEventData.documentDate = "2024-06-19"; //HC
                 oEventData.postingDate = "2024-06-19"; //HC
+                
                 oYear = new Date(oEventData.documentDate).getFullYear().toString(); //HC
                 if (oEventData.RenewableEventType && oEventData._RenewableMaterialDocument) {
                     logObjectID = oEventData.RenewableEventType + oEventData._RenewableMaterialDocument.RenwableMaterialDocument +
@@ -671,7 +672,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 reasonCode,
                 reasonCodeDesc,
                 renewablesDocumentComplianceYear,
-                sourceOrgCompanyPlant,
+                sourceOrgPlant,
                 adjustmentBase,
                 billofLading,
                 fuelCategory
@@ -739,7 +740,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                     fuelQuantity,
                                     renewablesEpaCompanyId,
                                     renewablesEpaFacilityId,
-                                    fuelLogisticsCompanyMaterialNumber,
+                                    fuelLogisticsMaterialNumber,
                                 } = ODataRequest.data;
 
                                 // Fetch material configuration
@@ -777,7 +778,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 businessPartnerNumber: businessPartnerNumber,
                                                 reasonCode: reasonCode,
                                                 reasonCodeDesc: reasonCodeDesc,
-                                                sourceOrgPlant: sourceOrgCompanyPlant,
+                                                sourceOrgPlant: sourceOrgPlant,
                                                 regulationQuantity: Math.round(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
                                                 regulationQuantityWholeNumber: Math.floor(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
                                                 // regulationUnitOfMeasurement: regulationUoMCategory,  
@@ -791,7 +792,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 fuelCategory: fuelCategory,
                                                 fuelQuantity: fuelQuantity,
                                                 adjustmentBase: adjustmentBase,
-                                                fuelLogisticsMaterialNumber: fuelLogisticsCompanyMaterialNumber,
+                                                fuelLogisticsMaterialNumber: fuelLogisticsMaterialNumber,
                                                 renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
@@ -814,12 +815,12 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 const {
                                     regulationQuantity,
                                     regulationUnitOfMeasurement,
-                                    regulationLogisticsCompanyMaterialNumber,
-                                    sourceOrgCompanyMaterialNumber
+                                    regulationLogisticsMaterialNumber,
+                                    sourceOrgMaterialNumber
                                 } = ODataRequest.data;
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
-                                    const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsCompanyMaterialNumber + "'";
+                                    const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsMaterialNumber + "'";
                                     aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
                                         {} as ILogUtility);
                                 }
@@ -845,10 +846,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                             businessPartnerNumber: businessPartnerNumber,
                                             reasonCode: reasonCode,
                                             reasonCodeDesc: reasonCodeDesc,
-                                            sourceOrgPlant: sourceOrgCompanyPlant,
+                                            sourceOrgPlant: sourceOrgPlant,
                                             regulationQuantity: regulationQuantity,
                                             regulationUnitOfMeasurement: regulationUnitOfMeasurement,
-                                            regulationLogisticsMaterialNumber: regulationLogisticsCompanyMaterialNumber,
+                                            regulationLogisticsMaterialNumber: regulationLogisticsMaterialNumber,
                                             billofLading: billofLading,
                                             fuelCategory: fuelCategory,
                                             adjustmentBase: adjustmentBase,
