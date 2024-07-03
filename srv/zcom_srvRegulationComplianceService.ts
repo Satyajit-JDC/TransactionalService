@@ -1022,6 +1022,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'GetFuelMaterialS4', async (request) => {
             debugger;
            const oFuelMat =  await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
+           console.log(oFuelMat);
            return oFuelMat;
         })
         this.on('READ', 'GetTransactionType', async () => {

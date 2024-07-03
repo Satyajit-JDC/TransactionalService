@@ -321,7 +321,9 @@ class RegulationComplianceBaseClass {
             } else {
                 const { maintainRenewableMaterialConfigurationApi } = regulationcompliancemasterserviceApi();
                 aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
-                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                .addCustomQueryParameters({
+                    $expand: 'regulationType'
+                }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: "RegulationComplianceMasterService"
                     });
