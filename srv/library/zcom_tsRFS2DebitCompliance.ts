@@ -41,7 +41,7 @@ export class RFS2DeditCompliance {
         }
 
         // set movement type data
-        await this._oRegulationComplianceBaseClassInstance.setRegulationObjectType();
+        await this._oRegulationComplianceBaseClassInstance.setMovementType();
         if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementType) {
             if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.movementType !== this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument.MovementType) {
                 return false;

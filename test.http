@@ -10,7 +10,7 @@ Content-Type: application/json
 {
     "data": {
     "RenewableMaterial":"300003",
-    "RenewableEventType":"GM-CR-ET",
+    "RenewableEventType":"GM",
     "RenewableFuelCategory":"GS",
     "RenewableTransactionType":"PUR",
     "RegulationGroupName":"R001",
@@ -66,11 +66,11 @@ Content-Type: application/json
       "RenwableMaterialDocument":"10001010",
       "RenwableMaterialDocumentItem":"10",
       "DocumentType":"",
-      "MovementType":"521",
+      "MovementType":"101",
       "Plant":"",
       "StorageLocation":"",
       "CompanyCode":"",
-      "DocumentDate":null,
+      "DocumentDate":"2024-07-03",
       "Quantity": "10000",
       "UnitOfMeasure":"UG6",
       "RenewableMaterialDocDocDte":null,
