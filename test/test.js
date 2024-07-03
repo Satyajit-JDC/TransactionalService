@@ -119,7 +119,7 @@ describe('Manual Adjustment Customer Handler', () => {
         "businessPartnerNumber": "123",
         "reasonCode": "02",
         "reasonCodeDesc": "Manual feed",
-        "sourceOrgCompanyPlant": "0563",
+        "sourceOrgPlant": "0563",
         "renewablesEpaCompanyId": "1000",
         "renewablesEpaFacilityId": "44",
         "fuelUnitofMeasurement": "BBL",
