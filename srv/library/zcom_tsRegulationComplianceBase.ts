@@ -13,10 +13,11 @@ import { resilience } from '@sap-cloud-sdk/resilience';
 import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes,language } from './utilities/zcom_tsConstants';
 import { ResourceManager } from '@sap/textbundle';
+import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 
 export class RegulationComplianceBaseClass {
     // private elements
-    private _oRFS2Compliance!: RFS2ComplianceClass;
+    private _oRFS2ComplianceClassInstance!: RFS2ComplianceClass;
 
     // public elements
     public oEventPayloadData: EventPayload;
@@ -49,7 +50,7 @@ export class RegulationComplianceBaseClass {
     public aImpact: Impact[];
 
     //-------- Start of Base constructor ------------------
-    constructor(oEventPayloadData: EventPayload) {
+   constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
 
         // initialize the data
@@ -80,9 +81,13 @@ export class RegulationComplianceBaseClass {
 
         // regulation group present then set Regulation Type to class object
         if (oEventPayloadData.RegulationGroupName) {
-            this.oRegulationDataIsReady = new Promise(async (resolve) => {
-                await this.setRegulations();
-                resolve(undefined);
+            this.oRegulationDataIsReady = new Promise(async (resolve,reject) => {
+                try {
+                    await this.setRegulations();
+                    resolve(true);
+                } catch (error) {
+                    reject(false);
+                }
             });
         }
     }
@@ -90,8 +95,8 @@ export class RegulationComplianceBaseClass {
 
     // --------- Start of Setter methods ------------------
     // set RFS2 Class Instance Object
-    set setRFS2ComplianceClassObject(oRFS2ClassObject: RFS2ComplianceClass) {
-        this._oRFS2Compliance = oRFS2ClassObject;
+    set setRFS2ComplianceClassObject(oRFS2ClassObjectInstance: RFS2ComplianceClass) {
+        this._oRFS2ComplianceClassInstance = oRFS2ClassObjectInstance;
     }
 
     // method to set regulation to object
@@ -123,7 +128,11 @@ export class RegulationComplianceBaseClass {
                 }
                 // in case of S4 event log the message
                 if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                    this.addLog("FailedToReadRegulationGroupFromMasterData", sErrorMsg, messageTypes.error);
+                    const oLogData: ILogUtility = {} as ILogUtility;
+                    oLogData.message = "FailedToReadRegulationGroupFromMasterData";
+                    oLogData.technicalMessage = sErrorMsg;
+                    oLogData.messageType = messageTypes.error;
+                    this.addLog(oLogData);
                 }
             }
         }
@@ -167,7 +176,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadObjectCategoryFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadObjectCategoryFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -203,7 +216,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadRegulationSubScenarioToScenarioFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadRegulationSubScenarioToScenarioFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -246,7 +263,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadObjectTypeFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadObjectTypeFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -286,7 +307,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadMovementTypeFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadMovementTypeFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -329,7 +354,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadMovementTypeRelevanceFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadMovementTypeRelevanceFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -366,7 +395,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadMaterialConfigurationFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadMaterialConfigurationFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -406,7 +439,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadRegulationTypeFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadRegulationTypeFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -439,7 +476,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadRegulationTransactionTypesFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadRegulationTransactionTypesFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -468,7 +509,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadTransactionTypeFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadTransactionTypeFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -495,7 +540,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadRFS2DebitTypeFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadRFS2DebitTypeFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -522,7 +571,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadFuelCategoryFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadFuelCategoryFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -549,7 +602,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadFuelCategoryFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadFuelCategoryFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -575,7 +632,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadAdjustmentReasonCodeFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadAdjustmentReasonCodeFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -601,7 +662,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadObjectCategoryFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadObjectCategoryFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -627,7 +692,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadUnitOfMeasurementFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadUnitOfMeasurementFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -653,7 +722,11 @@ export class RegulationComplianceBaseClass {
             }
             // in case of S4 event log the message
             if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
-                this.addLog("FailedToReadImpactFromMasterData", sErrorMsg, messageTypes.error);
+                const oLogData: ILogUtility = {} as ILogUtility;
+                oLogData.message = "FailedToReadImpactFromMasterData";
+                oLogData.technicalMessage = sErrorMsg;
+                oLogData.messageType = messageTypes.error;
+                this.addLog(oLogData);
             }
         }
     }
@@ -680,36 +753,58 @@ export class RegulationComplianceBaseClass {
     // --------- End of Getter methods ------------------
 
     // --------- Start of Post methods ------------------
-    async addLog(message: string, technicalMessage: string, messageType: string) {
-        if (message &&
-            messageType &&
-            this.oEventPayloadData.RenewableEventType &&
-            this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument &&
-            this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem
-        ) {
+    // add logs to log service
+    async addLog(oLogData:ILogUtility) {
+        if (oLogData) {
             const oResourceManager = new ResourceManager("../../_i18n/i18n"),
                   oBundle = oResourceManager.getTextBundle(language),
                   logObjectID = this.oEventPayloadData.RenewableEventType +
                     this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument +
                     this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem,
+                { logUtilityServiceApi } = logutilityserviceApi();
+            
+            // fill unfilled common data
+            if(!oLogData.object){
+                oLogData.object = logObjectID;
+            }
+            oLogData.message = oBundle.getText(oLogData.message);
+            if(!oLogData.regulationType){
+                oLogData.regulationType = this.oRFS2RegulationData.regulationType as string;
+            }
+            if(!oLogData.regulationSubObjectType){
+                oLogData.regulationSubObjectType = this.oMaintainRegulationObjecttype.objectTypeCode as string;
+            }
+            if(!oLogData.applicationModule){
+                oLogData.applicationModule = this.oRFS2RegulationData.regulationType as string;
+            }
+            if(!oLogData.applicationSubModule){
+                oLogData.applicationSubModule = this.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory as string;
+            }
 
-                oLogData: ILogUtility = {
-                    object: logObjectID,
-                    message: oBundle.getText(message),
-                    messageType: messageType,
-                    regulationType: this.oRFS2RegulationData.regulationType as string,
-                    regulationSubObjectType: this.oMaintainRegulationObjecttype.objectTypeCode as string,
-                    applicationModule: this.oRFS2RegulationData.regulationType as string,
-                    applicationSubModule: this.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory as string,
-                    technicalMessage: technicalMessage
-                },
-
-                { logUtilityServiceApi } = logutilityserviceApi(),
-                payload: LogUtilityService = logUtilityServiceApi.entityBuilder().fromJson(oLogData);
+            const payload: LogUtilityService = logUtilityServiceApi.entityBuilder().fromJson(oLogData);
 
             await logUtilityServiceApi.requestBuilder().create(payload).middleware(resilience({ retry: 3, circuitBreaker: true })).execute({
                 destinationName: "LogUtilityService"
             });
+        }
+    }
+
+    // add regulations
+    async addRegulationCompliances(data:RegulationComplianceTransaction[]){
+        const srv = await cds.connect.to ('RegulationComplianceTransactionService');
+        try {
+            await srv.post('RegulationComplianceTransaction', data);
+            
+        } catch (error) {
+            console.log(error);
+            const oLogData: ILogUtility = {} as ILogUtility;
+            if (error instanceof Error) {
+                // e is narrowed to Error!
+                oLogData.technicalMessage = error.stack as string;
+            }
+            oLogData.message = "ErrorDuringInsertingData";
+            oLogData.messageType = messageTypes.error;
+            this.addLog(oLogData);
         }
     }
     // --------- End of Post methods ------------------

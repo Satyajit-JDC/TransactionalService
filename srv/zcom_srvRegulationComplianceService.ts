@@ -9,13 +9,13 @@ import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
     IMaintainMovementType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario, IMaintainRegulationTransactionTypeTs,
-    IRfs2DebitType, IFuelCategory, IFuelSubCategory, EventPayload
+    IRfs2DebitType, IFuelCategory, IFuelSubCategory, EventPayload, ILogUtility
 } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import {
     MaintainRenewableMaterialConfiguration
 } from './external/regulationcompliancemasterservice_api';
-import { ILogUtility } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
+import { messageTypes } from './library/utilities/zcom_tsConstants';
 
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
@@ -162,13 +162,15 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     }
                 };
                 // create Base Class Object with Event Data to identify Regulation
-                const oRFS2ComplianceClassInstance = await new RegulationComplianceBaseClass(oEventPayloadData);
+                const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oEventPayloadData);
 
                 // wait for promise to get regulations
-                oRFS2ComplianceClassInstance.oRegulationDataIsReady.then(()=>{
-                    // RFS2 Regulation is Active
-                    if(oRFS2ComplianceClassInstance.oRFS2RegulationData){
-                        oRFS2ComplianceClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRFS2ComplianceClassInstance);
+                oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved)=>{
+                    if(bResolved){
+                        // RFS2 Regulation is Active
+                        if(oRegulationComplianceBaseClassInstance.oRFS2RegulationData){
+                            oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
+                        }
                     }
                 });
             }
@@ -1020,7 +1022,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }//if (oRegObjectCateory
             }//if (regulationType
             if (aFinalData.length > 0) {
-                await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData, logObjectID);
+                // await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData);
             }
             return ODataRequest.data;
         })
@@ -1156,10 +1158,18 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.after("CREATE", 'RegulationComplianceTransaction', async (data, req) => {
             debugger;
             // console.log("debugging")
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload),
+                  oLogData: ILogUtility = {} as ILogUtility;
+            oLogData.message = "RINSCreatedSuccessfully";
+            oLogData.messageType = messageTypes.success;
+
             for (let index = 0; index < data.length; index++) {
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);
                 data[index].objectId = oObjectID;
+                oLogData.regulationType = oLogData.applicationModule = data[index].regulationType;
+                oLogData.regulationSubObjectType = data[index].objectType;
+                oLogData.applicationSubModule = data[index].subObjectScenario;
+                oRegulationComplianceBaseInstance.addLog(oLogData);
             }
         })
 
