@@ -617,12 +617,18 @@ class RegulationComplianceBaseClass {
     async getFuelMaterialS4API(): Promise<Za_MaterialCharacteristics_R[]>{
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
         // i18n.getRe
-        return (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
+        let oFuelMat =  (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .execute({
                 destinationName: "dn1clnt300-BAS-RINS"
             }));
-
+            oFuelMat.forEach((fm) => {
+                ( fm.objectKey = fm.objectKey ),
+                ( fm.regulationGroup = fm.regulationGroup),
+                ( fm.regulationMaterialGroup = fm.regulationMaterialGroup),
+                ( fm.fuelCategory = fm.fuelCategory),
+                ( fm.materialDescription = fm.materialDescription)});
+                return oFuelMat;
     }
 
 }
