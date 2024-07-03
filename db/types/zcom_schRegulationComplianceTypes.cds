@@ -415,7 +415,7 @@ aspect RFS2 {
 aspect Enterprise {
     organizationId                                : String(4)    @title: '{i18n>OrganizationId}';
     organizationFacilityIdentifier                : String(5)    @title: '{i18n>OrganizationFacilityId}';
-    transactionPartnerOrgId                       : String(4)    @title: '{i18n>transactionPartnerOrgId}';
+    transactionPartnerOrgId                       : String(4)    @title: '{i18n>TransactionPartnerOrgId}';
     transactionPartnerFacilityId                  : String(5)    @title: '{i18n>TransactionPartnerFacilityId}';
     generateOrganizationId                        : String(4)    @title: '{i18n>GenerateOrganizationId}';
     generateFacilityId                            : String(5)    @title: '{i18n>GenerateFacilityId}';
