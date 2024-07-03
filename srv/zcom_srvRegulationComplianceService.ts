@@ -571,9 +571,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                         // renewableDeliveryDocNoDocumentItemNumber
                                                         // renewableDeliveryDocNoDocumentSubItem
                                                         // renewableDeliveryDocNoMaterialDocumentYear
-                                                        renewableMaterialDocNoDocumentType: 'G',
-                                                        renewableMaterialDocNoGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.obligationMaterialDocumentNumber,
-                                                        renewableMaterialDocNoDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.obligationMaterialDocumentItemNumber,
+                                                        renewableMaterialDocumentType: 'G',
+                                                        renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.obligationMaterialDocumentNumber,
+                                                        renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.obligationMaterialDocumentItemNumber,
                                                         // renewableMaterialDocNoDocumentSubItem
                                                         // renewableMaterialDocNoMaterialDocumentYear
                                                         // renewableReverseMaterialDocNoDocumentType
@@ -582,11 +582,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                         // renewableReverseMaterialDocNoDocumentSubItem
                                                         // renewableReverseMaterialDocNoMaterialDocumentYear
                                                         sourceOrgCompanyCode: "1000", //HC oEventData.sourceOrgCompanyCode,
-                                                        sourceOrgCompanyPlant: "0563", //HC oEventData.sourceOrgCompanyPlant,
-                                                        sourceOrgCompanyStorageLocation: "Bulk", //HC oEventData.sourceOrgCompanyStorageLocation,
-                                                        sourceOrgCompanyMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
-                                                        sourceOrgCompanyMaterialNumberDesc: "UNLEADED PREMIUM 91", //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
-                                                        sourceOrgCompanyCountryKey: "1000", //HC oRegulationTypeData.countryCode,
+                                                        sourceOrgPlant: "0563", //HC oEventData.sourceOrgCompanyPlant,
+                                                        sourceOrgStorageLocation: "Bulk", //HC oEventData.sourceOrgCompanyStorageLocation,
+                                                        sourceOrgMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
+                                                        sourceOrgMaterialNumberDesc: "UNLEADED PREMIUM 91", //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
+                                                        sourceOrgCountryKey: "1000", //HC oRegulationTypeData.countryCode,
                                                         // sourceOrgCompanyRegion: oRegulationTypeData.regionCode,
                                                         // destinationOrgCompanyCode: 
                                                         // destinationOrgCompanyPlant
@@ -597,17 +597,17 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                         // fuelLogisticsCompanyCode
                                                         // fuelLogisticsCompanyPlant
                                                         // fuelLogisticsCompanyStorageLocation
-                                                        fuelLogisticsCompanyMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
-                                                        fuelLogisticsCompanyMaterialNumberDesc: "UNLEADED PREMIUM 91", //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
+                                                        fuelLogisticsMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
+                                                        fuelLogisticsMaterialNumberDesc: "UNLEADED PREMIUM 91", //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
                                                         // fuelLogisticsCompanyCountryKey
                                                         // fuelLogisticsCompanyRegion
                                                         regulationLogisticsCompanyCode: "1000", //HC oEventData.sourceOrgCompanyCode,
-                                                        regulationLogisticsCompanyPlant: "0563", //HC oEventData.sourceOrgCompanyPlant,
-                                                        regulationLogisticsCompanyStorageLocation: "Bulk", //HC oEventData.sourceOrgCompanyStorageLocation,
-                                                        regulationLogisticsCompanyMaterialNumber: oMatDocData.RenewableMaterial, // oMaterialConfig.material,
-                                                        regulationLogisticsCompanyMaterialNumberDes: "UNLEADED PREMIUM 91", //HC oMaterialConfig.description,
-                                                        regulationLogisticsCompanyCountryKey: oRegulationTypeData.countryCode,
-                                                        regulationLogisticsCompanyRegion: oRegulationTypeData.regionCode,
+                                                        regulationLogisticsPlant: "0563", //HC oEventData.sourceOrgCompanyPlant,
+                                                        regulationLogisticsStorageLocation: "Bulk", //HC oEventData.sourceOrgCompanyStorageLocation,
+                                                        regulationLogisticsMaterialNumber: oMatDocData.RenewableMaterial, // oMaterialConfig.material,
+                                                        regulationLogisticsMaterialNumberDesc: "UNLEADED PREMIUM 91", //HC oMaterialConfig.description,
+                                                        regulationLogisticsCountryKey: oRegulationTypeData.countryCode,
+                                                        regulationLogisticsRegion: oRegulationTypeData.regionCode,
                                                         // nominationNumber
                                                         // nominationKey
                                                         // nominationKeyItem
@@ -777,7 +777,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 businessPartnerNumber: businessPartnerNumber,
                                                 reasonCode: reasonCode,
                                                 reasonCodeDesc: reasonCodeDesc,
-                                                sourceOrgCompanyPlant: sourceOrgCompanyPlant,
+                                                sourceOrgPlant: sourceOrgCompanyPlant,
                                                 regulationQuantity: Math.round(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
                                                 regulationQuantityWholeNumber: Math.floor(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
                                                 // regulationUnitOfMeasurement: regulationUoMCategory,  
@@ -785,13 +785,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 renewablesEpaFacilityId: renewablesEpaFacilityId,
                                                 fuelUnitofMeasurement: fuelUnitofMeasurement, //'BBL',
                                                 fuelAlternateUnitofMeasurement: fuelUnitofMeasurement,
-                                                sourceOrgCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
-                                                regulationLogisticsCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
+                                                sourceOrgMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
+                                                regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
                                                 billofLading: billofLading,
                                                 fuelCategory: fuelCategory,
                                                 fuelQuantity: fuelQuantity,
                                                 adjustmentBase: adjustmentBase,
-                                                fuelLogisticsCompanyMaterialNumber: fuelLogisticsCompanyMaterialNumber,
+                                                fuelLogisticsMaterialNumber: fuelLogisticsCompanyMaterialNumber,
                                                 renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
@@ -845,10 +845,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                             businessPartnerNumber: businessPartnerNumber,
                                             reasonCode: reasonCode,
                                             reasonCodeDesc: reasonCodeDesc,
-                                            sourceOrgCompanyPlant: sourceOrgCompanyPlant,
+                                            sourceOrgPlant: sourceOrgCompanyPlant,
                                             regulationQuantity: regulationQuantity,
                                             regulationUnitOfMeasurement: regulationUnitOfMeasurement,
-                                            regulationLogisticsCompanyMaterialNumber: regulationLogisticsCompanyMaterialNumber,
+                                            regulationLogisticsMaterialNumber: regulationLogisticsCompanyMaterialNumber,
                                             billofLading: billofLading,
                                             fuelCategory: fuelCategory,
                                             adjustmentBase: adjustmentBase,

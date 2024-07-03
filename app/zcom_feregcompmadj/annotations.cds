@@ -70,7 +70,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
             },
             {
                 $Type: 'UI.DataField',
-                Value: sourceOrgCompanyPlant,
+                Value: sourceOrgPlant,
                 Label: '{i18n>Plant}'
             },
             {
@@ -96,7 +96,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Value: regulationLogisticsCompanyMaterialNumber,
+                Value: regulationLogisticsMaterialNumber,
                 Label: '{i18n>RVOMaterial}'
             },
             {
@@ -118,7 +118,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Value: fuelLogisticsCompanyMaterialNumber,
+                Value: fuelLogisticsMaterialNumber,
                 Label: '{i18n>FuelMaterial}'
             },
             {
@@ -203,12 +203,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
         },
         {
             $Type: 'UI.DataField',
-            Value: regulationLogisticsCompanyMaterialNumber,
+            Value: regulationLogisticsMaterialNumber,
             Label: '{i18n>RVOMaterial}',
         },
         {
             $Type: 'UI.DataField',
-            Value: sourceOrgCompanyPlant,
+            Value: sourceOrgPlant,
             Label: '{i18n>Plant}',
         },
         {
@@ -291,13 +291,13 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
     UI.Identification : []
 );
 annotate service.ManualAdjRegulationComplianceTransaction with {
-    regulationLogisticsCompanyMaterialNumber @(Common.ValueList : {
+    regulationLogisticsMaterialNumber @(Common.ValueList : {
             $Type : 'Common.ValueListType',
             CollectionPath : 'MaintainRenewableMaterialConfiguration',
             Parameters : [
                 {
                     $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : regulationLogisticsCompanyMaterialNumber,
+                    LocalDataProperty : regulationLogisticsMaterialNumber,
                     ValueListProperty : 'material',
                 },
                 {

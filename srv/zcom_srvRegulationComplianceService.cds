@@ -55,10 +55,10 @@ service RegulationComplianceTransactionService {
     // CDs View for aggregating Regulation Quantity by Plant
     @cds.persistence.skip
     define view MaintainWorkplaceAgggregationByPlantView as select from RegulationComplianceTransaction {
-    sourceOrgCompanyPlant,
+    sourceOrgPlant,
     regulationQuantity,
     sum(regulationQuantity) as TotalRegQuantityByPlant:Integer
-    } group by sourceOrgCompanyPlant;
+    } group by sourceOrgPlant;
 
    // CDs View for aggregating Regulation Quantity by Month
    @cds.persistence.skip
