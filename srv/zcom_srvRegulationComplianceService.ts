@@ -2,7 +2,6 @@ import cds from '@sap/cds';
 import { Request } from '@sap/cds';
 import { oRFS2ComplianceInstance } from './library/zcom_tsRFS2Compliance';
 import { oRegulationComplianceBaseInstance } from './library/zcom_tsRegulationComplianceBase';
-
 // import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { Quarter, Month } from '@cds-models';
@@ -10,11 +9,12 @@ import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
     IMaintainMovementType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario, IMaintainRegulationTransactionTypeTs,
-    IRfs2DebitType,IFuelCategory,IFuelSubCategory
+    IRfs2DebitType, IFuelCategory, IFuelSubCategory
 } from './library/interfaces/zcom_tsRegulationComplicanceInterface';
 import {
     MaintainRenewableMaterialConfiguration
 } from './external/regulationcompliancemasterservice_api';
+import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
 import { queryObjects } from 'v8';
 import { ILogUtility } from './library/interfaces/zcom_tsRegulationComplicanceInterface';
 
@@ -37,8 +37,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
                     aMvtTypeRelevance: IMaintainMovementTypeToTransactionCategoryImpact = { map: {}, transactionCategoryCategory: "", data: [] },
                     aIMaintainRegulationTransactionTypeTsMAP: IMaintainRegulationTransactionTypeTs = { map: {}, data: [] },
-                    aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {},data:[] },
-                    logObjectID:string = "",
+                    aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
+                    logObjectID: string = "",
                     oLogData: ILogUtility = {} as ILogUtility,
                     aRFS2DebitType = { map: {}, data: [] } as IRfs2DebitType,
                     aFuelCategory = { map: {}, data: [] } as IFuelCategory,
@@ -47,10 +47,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 const aFinalData: RegulationComplianceTransaction[] = [];
                 oEventData.documentDate = "2024-06-19"; //HC
                 oEventData.postingDate = "2024-06-19"; //HC
+                
                 oYear = new Date(oEventData.documentDate).getFullYear().toString(); //HC
-                if(oEventData.RenewableEventType && oEventData._RenewableMaterialDocument){
+                if (oEventData.RenewableEventType && oEventData._RenewableMaterialDocument) {
                     logObjectID = oEventData.RenewableEventType + oEventData._RenewableMaterialDocument.RenwableMaterialDocument +
-                                oEventData._RenewableMaterialDocument.RenwableMaterialDocumentItem;
+                        oEventData._RenewableMaterialDocument.RenwableMaterialDocumentItem;
                 }
 
                 if (oEventData.RegulationGroupName) {
@@ -70,7 +71,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
                 // read regulation groups
                 if (sRegGroups && !oLogData.messageType) {
-                    aRegulationGroups = await oRegulationComplianceBaseInstance.getRegulations(sRegGroups,{
+                    aRegulationGroups = await oRegulationComplianceBaseInstance.getRegulations(sRegGroups, {
                         object: logObjectID,
                         message: "RegulationGroupValueIsEmptyInEventMessage",
                         messageType: "E",
@@ -84,7 +85,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
                 // get material group code
                 if (aRegulationGroups.regulationType && !oLogData.messageType) {
-                    aRegulationMaterialGrp = await oRegulationComplianceBaseInstance.getRegulationMaterialGroup(aRegulationGroups.regulationType,{
+                    aRegulationMaterialGrp = await oRegulationComplianceBaseInstance.getRegulationMaterialGroup(aRegulationGroups.regulationType, {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -98,8 +99,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
                 // get sub scenario
                 const sfilterSubObjectScenario = aRegulationGroups.regulationType_regulationType + " and transactionSourceScenario_category eq 'GM' and " + aRegulationMaterialGrp.objectCategory_category;
-                if(aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category && !oLogData.messageType){
-                    aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario(sfilterSubObjectScenario,{
+                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category && !oLogData.messageType) {
+                    aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario(sfilterSubObjectScenario, {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -112,10 +113,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }
 
                 // get reg object type
-                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category && 
-                        !oLogData.messageType && aRegulationSubscenario.data.length>0) {
+                if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory_category &&
+                    !oLogData.messageType && aRegulationSubscenario.data.length > 0) {
                     aRegObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType(aRegulationGroups.regulationType_regulationType + " and " +
-                     aRegulationMaterialGrp.objectCategory_category,{
+                        aRegulationMaterialGrp.objectCategory_category, {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -129,10 +130,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
                 // get movement type
                 if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType && !oLogData.messageType
-                    && aRegulationSubscenario.data.length>0
+                    && aRegulationSubscenario.data.length > 0
                 ) {
-                    aMovementTypes = await oRegulationComplianceBaseInstance.getMovementType(aRegulationGroups.regulationType_regulationType + " and " + 
-                    aRegObjectType.objectType,{
+                    aMovementTypes = await oRegulationComplianceBaseInstance.getMovementType(aRegulationGroups.regulationType_regulationType + " and " +
+                        aRegObjectType.objectType, {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -145,10 +146,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }
 
                 // get mvt type relevance
-                if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType && aMovementTypes.movementType_movementType 
-                    && !oLogData.messageType && aRegulationSubscenario.data.length>0) {
+                if (aRegulationGroups.regulationType_regulationType && aRegObjectType.objectType && aMovementTypes.movementType_movementType
+                    && !oLogData.messageType && aRegulationSubscenario.data.length > 0) {
                     aMvtTypeRelevance = await oRegulationComplianceBaseInstance.readMvtTypeTransationRelevance(aRegulationGroups.regulationType_regulationType + " and " +
-                     aRegObjectType.objectType + " and " + aMovementTypes.movementType_movementType,{
+                        aRegObjectType.objectType + " and " + aMovementTypes.movementType_movementType, {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -164,26 +165,26 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 let aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [];
                 // if(aRegulationGroups.regType.length>0 && aRegulationMaterialGrp.objectCategory.length>0 && oYear){
                 if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory && oYear && !oLogData.messageType
-                    && aRegulationSubscenario.data.length>0
+                    && aRegulationSubscenario.data.length > 0
                 ) {
-                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(aRegulationGroups.regulationType_regulationType + 
-                        " and objectType_code eq 'RVO' and year eq " + oYear,{
-                            object: logObjectID,
-                            message: "FailedToReadRegulationTypeFromMasterData",
-                            messageType: "E",
-                            regulationType: aRegulationGroups.data[0].regulationType as string,
-                            regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
-                            applicationModule: aRegulationGroups.data[0].regulationType as string,
-                            applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
-                            technicalMessage: ""
-                        });
+                    aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(aRegulationGroups.regulationType_regulationType +
+                        " and objectType_code eq 'RVO' and year eq " + oYear, {
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
                 }
 
                 // get regulation type
                 if (aRegulationGroups.regulationType && !oLogData.messageType
-                    && aRegulationSubscenario.data.length>0
+                    && aRegulationSubscenario.data.length > 0
                 ) {
-                    aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(aRegulationGroups.regulationType,{
+                    aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(aRegulationGroups.regulationType, {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -197,24 +198,24 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
                 // get Regulation Transaction Types
                 if (aMvtTypeRelevance.transactionCategoryCategory && aRegulationGroups.regulationType_regulationType && !oLogData.messageType
-                    && aRegulationSubscenario.data.length>0
+                    && aRegulationSubscenario.data.length > 0
                 ) {
-                    aIMaintainRegulationTransactionTypeTsMAP = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs(aRegulationGroups.regulationType_regulationType + 
-                        " and " + aMvtTypeRelevance.transactionCategoryCategory,{
-                            object: logObjectID,
-                            message: "FailedToReadRegulationTypeFromMasterData",
-                            messageType: "E",
-                            regulationType: aRegulationGroups.data[0].regulationType as string,
-                            regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
-                            applicationModule: aRegulationGroups.data[0].regulationType as string,
-                            applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
-                            technicalMessage: ""
-                        });
+                    aIMaintainRegulationTransactionTypeTsMAP = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs(aRegulationGroups.regulationType_regulationType +
+                        " and " + aMvtTypeRelevance.transactionCategoryCategory, {
+                        object: logObjectID,
+                        message: "FailedToReadRegulationTypeFromMasterData",
+                        messageType: "E",
+                        regulationType: aRegulationGroups.data[0].regulationType as string,
+                        regulationSubObjectType: aRegObjectType.data[0].objectTypeCode as string,
+                        applicationModule: aRegulationGroups.data[0].regulationType as string,
+                        applicationSubModule: aRegulationSubscenario.data[0].regulationSubScenarioCategory as string,
+                        technicalMessage: ""
+                    });
                 }
-                
-                if(aRegulationGroups.data.length>0 && aRegObjectType.data.length>0 && aRegulationSubscenario.data.length>0){
+
+                if (aRegulationGroups.data.length > 0 && aRegObjectType.data.length > 0 && aRegulationSubscenario.data.length > 0) {
                     // read RFS2DebitType
-                    aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("",{
+                    aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("", {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -225,7 +226,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         technicalMessage: ""
                     });
                     // read FuelCategory
-                    aFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory("",{
+                    aFuelCategory = await oRegulationComplianceBaseInstance.getFuelCategory("", {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -236,7 +237,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         technicalMessage: ""
                     });
                     // read SubFuelCategory
-                    aFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory("",{
+                    aFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory("", {
                         object: logObjectID,
                         message: "FailedToReadRegulationTypeFromMasterData",
                         messageType: "E",
@@ -251,7 +252,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 // build output array
                 if (aMaterialConfig.length > 0 && aRegulationGroups.regulationType && aRegulationMaterialGrp.objectCategory &&
                     aRegObjectType.objectType && aMovementTypes.movementTypeMovementType && aMvtTypeRelevance && aRegulationType && !oLogData.messageType
-                    && aRFS2DebitType.data.length>0 && aFuelCategory.data.length>0 && aFuelSubCategory.data.length>0
+                    && aRFS2DebitType.data.length > 0 && aFuelCategory.data.length > 0 && aFuelSubCategory.data.length > 0
                 ) {
 
                     // read reg group data
@@ -636,9 +637,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     }
                 }
                 if (aFinalData.length > 0) {
-                    await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData,logObjectID);
+                    await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData, logObjectID);
                 }
-                if(oLogData.messageType){   //log message
+                if (oLogData.messageType) {   //log message
                     oRegulationComplianceBaseInstance.addLog(oLogData);
                 }
             }
@@ -647,11 +648,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
             let aFinalData: RegulationComplianceTransaction[] = [],
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
-                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {}, data:[] },
-                aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {},data:[] },
+                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {}, data: [] },
+                aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
                 aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
-                logObjectID:string = "";
+                logObjectID: string = "";
             let oObjectID: number;
             // comment while deploy
             //SourceScenario.manualAdjustment;
@@ -685,17 +686,17 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             //Get object Type code i.e RIN or RVO
             if (regulationType && objectType) {
                 aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
-                {} as ILogUtility
+                    {} as ILogUtility
                 );
                 const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
-                
+
                 // read RFS2DebitType
                 const aRFS2DebitType = await oRegulationComplianceBaseInstance.getRFS2DebitType("",
-                {} as ILogUtility);
+                    {} as ILogUtility);
                 if (oRegObjectCateory.objectCategoryCategory) {
 
                     //Maintain Regulation Transaction Types
-                    aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" + 
+                    aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
                         regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
                         {} as ILogUtility);
                     const oTransactionTypeTs = aTransactionTypeTs.map[regulationType + transactionCategory];
@@ -703,12 +704,12 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     if (oTransactionTypeTs.transactionCategoryCategory) {
                         // Fetch regulation subscenario
                         // const sfilterSubObjectScenario = "regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'";
-                        aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" + 
+                        aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
                             regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
                             {} as ILogUtility);
                         const oRegualtionSubscenario = aRegulationSubscenario.map[regulationType + "MDJ" + objectType]
 
-                       
+
                         if (oRegualtionSubscenario.regulationSubScenarioCategory) {
 
                             // Month desc
@@ -869,13 +870,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }//if (oRegObjectCateory
             }//if (regulationType
             if (aFinalData.length > 0) {
-                await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData,logObjectID);
+                await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData, logObjectID);
             }
             return ODataRequest.data;
         })
         this.on('READ', 'MaintainRegulationType', async () => {
             const oRegulationTypes = await oRegulationComplianceBaseInstance.getRegulationTypes('',
-            {} as ILogUtility);
+                {} as ILogUtility);
             return oRegulationTypes.data;
         })
         // this.on('READ', 'MaintainTransactionTyp', async (request) => {
@@ -883,24 +884,24 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     return oRegulationTransactionTypeTsData;
         // })
         this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
-            const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs('',{} as ILogUtility);
+            const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs('', {} as ILogUtility);
             return oRegulationTransactionTypeTsData.data;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
-            const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('',{} as ILogUtility)
+            const oRegulaionObjectType = await oRegulationComplianceBaseInstance.getRegulationObjectType('', {} as ILogUtility)
             return oRegulaionObjectType.data;
         })
         this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
             return await oRegulationComplianceBaseInstance.getMaterialConfiguration('',
-            {} as ILogUtility);
+                {} as ILogUtility);
         })
         // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
         //     return oManualAdjustment;
         // })
-        this.on('READ', 'GetFuelCategory', async (req:Request) => {
+        this.on('READ', 'GetFuelCategory', async (req: Request) => {
             const service = await cds.connect.to('RegulationComplianceMasterService')
-           // {} as ILogUtility);
+            // {} as ILogUtility);
             return await service.run(req.query);
         })
         this.on('READ', 'GetReasonCode', async () => {
@@ -995,8 +996,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     return 'Message sent to Event Mesh';
         // })
 
-        this.after("CREATE", 'RegulationComplianceTransaction', async (data,req) => {
-           debugger;
+        this.after("CREATE", 'RegulationComplianceTransaction', async (data, req) => {
+            debugger;
             // console.log("debugging")
             for (let index = 0; index < data.length; index++) {
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);
@@ -1006,30 +1007,30 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'TransactionType', async () => {
             const oImpact = await oRegulationComplianceBaseInstance.getTransactionTypeData();
             return oImpact;
-        })    
+        })
         this.on('READ', 'GetFuelSubCategory', async (req) => {
             //const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
-           // {} as ILogUtility);
+            // {} as ILogUtility);
             // return oFuelSubCategory.data;
             const service = await cds.connect.to('RegulationComplianceMasterService');
             return await service.run(req.query);
         })
         this.on('READ', 'GetMovementType', async () => {
             const oMovementTypes = await oRegulationComplianceBaseInstance.getMovementType('',
-            {} as ILogUtility);
+                {} as ILogUtility);
             return oMovementTypes.data;
         })
         this.on('READ', 'GetFuelMaterialS4', async (request) => {
             debugger;
-           const oFuelMat =  await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
-           console.log(oFuelMat);
-           return oFuelMat;
+            const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
+            console.log(aFuelMaterial);
+            return aFuelMaterial;
         })
         this.on('READ', 'GetTransactionType', async () => {
             const oTransactionTypes = await oRegulationComplianceBaseInstance.getTransactiontype('');
             return oTransactionTypes;
         })
-        
+
         return super.init()
     }
 }
