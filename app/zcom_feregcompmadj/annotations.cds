@@ -538,3 +538,29 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
         },
         Common.ValueListWithFixedValues : true
 )};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    fuelLogisticsMaterialNumber @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetFuelMaterialS4',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : fuelLogisticsMaterialNumber,
+                    ValueListProperty : 'ObjectKey',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'FuelCategory',
+                    LocalDataProperty : fuelCategory,
+                },
+            ],
+            Label : '{i18n>FuelMaterial}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
+annotate service.GetFuelMaterialS4 with {
+    ObjectKey @Common.Text : {
+        $value : MaterialDescription,
+        ![@UI.TextArrangement] : #TextFirst,
+    }
+};

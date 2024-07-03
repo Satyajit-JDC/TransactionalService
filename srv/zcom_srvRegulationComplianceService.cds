@@ -51,7 +51,14 @@ service RegulationComplianceTransactionService {
     entity GetMovementType as projection on master.MaintainMovementType;
     entity GetTransactionType as projection on master.MaintainTransactionType;
     //S4 API 
-    entity GetFuelMaterialS4 as projection on s4h.ZA_MaterialCharacteristics_R;
+    entity GetFuelMaterialS4 as projection on s4h.ZA_MaterialCharacteristics_R
+    {
+        ObjectKey,
+        MaterialDescription,
+        FuelCategory,
+        RegulationGroup,
+        RegulationMaterialGroup
+    };
     // CDs View for aggregating Regulation Quantity by Plant
     @cds.persistence.skip
     define view MaintainWorkplaceAgggregationByPlantView as select from RegulationComplianceTransaction {
