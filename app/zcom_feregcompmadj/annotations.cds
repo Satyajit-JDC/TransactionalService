@@ -479,21 +479,23 @@ annotate service.GetUOM with {
         ![@UI.TextArrangement] : #TextFirst,
     }
 };
-// annotate service.ManualAdjRegulationComplianceTransaction with {
-//     fuelUnitofMeasurement @(Common.ValueList : {
-//             $Type : 'Common.ValueListType',
-//             CollectionPath : 'GetUOM',
-//             Parameters : [
-//                 {
-//                     $Type : 'Common.ValueListParameterInOut',
-//                     LocalDataProperty : fuelUnitofMeasurement,
-//                     ValueListProperty : 'category',
-//                 },
-//             ],
-//             Label : '{i18n>UoM}',
-//         },
-//         Common.ValueListWithFixedValues : true
-// )};
+
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    fuelUnitofMeasurement @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetUOM',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : fuelUnitofMeasurement,
+                    ValueListProperty : 'category',
+                },
+            ],
+            Label : '{i18n>UoM}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
+
 annotate service.ManualAdjRegulationComplianceTransaction with {
     objectType @(Common.ValueList : {
             $Type : 'Common.ValueListType',
