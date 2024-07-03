@@ -308,7 +308,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
             ],
             Label : 'RVO Material',
         },
-        Common.ValueListWithFixedValues : false
+        Common.ValueListWithFixedValues : true
 )};
 annotate service.MaintainRenewableMaterialConfiguration with @(
     UI.PresentationVariant #vh_ManualAdjRegulationComplianceTransaction_sourceOrgCompanyMaterialNumber : {
