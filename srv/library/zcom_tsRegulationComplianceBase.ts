@@ -4,6 +4,7 @@ import { MaintainRenewableMaterialConfiguration, MaintainTransactionType, Mainta
     Impact, ObjectCategory, 
     MaintainRegulationTransactionTypeTs,
     TransactionCategory,MaintainRegulationGroupView} from '../external/regulationcompliancemasterservice_api';
+    import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
 
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
@@ -15,8 +16,8 @@ import { LogUtilityService, logutilityserviceApi } from '../external/logutilitys
 import { ILogUtility } from '../library/interfaces/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
 // import { i18n } from '@sap/'
-import { Destination, getDestination } from '@sap-cloud-sdk/connectivity';
-import { Za_MaterialCharacteristics_R, materialcharacteristicsApi } from '../external/materialcharacteristics_api';
+import { Za_MaterialCharacteristics_R, materialcharacteristicsApi} from '../external/materialcharacteristics_api';
+
 import { destinationCache } from '@sap-cloud-sdk/connectivity/internal';
 // import { Impact, ObjectCategory } from '@cds-models';
 
@@ -614,25 +615,49 @@ class RegulationComplianceBaseClass {
                 destinationName: "RegulationComplianceMasterService"
             });
     }
-    async getFuelMaterialS4API(): Promise<Za_MaterialCharacteristics_R[]>{
+    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
-        let oFuelMaterial: Za_MaterialCharacteristics_R = {} as Za_MaterialCharacteristics_R,
-        aFuelMaterial : Za_MaterialCharacteristics_R[] = [] ;
-        // i18n.getRe
-        let aFuelMat =  (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
+        let aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
+        (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
+            .select(
+                za_MaterialCharacteristics_RApi.schema.OBJECT_KEY,
+                za_MaterialCharacteristics_RApi.schema.MATERIAL_DESCRIPTION,
+                za_MaterialCharacteristics_RApi.schema.REGULATION_GROUP,
+                za_MaterialCharacteristics_RApi.schema.REGULATION_MATERIAL_GROUP,
+                za_MaterialCharacteristics_RApi.schema.FUEL_CATEGORY
+            )
             .execute({
                 destinationName: "dn1clnt300-BAS-RINS"
-            }));
-            aFuelMat.forEach((fm) => {
-                ( oFuelMaterial.objectKey = fm.objectKey ),
-                ( oFuelMaterial.regulationGroup = fm.regulationGroup),
-                ( oFuelMaterial.regulationMaterialGroup = fm.regulationMaterialGroup),
-                ( oFuelMaterial.fuelCategory = fm.fuelCategory),
-                ( oFuelMaterial.materialDescription = fm.materialDescription)
-                aFuelMaterial.push(oFuelMaterial);
+            })).forEach((fm) => {
+                aFuelMaterial.push({
+                    ObjectKey: fm.objectKey as string,
+                    RegulationGroup: fm.regulationGroup,
+                    FuelCategory: fm.fuelCategory,
+                    MaterialDescription: fm.materialDescription,
+                    RegulationMaterialGroup: fm.regulationMaterialGroup
+                });
+
             });
-                return aFuelMaterial;
+            return aFuelMaterial;
+        // const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
+        // let oFuelMaterial: Za_MaterialCharacteristics_RType = {} as Za_MaterialCharacteristics_RType,
+        // aFuelMaterial : Za_MaterialCharacteristics_RType[] = [] ;
+        // // i18n.getRe
+        // let aFuelMat =  (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
+        //     .middleware(resilience({ retry: 3, circuitBreaker: true }))
+        //     .execute({
+        //         destinationName: "dn1clnt300-BAS-RINS"
+        //     }));
+        //     aFuelMat.forEach((fm) => {
+        //         ( oFuelMaterial.objectKey = fm.objectKey ),
+        //         ( oFuelMaterial.regulationGroup = fm.regulationGroup),
+        //         ( oFuelMaterial.regulationMaterialGroup = fm.regulationMaterialGroup),
+        //         ( oFuelMaterial.fuelCategory = fm.fuelCategory),
+        //         ( oFuelMaterial.materialDescription = fm.materialDescription)
+        //         aFuelMaterial.push(oFuelMaterial);
+        //     });
+        //         return aFuelMaterial;
     }
 
 }
