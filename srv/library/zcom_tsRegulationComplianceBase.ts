@@ -149,7 +149,7 @@ export class RegulationComplianceBaseClass {
                 (await maintainRegulationMaterialGroupViewApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent("regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                         "' and regulationMaterialGroup eq '"+this.oEventPayloadData.RegulationMateGroup+"'")
+                         "' and regulationMaterialGroup_regulationMaterialGroup eq '"+this.oEventPayloadData.RegulationMateGroup+"'")
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -189,8 +189,9 @@ export class RegulationComplianceBaseClass {
     async setRgulationSubScnario() {
         try {
             if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
-                const sFilterSubObjectScenario = this.oRFS2RegulationData.regulationType
-                    + " and transactionSourceScenario_category eq '"+this.oEventPayloadData.RenewableEventType+"' and '"
+                const sFilterSubObjectScenario = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType
+                    + "' and transactionSourceScenario_category eq '"+this.oEventPayloadData.RenewableEventType+
+                    "' and objectCategory_category eq '"
                     + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'",
                     { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
 
@@ -231,7 +232,7 @@ export class RegulationComplianceBaseClass {
         try {
             if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
-                    "objectCategory_category eq '" +
+                    "' and objectCategory_category eq '" +
                     (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
 
                 (await maintainRegulationObjecttypeApi.requestBuilder().getAll()
@@ -277,8 +278,8 @@ export class RegulationComplianceBaseClass {
         const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype) {
-                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
-                    "objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "'";
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + 
+                "' and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "'";
 
                 (await maintainMovementTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -321,9 +322,9 @@ export class RegulationComplianceBaseClass {
         const { maintainMovementTypeToTransactionCategoryImpactApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oMaintainMovementType) {
-                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
-                    "objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "'" +
-                    "movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + 
+                    "' and movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
 
                 (await maintainMovementTypeToTransactionCategoryImpactApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -368,9 +369,9 @@ export class RegulationComplianceBaseClass {
         const { maintainRenewableMaterialConfigurationApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oEventPayloadData._RenewableMaterialDocument.DocumentDate) {
-                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
-                    " and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "' and year eq " +
-                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString() + "'";
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "' and year eq " +
+                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString();
 
                 this.aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -453,8 +454,8 @@ export class RegulationComplianceBaseClass {
         try {
             if (this.oRFS2RegulationData) {
                 const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi(),
-                    sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType + "'" +
-                        "transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory + "'";
+                    sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
+                        "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory + "'";
 
                 (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
