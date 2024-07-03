@@ -795,17 +795,31 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         // On crreate of Manual adjustment for RVO/RIN
         // code revamp
         // this.on("OnCreateManualAdjustment", async (oDatarequest)=> {
-        this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
+        this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (oDataRequest) => {
             // let oResourceManager = new ResourceManager("/home/user/projects/TransactionalService/_i18n/i18n");
             // let oBundle = oResourceManager.getTextBundle('en_EN');
             // console.log(oBundle.getText('TruckNumber'));
             // oBundle.getText('Month');
-            const oManualAdjustmentReqData = ODataRequest.data;
+            const oReqData = oDataRequest.data;
             const oManualAdjPayloadData: EventPayload = {} as EventPayload;
-            oManualAdjPayloadData.MaterialDescription = oManualAdjustmentReqData.MaterialDescription;
+            oManualAdjPayloadData.MaterialDescription = oDataRequest.data.MaterialDescription;
+            
+            // oManualAdjPayloadData.o= oDataRequest.data.objectType,
+            // = oDataRequest.data.transactionCategory,
+            // = oDataRequest.data.impact,
+            oManualAdjPayloadData._RenewableMaterialDocument.DocumentDate = oDataRequest.data.documentDate,
+            oManualAdjPayloadData._RenewableProductionOrder.RenewableBusinessPartnerNumber = oDataRequest.data.businessPartnerNumber,
+            oManualAdjPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode = oDataRequest.data.reasonCode,
+           //oDataRequest.data.reasonCodeDesc,
+            // = oDataRequest.data.renewablesDocumentComplianceYear,
+            oManualAdjPayloadData._RenewableMaterialDocument.Plant = oDataRequest.data.sourceOrgCompanyPlant,
+            // = oDataRequest.data.adjustmentBase,
+            oManualAdjPayloadData._RenewableMaterialDocument.RenewableBillOfLading = oDataRequest.data.billofLading,
+            oManualAdjPayloadData.RenewableFuelCategory = oDataRequest.data.fuelCategory
+            
               // create Base Class Object with Event Data to identify Regulation
               const oRFS2ComplianceClassInstance = await new RegulationComplianceBaseClass(oManualAdjPayloadData);
-
+              oRFS2ComplianceClassInstance.oRFS2RegulationData.regulationType = oDataRequest.data.RegulationType;
               // wait for promise to get regulations
               oRFS2ComplianceClassInstance.oRegulationDataIsReady.then(()=>{
                   // RFS2 Regulation is Active
@@ -823,15 +837,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
                 logObjectID: string = "";
             let oObjectID: number;
-            // comment while deploy
-            //SourceScenario.manualAdjustment;
-            // debugger;
-            // comment this code while deploying
-            // let vadjustmentBase: string = 'V';
-            // let sregulationType: string = 'RFS2', sobjectType: string = 'RVO';
-            // let stransactionCategory: string = 'PUR', sobjectCategory: string = 'D', syear: string = '2024';
-            // // end of comment
-            // let objectType:string = 'RVO';
+            const oReqData : RegulationComplianceTransaction = {};
             const { regulationType,
                 objectType,
                 transactionCategory,

@@ -78,12 +78,14 @@ export class RegulationComplianceBaseClass {
         this.aImpact = [] as Impact[];
 
         // regulation group present then set Regulation Type to class object
+        if(oEventPayloadData.RenewableEventType !== 'MDJ'){
         if (oEventPayloadData.RegulationGroupName) {
             this.oRegulationDataIsReady = new Promise(async (resolve) => {
                 await this.setRegulations();
                 resolve(undefined);
             });
-        }
+        }}
+
     }
     //-------- End of Base constructor ------------------
 
