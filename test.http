@@ -10,7 +10,7 @@ Content-Type: application/json
 {
     "data": {
     "RenewableMaterial":"300003",
-    "RenewableEventType":"GM-CR-ET",
+    "RenewableEventType":"GM",
     "RenewableFuelCategory":"GS",
     "RenewableTransactionType":"PUR",
     "RegulationGroupName":"R001",
@@ -66,11 +66,11 @@ Content-Type: application/json
       "RenwableMaterialDocument":"10001010",
       "RenwableMaterialDocumentItem":"10",
       "DocumentType":"",
-      "MovementType":"521",
+      "MovementType":"101",
       "Plant":"",
       "StorageLocation":"",
       "CompanyCode":"",
-      "DocumentDate":null,
+      "DocumentDate":"2024-07-03",
       "Quantity": "10000",
       "UnitOfMeasure":"UG6",
       "RenewableMaterialDocDocDte":null,
@@ -172,7 +172,7 @@ Content-Type: application/json
             "dcode": "",
             "vintageYear": "2024",
             "rinMultiplier": 1,
-            "sourceOrgCompanyCode": "",
+            "sourceOrgCode": "",
             "qapCertified": "",
             "businessPartnerNumber": "",
             "businessPartnerDesc": "",
@@ -181,8 +181,8 @@ Content-Type: application/json
             "reversalPostingDate": "2024-06-18",
             "referenceContractGeneralDocumentNumber": "",
             "referenceContractDocumentItemNumber": "",
-            "sourceOrgCompanyMaterialNumber": "1059392",
-            "sourceOrgCompanyMaterialNumberDesc": "Gasoline",
+            "sourceOrgMaterialNumber": "1059392",
+            "sourceOrgMaterialNumberDesc": "Gasoline",
             "postingDate": "2024-06-18",
             "obligationMaterialDocumentNumber": "5000001",
             "obligationMaterialDocumentItemNumber": "0010",
@@ -190,8 +190,8 @@ Content-Type: application/json
             "obligationReverseMaterialDocumentItemNumber": "",
             "rfOrder": "",
             "rfOrderItem": "",
-            "sourceOrgCompanyPlant": "0563",
-            "sourceOrgCompanyStorageLocation": "1000"
+            "sourceOrgPlant": "0563",
+            "sourceOrgStorageLocation": "1000"
         }
     ]
 }
@@ -212,7 +212,7 @@ Content-Type: application/json
     "transactionType": "PUR1",
     "impact": "I",
     "movementType": "101",
-    "fuelLogisticsCompanyMaterialNumber": "5000",
+    "fuelLogisticsMaterialNumber": "5000",
     "fuelQuantity": 10,
     "fuelQuantityRaw": "10",
     "fuelUnitofMeasurement": "RIN",
@@ -242,10 +242,10 @@ Content-Type: application/json
     "renewablesDocumentComplianceYear": "2024",
     "businessPartnerNumber":"1234",
     "reasonCode":"30",
-    "sourceOrgCompanyPlant":"1000",
+    "sourceOrgPlant":"1000",
     "regulationQuantity": 200,
     "regulationUnitOfMeasurement": "RIN",
-    "regulationLogisticsCompanyMaterialNumber":"CELLULOSIC_2024"
+    "regulationLogisticsMaterialNumber":"CELLULOSIC_2024"
 
 }
 # Get Metadata of Service 

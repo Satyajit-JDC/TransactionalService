@@ -72,6 +72,9 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.Text": {
       "=": "description"
      }
@@ -122,6 +125,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "region": {
@@ -152,6 +158,9 @@
      "type": "cds.String",
      "length": 3,
      "@Common.Label": "Region",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
@@ -206,6 +215,9 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "Label": "Country",
@@ -229,6 +241,10 @@
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -292,6 +308,9 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -508,6 +527,17 @@
      }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -569,10 +599,18 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Transaction Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -716,6 +754,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -777,6 +826,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Transaction Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType": {
      "type": "cds.Association",
@@ -832,10 +885,68 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Regulation Type",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
@@ -913,10 +1024,35 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Transaction Category",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "TransactionCategory",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "transactionCategory_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -1007,6 +1143,82 @@
       "type": "RegulationComplianceMasterService.MaintainRegulationTransactionTypeTS"
      }
     }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionCategory_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "description"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionCategory_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "description"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
    },
    "@UI.FieldGroup#GeneratedGroup": {
     "$Type": "UI.FieldGroupType",
@@ -1182,6 +1394,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "fuelSubType": {
@@ -1227,6 +1442,9 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -1398,6 +1616,45 @@
     },
     "Text": "Table View 1"
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "fuelType_category"
+     }
+    }
+   },
+   "@UI.SelectionPresentationVariant#tableView": {
+    "$Type": "UI.SelectionPresentationVariantType",
+    "PresentationVariant": {
+     "$Type": "UI.PresentationVariantType",
+     "Visualizations": [
+      "@UI.LineItem"
+     ]
+    },
+    "SelectionVariant": {
+     "$Type": "UI.SelectionVariantType",
+     "SelectOptions": []
+    },
+    "Text": "Table View"
+   },
+   "@UI.SelectionPresentationVariant#tableView1": {
+    "$Type": "UI.SelectionPresentationVariantType",
+    "PresentationVariant": {
+     "$Type": "UI.PresentationVariantType",
+     "Visualizations": [
+      "@UI.LineItem#tableView"
+     ]
+    },
+    "SelectionVariant": {
+     "$Type": "UI.SelectionVariantType",
+     "SelectOptions": []
+    },
+    "Text": "Table View 1"
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -1505,6 +1762,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -1539,6 +1800,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "objectType": {
      "type": "cds.Association",
@@ -1567,6 +1832,9 @@
      "type": "cds.String",
      "length": 4,
      "@Common.Label": "Object Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
@@ -1635,11 +1903,18 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -1796,6 +2071,17 @@
      }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "Title": {
@@ -2047,6 +2333,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationGroup"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -2108,10 +2405,18 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Regulation Material Group",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -2281,6 +2586,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationMaterialGroup"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -2343,6 +2659,10 @@
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -2486,6 +2806,17 @@
      }
     }
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "reasonCode"
+     }
+    }
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -2591,6 +2922,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "regulationType_regulationType": {
@@ -2624,11 +2958,18 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "companyId": {
      "type": "cds.String",
      "length": 5,
+     "@Common.Label": "Company ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Company ID",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -2641,10 +2982,18 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Plant",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "storageLocation": {
      "type": "cds.String",
      "length": 4,
+     "@Common.Label": "Storage Location",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Storage Location",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -2812,6 +3161,17 @@
      }
     }
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    }
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -2873,6 +3233,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Inco Term",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "impact": {
      "type": "cds.Association",
@@ -2917,6 +3281,9 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -3060,6 +3427,17 @@
      }
     }
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "incoTerm"
+     }
+    }
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -3167,6 +3545,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -3201,9 +3583,17 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "noOfDays": {
      "type": "cds.Integer",
+     "@Common.Label": "No Of Days",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "No Of Days",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -3347,6 +3737,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -3456,6 +3857,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "regulationType_regulationType": {
@@ -3493,10 +3897,17 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "range": {
      "type": "cds.Integer",
+     "@Common.Label": "Range",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Range",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -3629,6 +4040,17 @@
      }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "Title": {
@@ -3810,6 +4232,7 @@
         "$Type": "Common.ValueListParameterInOut",
         "LocalDataProperty": {
          "=": "transactionType_transactionType"
+         "=": "transactionType_transactionType"
         },
         "ValueListProperty": "transactionType"
        },
@@ -3818,6 +4241,8 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.ValueListWithFixedValues": true
      },
      "@Common.ValueListWithFixedValues": true
     },
@@ -3833,6 +4258,7 @@
         "$Type": "Common.ValueListParameterInOut",
         "LocalDataProperty": {
          "=": "transactionType_transactionType"
+         "=": "transactionType_transactionType"
         },
         "ValueListProperty": "transactionType"
        },
@@ -3841,6 +4267,8 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.ValueListWithFixedValues": true
      },
      "@Common.ValueListWithFixedValues": true
     },
@@ -4153,6 +4581,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType_transactionType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -4214,6 +4653,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "MovementType",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType": {
      "type": "cds.Association",
@@ -4270,6 +4713,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": false,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -4300,6 +4747,10 @@
        }
       ]
      },
+     "@Common.ValueListWithFixedValues": false,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.ValueListWithFixedValues": false,
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -4335,6 +4786,9 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "Label": "Object Type",
@@ -4356,6 +4810,10 @@
     },
     "subObjectScenario": {
      "type": "cds.LargeString",
+     "@Common.Label": "Sub Object Scenario",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Sub Object Scenario",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -4407,10 +4865,17 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "sourceScenario": {
      "type": "cds.LargeString",
+     "@Common.Label": "Source Scenario",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Source Scenario",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -4422,9 +4887,17 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Negative Impact",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "withReference": {
      "type": "cds.LargeString",
+     "@Common.Label": "With Reference",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "With Reference",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -4523,6 +4996,8 @@
       "$Type": "UI.DataField",
       "Value": {
        "=": "movementType"
+      },
+      "Label": "Movement Type"
       },
       "Label": "Movement Type"
      },
@@ -4629,8 +5104,37 @@
      "Value": {
       "=": "withReference"
      }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "negativeImpact"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "sourceScenario"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "withReference"
+     }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "movementType"
+     }
+    }
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "TypeName": {},
@@ -5281,8 +5785,49 @@
      "Value": {
       "=": "transactionCategory_category"
      }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "destinationMaterialRelevant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "destinationRelevant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "impact_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "mode_code"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionCategory_category"
+     }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "movementType_movementType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "Title": {
@@ -5403,6 +5948,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "regulationType_regulationType": {
@@ -5440,6 +5988,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "ObjectType": {
@@ -5469,6 +6020,9 @@
      "type": "cds.String",
      "length": 4,
      "@Common.Label": "Object Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
@@ -5513,9 +6067,11 @@
       }
      ],
      "@Common.Label": "Inventory Movement Type"
+     "@Common.Label": "Inventory Movement Type"
     },
     "inventoryMovementType_ID": {
      "type": "cds.UUID",
+     "@Common.Label": "Inventory Movement Type",
      "@Common.Label": "Inventory Movement Type",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
@@ -5548,11 +6104,15 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "inventoryMovementType_movementType": {
      "type": "cds.String",
      "length": 4,
+     "@Common.Label": "Inventory Movement Type",
      "@Common.Label": "Inventory Movement Type",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
@@ -5582,6 +6142,9 @@
         "ValueListProperty": "subObjectScenario"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -5593,6 +6156,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Contract Relevant",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "contractSide": {
      "type": "cds.LargeString",
@@ -5600,9 +6167,17 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Contract Side",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "relevantMovementType": {
      "type": "cds.LargeString",
+     "@Common.Label": "Relevant Movement Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Relevant Movement Type",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -5788,6 +6363,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -5897,6 +6483,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "regulationType_regulationType": {
@@ -5934,6 +6523,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "objectType": {
@@ -5966,6 +6558,9 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "Label": "Object Type",
@@ -5987,6 +6582,10 @@
     },
     "year": {
      "type": "cds.Integer",
+     "@Common.Label": "Year",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Year",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -6035,6 +6634,9 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -6098,10 +6700,15 @@
     "rinMultiplier": {
      "type": "cds.Integer",
      "@Common.Label": "RIN Multiplyer"
+     "@Common.Label": "RIN Multiplyer"
     },
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -6316,8 +6923,43 @@
      "Value": {
       "=": "material"
      }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "rinMultiplier"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "obligationPercent"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "description"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "material"
+     }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "Title": {
@@ -6388,10 +7030,18 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Company ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "plant": {
      "type": "cds.String",
      "length": 5,
+     "@Common.Label": "Plant",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Plant",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -6535,6 +7185,17 @@
      }
     }
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "companyId"
+     }
+    }
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -6594,6 +7255,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Company ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "plant": {
      "type": "cds.String",
@@ -6602,10 +7267,18 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Plant",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "facilityId": {
      "type": "cds.String",
      "length": 5,
+     "@Common.Label": "Facility ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Facility ID",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -6761,6 +7434,17 @@
      }
     }
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "facilityId"
+     }
+    }
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -6834,6 +7518,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -6864,6 +7552,10 @@
        }
       ]
      },
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.ValueListWithFixedValues": true,
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -6915,6 +7607,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "objectCategory": {
@@ -6960,6 +7655,9 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -7011,11 +7709,18 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -7128,6 +7833,8 @@
        "=": "objectCategory_category"
       },
       "Label": "Object Category"
+      },
+      "Label": "Object Category"
      },
      {
       "$Type": "UI.DataField",
@@ -7172,6 +7879,8 @@
       "=": "objectCategory_category"
      },
      "Label": "Object Category"
+     },
+     "Label": "Object Category"
     },
     {
      "$Type": "UI.DataField",
@@ -7186,6 +7895,17 @@
      }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "Title": {
@@ -7261,6 +7981,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "action": {
@@ -7306,6 +8029,9 @@
         "ValueListProperty": "description"
        }
       ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -7449,6 +8175,17 @@
     "TypeName": {},
     "TypeNamePlural": {}
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubScenario_category"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -7511,13 +8248,16 @@
        {
         "$Type": "Common.ValueListParameterDisplayOnly",
         "ValueListProperty": "region_code"
+        "ValueListProperty": "region_code"
        },
        {
         "$Type": "Common.ValueListParameterDisplayOnly",
         "ValueListProperty": "country_code"
        }
       ]
+      ]
      },
+     "@Common.ValueListWithFixedValues": true
      "@Common.ValueListWithFixedValues": true
     },
     "regulationType_regulationType": {
@@ -7542,13 +8282,16 @@
        {
         "$Type": "Common.ValueListParameterDisplayOnly",
         "ValueListProperty": "region_code"
+        "ValueListProperty": "region_code"
        },
        {
         "$Type": "Common.ValueListParameterDisplayOnly",
         "ValueListProperty": "country_code"
        }
       ]
+      ]
      },
+     "@Common.ValueListWithFixedValues": true
      "@Common.ValueListWithFixedValues": true
     },
     "active": {
@@ -8111,6 +8854,9 @@
      },
      "@Common.FieldControl": {
       "#": "Mandatory"
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
      }
     },
     "numberOfStart": {
@@ -8119,9 +8865,17 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Number Of Start",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfEnd": {
      "type": "cds.Integer",
+     "@Common.Label": "Number Of End",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Number Of End",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -8297,6 +9051,17 @@
      }
     }
    },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubScenario_category"
+     }
+    }
+   },
    "@Capabilities.InsertRestrictions.Insertable": true,
    "@Capabilities.DeleteRestrictions.Deletable": false,
    "@Capabilities.UpdateRestrictions.Updatable": true,
@@ -8373,6 +9138,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -8407,6 +9176,10 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfStart": {
      "type": "cds.Integer",
@@ -8414,9 +9187,17 @@
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
+     "@Common.Label": "Number Of Start",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfEnd": {
      "type": "cds.Integer",
+     "@Common.Label": "Number Of End",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
      "@Common.Label": "Number Of End",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -8562,6 +9343,17 @@
      }
     }
    ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    }
+   },
    "@UI.HeaderInfo": {
     "$Type": "UI.HeaderInfoType",
     "TypeName": {},

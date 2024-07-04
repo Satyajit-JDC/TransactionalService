@@ -31,7 +31,7 @@
     "@sap-cloud-sdk/generator": "^3.15.0",
     "@sap/cds": "^7.9.2",
     "@sap/cds-compiler": "^4.9.4",
-    "@sap/cds-dk": "^7.9.2",
+    "@sap/cds-dk": "^7.9.4",
     "@sap/dev-cap-tools": "^1.31.0",
     "@sap/eslint-plugin-ui5-jsdocs": "^2.0.8",
     "@sap/hdi-deploy": "^5.2.0",
@@ -71,6 +71,11 @@
     "#cds-models/*": "./@cds-models/*/index.js"
   },
   "cds": {
+    "i18n": {
+      "folders": [
+        "_i18n"
+      ]
+    },
     "requires": {
       "RegulationComplianceMasterService": {
         "kind": "odata-v4",
@@ -123,10 +128,26 @@
         }
       },
       "db": "hana",
-      "auth": "xsuaa"
+      "auth": "xsuaa",
+      "MaterialCharacteristics": {
+        "kind": "odata",
+        "model": "srv/external/MaterialCharacteristics",
+        "[hybrid]": {
+          "credentials": {
+            "path": "/sap/opu/odata4/sap/zapi_materialcharcs_r_o4/srvd_a2x/sap/zmaterialcharacteristics_r/0001",
+            "destination": "dn1clnt300-BAS-RINS"
+          }
+        },
+        "[production]": {
+          "credentials": {
+            "path": "/sap/opu/odata4/sap/zapi_materialcharcs_r_o4/srvd_a2x/sap/zmaterialcharacteristics_r/0001",
+            "destination": "dn1clnt300-BAS-RINS"
+          }
+        }
+      }
     },
-    "cov2ap" : {
-      "plugin" : true
+    "cov2ap": {
+      "plugin": true
     }
   },
   "sapux": [

@@ -10,7 +10,7 @@ modules:
       - name: zcom_capRegCompTransSrv-destination
       - name: zcom_capRegCompTransSrv-db
       - name: zcom_capRegCompTransSrv-auth
-      - name: emdev      
+      - name: emdev
       - name: zcom_capRegCompTransSrv-conn
     provides:
       - name: srv-api
