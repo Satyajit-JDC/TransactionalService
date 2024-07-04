@@ -173,20 +173,30 @@ export class RegulationComplianceBaseClass {
     // set sub scenario data
     async setRgulationSubScnario() {
         try {
+            const { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
             if (this.oEventPayloadData.RenewableEventType && this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
                 const sSourceScenario = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
                     RFS2ConstantValues.eventTypeMDJ : this.oEventPayloadData.RenewableEventType.substring(0, 2);
                 const sFilterSubObjectScenario = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType
                     + "' and transactionSourceScenario_category eq '" + sSourceScenario +
                     "' and objectCategory_category eq '"
-                    + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'",
-                    { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
+                    + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
 
                 // call Cloud SDK
                 (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent(sFilterSubObjectScenario)
                     })
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.oMaintainRegulationSubScenarioToScenarioType = oData;
+                    });
+            }
+            else {
+                (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -440,15 +450,26 @@ export class RegulationComplianceBaseClass {
     // set Regulation Transaction Types data
     async setRegulationTransactionTypeTs() {
         try {
+            const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi();
+
             if (this.oRFS2RegulationData) {
-                const { maintainRegulationTransactionTypeTsApi } = regulationcompliancemasterserviceApi(),
-                    sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                        "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory + "'";
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
+                    "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory + "'";
 
                 (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.oMaintainRegulationTransactionTypeTs = oData;
+                    });
+            }
+            else {
+                (await maintainRegulationTransactionTypeTsApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
@@ -604,14 +625,30 @@ export class RegulationComplianceBaseClass {
     async setAdjustmentReasonCode() {
         const { maintainAdjustmentReasonCodeApi } = regulationcompliancemasterserviceApi();
         try {
-            (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
-                .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                .execute({
-                    destinationName: destinationNames.regulationComplianceMasterService
-                })).
-                forEach(oData => {
-                    this.aMaintainAdjustmentReasonCode.push(oData);
-                });
+            if (this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode) {
+                const sFilters = "reasonCode eq " + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "";
+
+                (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent(sFilters)
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach(oData => {
+                        this.aMaintainAdjustmentReasonCode.push(oData);
+                    });
+            }
+            else {
+                (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach(oData => {
+                        this.aMaintainAdjustmentReasonCode.push(oData);
+                    });
+            }
         } catch (error) {
             console.log(error);
             let sErrorMsg = "";
@@ -802,18 +839,6 @@ export class RegulationComplianceBaseClass {
         const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction');
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
         return await srv.read(RegulationComplianceTransaction).where({ sourceScenario: sourceScenario });
-        // return srv.run(SELECT.from(RegulationComplianceTransaction).where({sourceScenario:sourceScenario}));
-        // return await srv.run(
-        //     SELECT("*")
-        //       .from("RegulationComplianceTransaction")
-        //       .where(
-        //         `sourceScenario = '${sourceScenario}' `
-        //       )
-        //   );
-
-        // SELECT.from(Books).where({author_ID:106})
-        // return await srv.run(SELECT(RegulationComplianceTransaction).where({sourceScenario}));        
-
     }
 
 }
