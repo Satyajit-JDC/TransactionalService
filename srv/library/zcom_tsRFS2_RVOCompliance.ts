@@ -3,7 +3,7 @@ import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/reg
 import { createdStatus } from './utilities/zcom_tsConstants';
 import { CdsDate } from '@cds-models/_/index';
 import { Quarter, Month } from '@cds-models';
-export class RFS2DeditCompliance {
+export class RFS2_RVOCompliance {
     // private elements
     public _oRegulationComplianceBaseClassInstance: RegulationComplianceBaseClass;
 
@@ -24,14 +24,6 @@ export class RFS2DeditCompliance {
 
     //-------- Start of private methods ------------------
     private async _validateData(): Promise<boolean> {
-        // set sub scenario data
-        await this._oRegulationComplianceBaseClassInstance.setRgulationSubScnario();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType) {
-            // data available
-        } else {
-            return false;
-        }
-
         // set reg object type data
         await this._oRegulationComplianceBaseClassInstance.setRegulationObjectType();
         if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype) {

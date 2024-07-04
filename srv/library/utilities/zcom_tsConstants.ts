@@ -3,7 +3,7 @@ export const RFS2ConstantValues = {
     RFS2: "RFS2",
     credit: "C",
     debit: "D",
-    eventTypeGMCR: "GM-CR-ET"
+    eventTypeMDJ: "MDJ"
 } as const;
 
 // constants related to LCFS Regulation Compliances
@@ -26,4 +26,12 @@ export const language = "en_EN";
 export const createdStatus = {
     key: "01",
     value: "Created"
+} as const;
+
+// Regulation sub scenario
+export const regulationSubScenario = {
+    RFS2_RVO: "RFS2_RVO",
+    RFS2_RIN_RF: "RFS2_RIN_RF",
+    RFS2_MADJ_RVO: "RFS2_MADJ_RVO",
+    RFS2_MADJ_RIN: "RFS2_MADJ_RIN"
 } as const;
