@@ -40,6 +40,7 @@ export class RegulationComplianceBaseClass {
     public aMaintainMovementTypeToTransactionCategoryMapping: MaintainMovementTypeToTransactionCategoryMapping[] = [];
     public aMaintainRfs2Material: MaintainRfs2Material[] = [];
     public oMaintainRegulationTransactionType: MaintainRegulationTransactionType = {} as MaintainRegulationTransactionType;
+    public aMaintainRegulationTransactionType: MaintainRegulationTransactionType[] = [];
     public oMaintainRegulationType: MaintainRegulationType = {} as MaintainRegulationType;
     public aMaintainRegulationType: MaintainRegulationType[] = [];
     public aMaintainTransactionType: MaintainTransactionType[] = [];
@@ -384,13 +385,15 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     });
             }
-            //  else {
-            //     this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
-            //         .middleware(resilience({ retry: 3, circuitBreaker: true }))
-            //         .execute({
-            //             destinationName: destinationNames.regulationComplianceMasterService
-            //         });
-            // }
+             else {
+                this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $expand: 'regulationType'
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    });
+            }
         } catch (error) {
             console.log(error);
             let sErrorMsg = "";
@@ -474,13 +477,13 @@ export class RegulationComplianceBaseClass {
                     });
             }
             else {
-                (await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
+                this.aMaintainRegulationTransactionType = await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $expand: 'transactionCategory'
+                    })
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        this.oMaintainRegulationTransactionType = oData;
                     });
             }
         } catch (error) {

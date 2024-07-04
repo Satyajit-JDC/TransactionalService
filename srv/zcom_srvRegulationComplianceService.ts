@@ -1066,7 +1066,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs();
-            return oRegulationComplianceBaseInstance.aMaintainTransactionType;
+            return oRegulationComplianceBaseInstance.aMaintainRegulationTransactionType;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
