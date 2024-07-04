@@ -47,20 +47,17 @@ export class MaintainMovementTypeRequestBuilder<
   /**
    * Returns a request builder for retrieving one `MaintainMovementType` entity based on its keys.
    * @param id Key property. See {@link MaintainMovementType.id}.
-   * @param movementType Key property. See {@link MaintainMovementType.movementType}.
    * @param isActiveEntity Key property. See {@link MaintainMovementType.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainMovementType` entity based on its keys.
    */
   getByKey(
     id: DeserializedType<T, 'Edm.Guid'>,
-    movementType: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainMovementType<T>, T> {
     return new GetByKeyRequestBuilder<MaintainMovementType<T>, T>(
       this.entityApi,
       {
         ID: id,
-        movementType: movementType,
         IsActiveEntity: isActiveEntity
       }
     );
@@ -83,13 +80,11 @@ export class MaintainMovementTypeRequestBuilder<
   /**
    * Returns a request builder for deleting an entity of type `MaintainMovementType`.
    * @param id Key property. See {@link MaintainMovementType.id}.
-   * @param movementType Key property. See {@link MaintainMovementType.movementType}.
    * @param isActiveEntity Key property. See {@link MaintainMovementType.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainMovementType`.
    */
   delete(
     id: string,
-    movementType: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainMovementType<T>, T>;
   /**
@@ -102,7 +97,6 @@ export class MaintainMovementTypeRequestBuilder<
   ): DeleteRequestBuilder<MaintainMovementType<T>, T>;
   delete(
     idOrEntity: any,
-    movementType?: string,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainMovementType<T>, T> {
     return new DeleteRequestBuilder<MaintainMovementType<T>, T>(
@@ -111,7 +105,6 @@ export class MaintainMovementTypeRequestBuilder<
         ? idOrEntity
         : {
             ID: idOrEntity!,
-            movementType: movementType!,
             IsActiveEntity: isActiveEntity!
           }
     );

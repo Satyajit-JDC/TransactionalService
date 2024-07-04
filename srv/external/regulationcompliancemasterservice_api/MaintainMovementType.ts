@@ -37,7 +37,7 @@ export class MaintainMovementType<
   /**
    * All key fields of the MaintainMovementType entity
    */
-  static _keys = ['ID', 'movementType', 'IsActiveEntity'];
+  static _keys = ['ID', 'IsActiveEntity'];
   /**
    * Id.
    */
@@ -67,13 +67,9 @@ export class MaintainMovementType<
   /**
    * Movement Type.
    * Maximum length: 4.
-   */
-  declare movementType: DeserializedType<T, 'Edm.String'>;
-  /**
-   * Regulation Type Id.
    * @nullable
    */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
+  declare movementType?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
@@ -157,8 +153,7 @@ export interface MaintainMovementTypeType<
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
-  movementType: DeserializedType<T, 'Edm.String'>;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
+  movementType?: DeserializedType<T, 'Edm.String'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   objectTypeCode?: DeserializedType<T, 'Edm.String'> | null;
   subObjectScenario?: DeserializedType<T, 'Edm.String'> | null;

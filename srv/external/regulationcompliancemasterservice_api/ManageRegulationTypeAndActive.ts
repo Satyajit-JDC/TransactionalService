@@ -45,11 +45,6 @@ export class ManageRegulationTypeAndActive<
    */
   declare id: DeserializedType<T, 'Edm.Guid'>;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -63,11 +58,6 @@ export class ManageRegulationTypeAndActive<
    * @nullable
    */
   declare active?: DeserializedType<T, 'Edm.Boolean'> | null;
-  /**
-   * Regulation Group Id.
-   * @nullable
-   */
-  declare regulationGroupId?: DeserializedType<T, 'Edm.Guid'> | null;
   /**
    * Regulation Group Regulation Group.
    * Maximum length: 5.
@@ -111,10 +101,8 @@ export interface ManageRegulationTypeAndActiveType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   id: DeserializedType<T, 'Edm.Guid'>;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   active?: DeserializedType<T, 'Edm.Boolean'> | null;
-  regulationGroupId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationGroupRegulationGroup?: DeserializedType<T, 'Edm.String'> | null;
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasActiveEntity: DeserializedType<T, 'Edm.Boolean'>;

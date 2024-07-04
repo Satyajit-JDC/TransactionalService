@@ -128,13 +128,6 @@ export class MaintainRegulationMaterialGroupViewApi<
       true,
       true
     >;
-    REGULATION_MATERIAL_GROUP_ID: OrderableEdmTypeField<
-      MaintainRegulationMaterialGroupView<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      true,
-      true
-    >;
     REGULATION_MATERIAL_GROUP_REGULATION_MATERIAL_GROUP: OrderableEdmTypeField<
       MaintainRegulationMaterialGroupView<DeSerializers>,
       DeSerializersT,
@@ -179,15 +172,6 @@ export class MaintainRegulationMaterialGroupViewApi<
         REGULATION_TYPE: fieldBuilder.buildEdmTypeField(
           'regulationType',
           'Edm.String',
-          true
-        ),
-        /**
-         * Static representation of the {@link regulationMaterialGroupId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_MATERIAL_GROUP_ID: fieldBuilder.buildEdmTypeField(
-          'regulationMaterialGroup_ID',
-          'Edm.Guid',
           true
         ),
         /**

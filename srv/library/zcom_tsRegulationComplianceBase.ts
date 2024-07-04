@@ -16,6 +16,10 @@ import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
 import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
+import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
+import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
+ 
+ 
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -627,7 +631,7 @@ export class RegulationComplianceBaseClass {
     async setAdjustmentReasonCode() {
         const { maintainAdjustmentReasonCodeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode) {
+            if (this.oEventPayloadData._RenewableMaterialDocument) {
                 const sFilters = "reasonCode eq " + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "";
 
                 (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
@@ -842,5 +846,31 @@ export class RegulationComplianceBaseClass {
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
         return await srv.read(RegulationComplianceTransaction).where({ sourceScenario: sourceScenario });
     }
+    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
+        const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
+        let aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
+        (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
+            .middleware(resilience({ retry: 3, circuitBreaker: true }))
+            .select(
+                za_MaterialCharacteristics_RApi.schema.OBJECT_KEY,
+                za_MaterialCharacteristics_RApi.schema.MATERIAL_DESCRIPTION,
+                za_MaterialCharacteristics_RApi.schema.REGULATION_GROUP,
+                za_MaterialCharacteristics_RApi.schema.REGULATION_MATERIAL_GROUP,
+                za_MaterialCharacteristics_RApi.schema.FUEL_CATEGORY
+            )
+            .execute({
+                destinationName: "dn1clnt300-BAS-RINS"
+            })).forEach((fm) => {
+                aFuelMaterial.push({
+                    ObjectKey: fm.objectKey as string,
+                    RegulationGroup: fm.regulationGroup,
+                    FuelCategory: fm.fuelCategory,
+                    MaterialDescription: fm.materialDescription,
+                    RegulationMaterialGroup: fm.regulationMaterialGroup
+                });
+ 
+            });
+            return aFuelMaterial;
+        }
 
 }

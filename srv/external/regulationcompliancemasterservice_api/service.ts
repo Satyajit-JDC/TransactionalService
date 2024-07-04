@@ -21,9 +21,9 @@ import { MaintainMovementTypeToTransactionCategoryMappingApi } from './MaintainM
 import { MaintainRenewableMovementTypeApi } from './MaintainRenewableMovementTypeApi';
 import { MaintainRfs2MaterialApi } from './MaintainRfs2MaterialApi';
 import { MaintainCompanyIdToPlantMappingApi } from './MaintainCompanyIdToPlantMappingApi';
-import { MaintainCompanyIdOrPlantToFacilityIdApi } from './MaintainCompanyIdOrPlantToFacilityIdApi';
+import { MaintainCompanyIdOrPlantToFacilityIdMappingApi } from './MaintainCompanyIdOrPlantToFacilityIdMappingApi';
 import { MaintainRegulationSubScenarioToScenarioApi } from './MaintainRegulationSubScenarioToScenarioApi';
-import { MaintainRegulationSubScenarioActionApi } from './MaintainRegulationSubScenarioActionApi';
+import { MaintainActionSubScenarioMappingApi } from './MaintainActionSubScenarioMappingApi';
 import { ManageRegulationTypeAndActiveApi } from './ManageRegulationTypeAndActiveApi';
 import { ManageRegulationTypeAndObjectCategoryApi } from './ManageRegulationTypeAndObjectCategoryApi';
 import { MaintainIdRangeForRenewableObjectSequenceApi } from './MaintainIdRangeForRenewableObjectSequenceApi';
@@ -444,15 +444,15 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainCompanyIdOrPlantToFacilityIdApi(): MaintainCompanyIdOrPlantToFacilityIdApi<DeSerializersT> {
+  get maintainCompanyIdOrPlantToFacilityIdMappingApi(): MaintainCompanyIdOrPlantToFacilityIdMappingApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainCompanyIdOrPlantToFacilityIdApi',
-      MaintainCompanyIdOrPlantToFacilityIdApi
+      'maintainCompanyIdOrPlantToFacilityIdMappingApi',
+      MaintainCompanyIdOrPlantToFacilityIdMappingApi
     );
     const linkedApis = [
       this.initApi(
-        'maintainCompanyIdOrPlantToFacilityIdApi',
-        MaintainCompanyIdOrPlantToFacilityIdApi
+        'maintainCompanyIdOrPlantToFacilityIdMappingApi',
+        MaintainCompanyIdOrPlantToFacilityIdMappingApi
       )
     ];
     api._addNavigationProperties(linkedApis);
@@ -481,17 +481,17 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainRegulationSubScenarioActionApi(): MaintainRegulationSubScenarioActionApi<DeSerializersT> {
+  get maintainActionSubScenarioMappingApi(): MaintainActionSubScenarioMappingApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRegulationSubScenarioActionApi',
-      MaintainRegulationSubScenarioActionApi
+      'maintainActionSubScenarioMappingApi',
+      MaintainActionSubScenarioMappingApi
     );
     const linkedApis = [
       this.initApi('regulationSubTypeApi', RegulationSubTypeApi),
       this.initApi('actionInventoryApi', ActionInventoryApi),
       this.initApi(
-        'maintainRegulationSubScenarioActionApi',
-        MaintainRegulationSubScenarioActionApi
+        'maintainActionSubScenarioMappingApi',
+        MaintainActionSubScenarioMappingApi
       )
     ];
     api._addNavigationProperties(linkedApis);

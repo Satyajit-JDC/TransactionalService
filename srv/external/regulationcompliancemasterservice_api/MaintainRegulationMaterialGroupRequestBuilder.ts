@@ -48,20 +48,17 @@ export class MaintainRegulationMaterialGroupRequestBuilder<
 
   /**
    * Returns a request builder for retrieving one `MaintainRegulationMaterialGroup` entity based on its keys.
-   * @param id Key property. See {@link MaintainRegulationMaterialGroup.id}.
    * @param regulationMaterialGroup Key property. See {@link MaintainRegulationMaterialGroup.regulationMaterialGroup}.
    * @param isActiveEntity Key property. See {@link MaintainRegulationMaterialGroup.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainRegulationMaterialGroup` entity based on its keys.
    */
   getByKey(
-    id: DeserializedType<T, 'Edm.Guid'>,
     regulationMaterialGroup: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainRegulationMaterialGroup<T>, T> {
     return new GetByKeyRequestBuilder<MaintainRegulationMaterialGroup<T>, T>(
       this.entityApi,
       {
-        ID: id,
         regulationMaterialGroup: regulationMaterialGroup,
         IsActiveEntity: isActiveEntity
       }
@@ -84,13 +81,11 @@ export class MaintainRegulationMaterialGroupRequestBuilder<
 
   /**
    * Returns a request builder for deleting an entity of type `MaintainRegulationMaterialGroup`.
-   * @param id Key property. See {@link MaintainRegulationMaterialGroup.id}.
    * @param regulationMaterialGroup Key property. See {@link MaintainRegulationMaterialGroup.regulationMaterialGroup}.
    * @param isActiveEntity Key property. See {@link MaintainRegulationMaterialGroup.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainRegulationMaterialGroup`.
    */
   delete(
-    id: string,
     regulationMaterialGroup: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainRegulationMaterialGroup<T>, T>;
@@ -103,17 +98,15 @@ export class MaintainRegulationMaterialGroupRequestBuilder<
     entity: MaintainRegulationMaterialGroup<T>
   ): DeleteRequestBuilder<MaintainRegulationMaterialGroup<T>, T>;
   delete(
-    idOrEntity: any,
-    regulationMaterialGroup?: string,
+    regulationMaterialGroupOrEntity: any,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainRegulationMaterialGroup<T>, T> {
     return new DeleteRequestBuilder<MaintainRegulationMaterialGroup<T>, T>(
       this.entityApi,
-      idOrEntity instanceof MaintainRegulationMaterialGroup
-        ? idOrEntity
+      regulationMaterialGroupOrEntity instanceof MaintainRegulationMaterialGroup
+        ? regulationMaterialGroupOrEntity
         : {
-            ID: idOrEntity!,
-            regulationMaterialGroup: regulationMaterialGroup!,
+            regulationMaterialGroup: regulationMaterialGroupOrEntity!,
             IsActiveEntity: isActiveEntity!
           }
     );

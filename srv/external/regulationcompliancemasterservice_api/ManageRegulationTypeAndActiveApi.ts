@@ -150,13 +150,6 @@ export class ManageRegulationTypeAndActiveApi<
       false,
       true
     >;
-    REGULATION_TYPE_ID: OrderableEdmTypeField<
-      ManageRegulationTypeAndActive<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      true,
-      true
-    >;
     REGULATION_TYPE_REGULATION_TYPE: OrderableEdmTypeField<
       ManageRegulationTypeAndActive<DeSerializers>,
       DeSerializersT,
@@ -168,13 +161,6 @@ export class ManageRegulationTypeAndActiveApi<
       ManageRegulationTypeAndActive<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
-      true,
-      true
-    >;
-    REGULATION_GROUP_ID: OrderableEdmTypeField<
-      ManageRegulationTypeAndActive<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
       true,
       true
     >;
@@ -246,15 +232,6 @@ export class ManageRegulationTypeAndActiveApi<
          */
         ID: fieldBuilder.buildEdmTypeField('ID', 'Edm.Guid', false),
         /**
-         * Static representation of the {@link regulationTypeId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_TYPE_ID: fieldBuilder.buildEdmTypeField(
-          'regulationType_ID',
-          'Edm.Guid',
-          true
-        ),
-        /**
          * Static representation of the {@link regulationTypeRegulationType} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
@@ -268,15 +245,6 @@ export class ManageRegulationTypeAndActiveApi<
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
         ACTIVE: fieldBuilder.buildEdmTypeField('active', 'Edm.Boolean', true),
-        /**
-         * Static representation of the {@link regulationGroupId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_GROUP_ID: fieldBuilder.buildEdmTypeField(
-          'regulationGroup_ID',
-          'Edm.Guid',
-          true
-        ),
         /**
          * Static representation of the {@link regulationGroupRegulationGroup} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.

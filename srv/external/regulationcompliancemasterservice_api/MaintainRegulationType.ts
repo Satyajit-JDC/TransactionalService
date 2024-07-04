@@ -37,11 +37,7 @@ export class MaintainRegulationType<
   /**
    * All key fields of the MaintainRegulationType entity
    */
-  static _keys = ['ID', 'regulationType', 'IsActiveEntity'];
-  /**
-   * Id.
-   */
-  declare id: DeserializedType<T, 'Edm.Guid'>;
+  static _keys = ['regulationType', 'IsActiveEntity'];
   /**
    * Created At.
    * @nullable
@@ -158,7 +154,6 @@ export class MaintainRegulationType<
 export interface MaintainRegulationTypeType<
   T extends DeSerializers = DefaultDeSerializers
 > {
-  id: DeserializedType<T, 'Edm.Guid'>;
   createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;

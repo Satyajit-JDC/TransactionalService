@@ -231,13 +231,6 @@ export class MaintainMovementTypeToTransactionCategoryMappingApi<
       true,
       true
     >;
-    REGULATION_TYPE_ID: OrderableEdmTypeField<
-      MaintainMovementTypeToTransactionCategoryMapping<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      true,
-      true
-    >;
     REGULATION_TYPE_REGULATION_TYPE: OrderableEdmTypeField<
       MaintainMovementTypeToTransactionCategoryMapping<DeSerializers>,
       DeSerializersT,
@@ -256,13 +249,6 @@ export class MaintainMovementTypeToTransactionCategoryMappingApi<
       MaintainMovementTypeToTransactionCategoryMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Guid',
-      true,
-      true
-    >;
-    MOVEMENT_TYPE_MOVEMENT_TYPE: OrderableEdmTypeField<
-      MaintainMovementTypeToTransactionCategoryMapping<DeSerializers>,
-      DeSerializersT,
-      'Edm.String',
       true,
       true
     >;
@@ -450,15 +436,6 @@ export class MaintainMovementTypeToTransactionCategoryMappingApi<
           true
         ),
         /**
-         * Static representation of the {@link regulationTypeId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_TYPE_ID: fieldBuilder.buildEdmTypeField(
-          'regulationType_ID',
-          'Edm.Guid',
-          true
-        ),
-        /**
          * Static representation of the {@link regulationTypeRegulationType} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
@@ -483,15 +460,6 @@ export class MaintainMovementTypeToTransactionCategoryMappingApi<
         MOVEMENT_TYPE_ID: fieldBuilder.buildEdmTypeField(
           'movementType_ID',
           'Edm.Guid',
-          true
-        ),
-        /**
-         * Static representation of the {@link movementTypeMovementType} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        MOVEMENT_TYPE_MOVEMENT_TYPE: fieldBuilder.buildEdmTypeField(
-          'movementType_movementType',
-          'Edm.String',
           true
         ),
         /**

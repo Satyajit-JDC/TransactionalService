@@ -129,13 +129,6 @@ export class MaintainRegulationGroupApi<
   }
 
   private _schema?: {
-    ID: OrderableEdmTypeField<
-      MaintainRegulationGroup<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      false,
-      true
-    >;
     CREATED_AT: OrderableEdmTypeField<
       MaintainRegulationGroup<DeSerializers>,
       DeSerializersT,
@@ -224,11 +217,6 @@ export class MaintainRegulationGroupApi<
     if (!this._schema) {
       const fieldBuilder = this.fieldBuilder;
       this._schema = {
-        /**
-         * Static representation of the {@link id} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        ID: fieldBuilder.buildEdmTypeField('ID', 'Edm.Guid', false),
         /**
          * Static representation of the {@link createdAt} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.

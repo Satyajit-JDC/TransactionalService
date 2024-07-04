@@ -66,11 +66,6 @@ export class MaintainRfs2Material<
    */
   declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -170,7 +165,6 @@ export interface MaintainRfs2MaterialType<
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   objectTypeCode?: DeserializedType<T, 'Edm.String'> | null;
   year?: DeserializedType<T, 'Edm.String'> | null;

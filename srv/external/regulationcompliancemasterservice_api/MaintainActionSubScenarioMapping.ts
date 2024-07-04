@@ -9,35 +9,57 @@ import {
   DeSerializers,
   DeserializedType
 } from '@sap-cloud-sdk/odata-v4';
-import type { MaintainRegulationSubScenarioActionApi } from './MaintainRegulationSubScenarioActionApi';
+import type { MaintainActionSubScenarioMappingApi } from './MaintainActionSubScenarioMappingApi';
 import { RegulationSubType, RegulationSubTypeType } from './RegulationSubType';
 import { ActionInventory, ActionInventoryType } from './ActionInventory';
 
 /**
- * This class represents the entity "MaintainRegulationSubScenarioAction" of service "RegulationComplianceMasterService".
+ * This class represents the entity "MaintainActionSubScenarioMapping" of service "RegulationComplianceMasterService".
  */
-export class MaintainRegulationSubScenarioAction<
+export class MaintainActionSubScenarioMapping<
     T extends DeSerializers = DefaultDeSerializers
   >
   extends Entity
-  implements MaintainRegulationSubScenarioActionType<T>
+  implements MaintainActionSubScenarioMappingType<T>
 {
   /**
-   * Technical entity name for MaintainRegulationSubScenarioAction.
+   * Technical entity name for MaintainActionSubScenarioMapping.
    */
-  static _entityName = 'MaintainRegulationSubScenarioAction';
+  static _entityName = 'MaintainActionSubScenarioMapping';
   /**
    * Default url path for the according service.
    */
   static _defaultBasePath = '/service/RegulationComplianceMasterService';
   /**
-   * All key fields of the MaintainRegulationSubScenarioAction entity
+   * All key fields of the MaintainActionSubScenarioMapping entity
    */
   static _keys = ['ID', 'IsActiveEntity'];
   /**
    * Id.
    */
   declare id: DeserializedType<T, 'Edm.Guid'>;
+  /**
+   * Created At.
+   * @nullable
+   */
+  declare createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  /**
+   * Created By.
+   * Maximum length: 255.
+   * @nullable
+   */
+  declare createdBy?: DeserializedType<T, 'Edm.String'> | null;
+  /**
+   * Modified At.
+   * @nullable
+   */
+  declare modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  /**
+   * Modified By.
+   * Maximum length: 255.
+   * @nullable
+   */
+  declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Regulation Sub Scenario Category.
    * Maximum length: 20.
@@ -74,19 +96,23 @@ export class MaintainRegulationSubScenarioAction<
    */
   declare action?: ActionInventory<T> | null;
   /**
-   * One-to-one navigation property to the {@link MaintainRegulationSubScenarioAction} entity.
+   * One-to-one navigation property to the {@link MaintainActionSubScenarioMapping} entity.
    */
-  declare siblingEntity?: MaintainRegulationSubScenarioAction<T> | null;
+  declare siblingEntity?: MaintainActionSubScenarioMapping<T> | null;
 
-  constructor(_entityApi: MaintainRegulationSubScenarioActionApi<T>) {
+  constructor(_entityApi: MaintainActionSubScenarioMappingApi<T>) {
     super(_entityApi);
   }
 }
 
-export interface MaintainRegulationSubScenarioActionType<
+export interface MaintainActionSubScenarioMappingType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   id: DeserializedType<T, 'Edm.Guid'>;
+  createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  createdBy?: DeserializedType<T, 'Edm.String'> | null;
+  modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   regulationSubScenarioCategory?: DeserializedType<T, 'Edm.String'> | null;
   actionCategory?: DeserializedType<T, 'Edm.String'> | null;
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
@@ -94,5 +120,5 @@ export interface MaintainRegulationSubScenarioActionType<
   hasDraftEntity: DeserializedType<T, 'Edm.Boolean'>;
   regulationSubScenario?: RegulationSubTypeType<T> | null;
   action?: ActionInventoryType<T> | null;
-  siblingEntity?: MaintainRegulationSubScenarioActionType<T> | null;
+  siblingEntity?: MaintainActionSubScenarioMappingType<T> | null;
 }
