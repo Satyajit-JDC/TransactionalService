@@ -171,7 +171,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved) => {
                     if (bResolved) {
                         // RFS2 Regulation is Active
-                        if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
+                        if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType) {
                             oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
                         }
                     }
