@@ -5,22 +5,22 @@
  */
 import { MaintainRegulationTypeApi } from './MaintainRegulationTypeApi';
 import { MaintainTransactionTypeApi } from './MaintainTransactionTypeApi';
-import { MaintainRegulationTransactionTypeTsApi } from './MaintainRegulationTransactionTypeTsApi';
+import { MaintainRegulationTransactionTypeApi } from './MaintainRegulationTransactionTypeApi';
 import { MaintainFuelMappingApi } from './MaintainFuelMappingApi';
-import { MaintainRegulationObjecttypeApi } from './MaintainRegulationObjecttypeApi';
+import { MaintainRegulationObjectTypeApi } from './MaintainRegulationObjectTypeApi';
 import { MaintainRegulationGroupApi } from './MaintainRegulationGroupApi';
 import { MaintainRegulationMaterialGroupApi } from './MaintainRegulationMaterialGroupApi';
 import { MaintainAdjustmentReasonCodeApi } from './MaintainAdjustmentReasonCodeApi';
 import { MaintainInventoryPostingPlantApi } from './MaintainInventoryPostingPlantApi';
 import { MaintainIncotermsImpactForImportOrExportApi } from './MaintainIncotermsImpactForImportOrExportApi';
-import { MaintainRegulationToleranceForDateMatchApi } from './MaintainRegulationToleranceForDateMatchApi';
-import { MaintainRegulatonToleranceForVolumeMatchApi } from './MaintainRegulatonToleranceForVolumeMatchApi';
-import { MaintainRegulationTransactionTypeBuApi } from './MaintainRegulationTransactionTypeBuApi';
+import { MaintainDateToleranceForAutoMatchApi } from './MaintainDateToleranceForAutoMatchApi';
+import { MaintainVolumeToleranceForAutoMatchApi } from './MaintainVolumeToleranceForAutoMatchApi';
+import { MaintainRegulationTransactionTypeWithImpactApi } from './MaintainRegulationTransactionTypeWithImpactApi';
 import { MaintainMovementTypeApi } from './MaintainMovementTypeApi';
-import { MaintainMovementTypeToTransactionCategoryImpactApi } from './MaintainMovementTypeToTransactionCategoryImpactApi';
+import { MaintainMovementTypeToTransactionCategoryMappingApi } from './MaintainMovementTypeToTransactionCategoryMappingApi';
 import { MaintainRenewableMovementTypeApi } from './MaintainRenewableMovementTypeApi';
-import { MaintainRenewableMaterialConfigurationApi } from './MaintainRenewableMaterialConfigurationApi';
-import { MaintainCompanyIdToPlantApi } from './MaintainCompanyIdToPlantApi';
+import { MaintainRfs2MaterialApi } from './MaintainRfs2MaterialApi';
+import { MaintainCompanyIdToPlantMappingApi } from './MaintainCompanyIdToPlantMappingApi';
 import { MaintainCompanyIdOrPlantToFacilityIdApi } from './MaintainCompanyIdOrPlantToFacilityIdApi';
 import { MaintainRegulationSubScenarioToScenarioApi } from './MaintainRegulationSubScenarioToScenarioApi';
 import { MaintainRegulationSubScenarioActionApi } from './MaintainRegulationSubScenarioActionApi';
@@ -29,11 +29,11 @@ import { ManageRegulationTypeAndObjectCategoryApi } from './ManageRegulationType
 import { MaintainIdRangeForRenewableObjectSequenceApi } from './MaintainIdRangeForRenewableObjectSequenceApi';
 import { MaintainRegulationGroupViewApi } from './MaintainRegulationGroupViewApi';
 import { MaintainRegulationMaterialGroupViewApi } from './MaintainRegulationMaterialGroupViewApi';
-import { MaintainIdRangeForRenewableObjectsApi } from './MaintainIdRangeForRenewableObjectsApi';
-import { MaintainIdRangeForReconciliationGroupsApi } from './MaintainIdRangeForReconciliationGroupsApi';
+import { MaintainIdRangeForRenewableObjectApi } from './MaintainIdRangeForRenewableObjectApi';
+import { MaintainIdRangeForReconciliationGroupApi } from './MaintainIdRangeForReconciliationGroupApi';
 import { RegulationCategoryApi } from './RegulationCategoryApi';
 import { CountriesApi } from './CountriesApi';
-import { UomApi } from './UomApi';
+import { RegulationUomApi } from './RegulationUomApi';
 import { TransactionCategoryApi } from './TransactionCategoryApi';
 import { FuelCategoryApi } from './FuelCategoryApi';
 import { FuelSubCategoryApi } from './FuelSubCategoryApi';
@@ -43,10 +43,10 @@ import { ImpactApi } from './ImpactApi';
 import { PassRetainIndicatorApi } from './PassRetainIndicatorApi';
 import { ModeApi } from './ModeApi';
 import { Rfs2DebitTypeApi } from './Rfs2DebitTypeApi';
-import { FuelCodeApi } from './FuelCodeApi';
+import { Rfs2FuelCodeApi } from './Rfs2FuelCodeApi';
 import { TransactionSourceScenarioApi } from './TransactionSourceScenarioApi';
-import { RegulationSubCategoryApi } from './RegulationSubCategoryApi';
-import { ActionApi } from './ActionApi';
+import { RegulationSubTypeApi } from './RegulationSubTypeApi';
+import { ActionInventoryApi } from './ActionInventoryApi';
 import { Countries_TextsApi } from './Countries_TextsApi';
 import { ObjectType_TextsApi } from './ObjectType_TextsApi';
 import { Mode_TextsApi } from './Mode_TextsApi';
@@ -159,7 +159,7 @@ class RegulationcompliancemasterserviceApi<
       this.initApi('regulationCategoryApi', RegulationCategoryApi),
       this.initApi('countriesApi', CountriesApi),
       this.initApi('countriesApi', CountriesApi),
-      this.initApi('uomApi', UomApi),
+      this.initApi('regulationUomApi', RegulationUomApi),
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi)
     ];
     api._addNavigationProperties(linkedApis);
@@ -178,17 +178,18 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainRegulationTransactionTypeTsApi(): MaintainRegulationTransactionTypeTsApi<DeSerializersT> {
+  get maintainRegulationTransactionTypeApi(): MaintainRegulationTransactionTypeApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRegulationTransactionTypeTsApi',
-      MaintainRegulationTransactionTypeTsApi
+      'maintainRegulationTransactionTypeApi',
+      MaintainRegulationTransactionTypeApi
     );
     const linkedApis = [
+      this.initApi('maintainTransactionTypeApi', MaintainTransactionTypeApi),
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
       this.initApi('transactionCategoryApi', TransactionCategoryApi),
       this.initApi(
-        'maintainRegulationTransactionTypeTsApi',
-        MaintainRegulationTransactionTypeTsApi
+        'maintainRegulationTransactionTypeApi',
+        MaintainRegulationTransactionTypeApi
       )
     ];
     api._addNavigationProperties(linkedApis);
@@ -206,18 +207,18 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainRegulationObjecttypeApi(): MaintainRegulationObjecttypeApi<DeSerializersT> {
+  get maintainRegulationObjectTypeApi(): MaintainRegulationObjectTypeApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRegulationObjecttypeApi',
-      MaintainRegulationObjecttypeApi
+      'maintainRegulationObjectTypeApi',
+      MaintainRegulationObjectTypeApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
       this.initApi('objectTypeApi', ObjectTypeApi),
       this.initApi('objectCategoryApi', ObjectCategoryApi),
       this.initApi(
-        'maintainRegulationObjecttypeApi',
-        MaintainRegulationObjecttypeApi
+        'maintainRegulationObjectTypeApi',
+        MaintainRegulationObjectTypeApi
       )
     ];
     api._addNavigationProperties(linkedApis);
@@ -306,42 +307,42 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainRegulationToleranceForDateMatchApi(): MaintainRegulationToleranceForDateMatchApi<DeSerializersT> {
+  get maintainDateToleranceForAutoMatchApi(): MaintainDateToleranceForAutoMatchApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRegulationToleranceForDateMatchApi',
-      MaintainRegulationToleranceForDateMatchApi
+      'maintainDateToleranceForAutoMatchApi',
+      MaintainDateToleranceForAutoMatchApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
       this.initApi(
-        'maintainRegulationToleranceForDateMatchApi',
-        MaintainRegulationToleranceForDateMatchApi
+        'maintainDateToleranceForAutoMatchApi',
+        MaintainDateToleranceForAutoMatchApi
       )
     ];
     api._addNavigationProperties(linkedApis);
     return api;
   }
 
-  get maintainRegulatonToleranceForVolumeMatchApi(): MaintainRegulatonToleranceForVolumeMatchApi<DeSerializersT> {
+  get maintainVolumeToleranceForAutoMatchApi(): MaintainVolumeToleranceForAutoMatchApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRegulatonToleranceForVolumeMatchApi',
-      MaintainRegulatonToleranceForVolumeMatchApi
+      'maintainVolumeToleranceForAutoMatchApi',
+      MaintainVolumeToleranceForAutoMatchApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
       this.initApi(
-        'maintainRegulatonToleranceForVolumeMatchApi',
-        MaintainRegulatonToleranceForVolumeMatchApi
+        'maintainVolumeToleranceForAutoMatchApi',
+        MaintainVolumeToleranceForAutoMatchApi
       )
     ];
     api._addNavigationProperties(linkedApis);
     return api;
   }
 
-  get maintainRegulationTransactionTypeBuApi(): MaintainRegulationTransactionTypeBuApi<DeSerializersT> {
+  get maintainRegulationTransactionTypeWithImpactApi(): MaintainRegulationTransactionTypeWithImpactApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRegulationTransactionTypeBuApi',
-      MaintainRegulationTransactionTypeBuApi
+      'maintainRegulationTransactionTypeWithImpactApi',
+      MaintainRegulationTransactionTypeWithImpactApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
@@ -350,8 +351,8 @@ class RegulationcompliancemasterserviceApi<
       this.initApi('impactApi', ImpactApi),
       this.initApi('passRetainIndicatorApi', PassRetainIndicatorApi),
       this.initApi(
-        'maintainRegulationTransactionTypeBuApi',
-        MaintainRegulationTransactionTypeBuApi
+        'maintainRegulationTransactionTypeWithImpactApi',
+        MaintainRegulationTransactionTypeWithImpactApi
       )
     ];
     api._addNavigationProperties(linkedApis);
@@ -373,10 +374,10 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainMovementTypeToTransactionCategoryImpactApi(): MaintainMovementTypeToTransactionCategoryImpactApi<DeSerializersT> {
+  get maintainMovementTypeToTransactionCategoryMappingApi(): MaintainMovementTypeToTransactionCategoryMappingApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainMovementTypeToTransactionCategoryImpactApi',
-      MaintainMovementTypeToTransactionCategoryImpactApi
+      'maintainMovementTypeToTransactionCategoryMappingApi',
+      MaintainMovementTypeToTransactionCategoryMappingApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
@@ -386,8 +387,8 @@ class RegulationcompliancemasterserviceApi<
       this.initApi('transactionCategoryApi', TransactionCategoryApi),
       this.initApi('impactApi', ImpactApi),
       this.initApi(
-        'maintainMovementTypeToTransactionCategoryImpactApi',
-        MaintainMovementTypeToTransactionCategoryImpactApi
+        'maintainMovementTypeToTransactionCategoryMappingApi',
+        MaintainMovementTypeToTransactionCategoryMappingApi
       )
     ];
     api._addNavigationProperties(linkedApis);
@@ -412,32 +413,32 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainRenewableMaterialConfigurationApi(): MaintainRenewableMaterialConfigurationApi<DeSerializersT> {
+  get maintainRfs2MaterialApi(): MaintainRfs2MaterialApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainRenewableMaterialConfigurationApi',
-      MaintainRenewableMaterialConfigurationApi
+      'maintainRfs2MaterialApi',
+      MaintainRfs2MaterialApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
       this.initApi('objectTypeApi', ObjectTypeApi),
       this.initApi('rfs2DebitTypeApi', Rfs2DebitTypeApi),
-      this.initApi('fuelCodeApi', FuelCodeApi),
-      this.initApi(
-        'maintainRenewableMaterialConfigurationApi',
-        MaintainRenewableMaterialConfigurationApi
-      )
+      this.initApi('rfs2FuelCodeApi', Rfs2FuelCodeApi),
+      this.initApi('maintainRfs2MaterialApi', MaintainRfs2MaterialApi)
     ];
     api._addNavigationProperties(linkedApis);
     return api;
   }
 
-  get maintainCompanyIdToPlantApi(): MaintainCompanyIdToPlantApi<DeSerializersT> {
+  get maintainCompanyIdToPlantMappingApi(): MaintainCompanyIdToPlantMappingApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainCompanyIdToPlantApi',
-      MaintainCompanyIdToPlantApi
+      'maintainCompanyIdToPlantMappingApi',
+      MaintainCompanyIdToPlantMappingApi
     );
     const linkedApis = [
-      this.initApi('maintainCompanyIdToPlantApi', MaintainCompanyIdToPlantApi)
+      this.initApi(
+        'maintainCompanyIdToPlantMappingApi',
+        MaintainCompanyIdToPlantMappingApi
+      )
     ];
     api._addNavigationProperties(linkedApis);
     return api;
@@ -470,7 +471,7 @@ class RegulationcompliancemasterserviceApi<
         TransactionSourceScenarioApi
       ),
       this.initApi('objectCategoryApi', ObjectCategoryApi),
-      this.initApi('regulationSubCategoryApi', RegulationSubCategoryApi),
+      this.initApi('regulationSubTypeApi', RegulationSubTypeApi),
       this.initApi(
         'maintainRegulationSubScenarioToScenarioApi',
         MaintainRegulationSubScenarioToScenarioApi
@@ -486,8 +487,8 @@ class RegulationcompliancemasterserviceApi<
       MaintainRegulationSubScenarioActionApi
     );
     const linkedApis = [
-      this.initApi('regulationSubCategoryApi', RegulationSubCategoryApi),
-      this.initApi('actionApi', ActionApi),
+      this.initApi('regulationSubTypeApi', RegulationSubTypeApi),
+      this.initApi('actionInventoryApi', ActionInventoryApi),
       this.initApi(
         'maintainRegulationSubScenarioActionApi',
         MaintainRegulationSubScenarioActionApi
@@ -541,7 +542,7 @@ class RegulationcompliancemasterserviceApi<
       MaintainIdRangeForRenewableObjectSequenceApi
     );
     const linkedApis = [
-      this.initApi('regulationSubCategoryApi', RegulationSubCategoryApi)
+      this.initApi('regulationSubTypeApi', RegulationSubTypeApi)
     ];
     api._addNavigationProperties(linkedApis);
     return api;
@@ -574,32 +575,32 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get maintainIdRangeForRenewableObjectsApi(): MaintainIdRangeForRenewableObjectsApi<DeSerializersT> {
+  get maintainIdRangeForRenewableObjectApi(): MaintainIdRangeForRenewableObjectApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainIdRangeForRenewableObjectsApi',
-      MaintainIdRangeForRenewableObjectsApi
+      'maintainIdRangeForRenewableObjectApi',
+      MaintainIdRangeForRenewableObjectApi
     );
     const linkedApis = [
-      this.initApi('regulationSubCategoryApi', RegulationSubCategoryApi),
+      this.initApi('regulationSubTypeApi', RegulationSubTypeApi),
       this.initApi(
-        'maintainIdRangeForRenewableObjectsApi',
-        MaintainIdRangeForRenewableObjectsApi
+        'maintainIdRangeForRenewableObjectApi',
+        MaintainIdRangeForRenewableObjectApi
       )
     ];
     api._addNavigationProperties(linkedApis);
     return api;
   }
 
-  get maintainIdRangeForReconciliationGroupsApi(): MaintainIdRangeForReconciliationGroupsApi<DeSerializersT> {
+  get maintainIdRangeForReconciliationGroupApi(): MaintainIdRangeForReconciliationGroupApi<DeSerializersT> {
     const api = this.initApi(
-      'maintainIdRangeForReconciliationGroupsApi',
-      MaintainIdRangeForReconciliationGroupsApi
+      'maintainIdRangeForReconciliationGroupApi',
+      MaintainIdRangeForReconciliationGroupApi
     );
     const linkedApis = [
       this.initApi('maintainRegulationTypeApi', MaintainRegulationTypeApi),
       this.initApi(
-        'maintainIdRangeForReconciliationGroupsApi',
-        MaintainIdRangeForReconciliationGroupsApi
+        'maintainIdRangeForReconciliationGroupApi',
+        MaintainIdRangeForReconciliationGroupApi
       )
     ];
     api._addNavigationProperties(linkedApis);
@@ -620,8 +621,8 @@ class RegulationcompliancemasterserviceApi<
     return api;
   }
 
-  get uomApi(): UomApi<DeSerializersT> {
-    return this.initApi('uomApi', UomApi);
+  get regulationUomApi(): RegulationUomApi<DeSerializersT> {
+    return this.initApi('regulationUomApi', RegulationUomApi);
   }
 
   get transactionCategoryApi(): TransactionCategoryApi<DeSerializersT> {
@@ -672,8 +673,8 @@ class RegulationcompliancemasterserviceApi<
     return this.initApi('rfs2DebitTypeApi', Rfs2DebitTypeApi);
   }
 
-  get fuelCodeApi(): FuelCodeApi<DeSerializersT> {
-    return this.initApi('fuelCodeApi', FuelCodeApi);
+  get rfs2FuelCodeApi(): Rfs2FuelCodeApi<DeSerializersT> {
+    return this.initApi('rfs2FuelCodeApi', Rfs2FuelCodeApi);
   }
 
   get transactionSourceScenarioApi(): TransactionSourceScenarioApi<DeSerializersT> {
@@ -683,12 +684,12 @@ class RegulationcompliancemasterserviceApi<
     );
   }
 
-  get regulationSubCategoryApi(): RegulationSubCategoryApi<DeSerializersT> {
-    return this.initApi('regulationSubCategoryApi', RegulationSubCategoryApi);
+  get regulationSubTypeApi(): RegulationSubTypeApi<DeSerializersT> {
+    return this.initApi('regulationSubTypeApi', RegulationSubTypeApi);
   }
 
-  get actionApi(): ActionApi<DeSerializersT> {
-    return this.initApi('actionApi', ActionApi);
+  get actionInventoryApi(): ActionInventoryApi<DeSerializersT> {
+    return this.initApi('actionInventoryApi', ActionInventoryApi);
   }
 
   get countries_TextsApi(): Countries_TextsApi<DeSerializersT> {

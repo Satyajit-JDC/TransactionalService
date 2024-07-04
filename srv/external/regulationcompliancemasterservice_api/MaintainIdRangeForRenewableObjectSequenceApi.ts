@@ -5,7 +5,7 @@
  */
 import { MaintainIdRangeForRenewableObjectSequence } from './MaintainIdRangeForRenewableObjectSequence';
 import { MaintainIdRangeForRenewableObjectSequenceRequestBuilder } from './MaintainIdRangeForRenewableObjectSequenceRequestBuilder';
-import { RegulationSubCategoryApi } from './RegulationSubCategoryApi';
+import { RegulationSubTypeApi } from './RegulationSubTypeApi';
 import {
   CustomField,
   defaultDeSerializers,
@@ -55,12 +55,12 @@ export class MaintainIdRangeForRenewableObjectSequenceApi<
     REGULATION_SUB_SCENARIO: OneToOneLink<
       MaintainIdRangeForRenewableObjectSequence<DeSerializersT>,
       DeSerializersT,
-      RegulationSubCategoryApi<DeSerializersT>
+      RegulationSubTypeApi<DeSerializersT>
     >;
   };
 
   _addNavigationProperties(
-    linkedApis: [RegulationSubCategoryApi<DeSerializersT>]
+    linkedApis: [RegulationSubTypeApi<DeSerializersT>]
   ): this {
     this.navigationPropertyFields = {
       REGULATION_SUB_SCENARIO: new OneToOneLink(
@@ -156,7 +156,7 @@ export class MaintainIdRangeForRenewableObjectSequenceApi<
     REGULATION_SUB_SCENARIO: OneToOneLink<
       MaintainIdRangeForRenewableObjectSequence<DeSerializersT>,
       DeSerializersT,
-      RegulationSubCategoryApi<DeSerializersT>
+      RegulationSubTypeApi<DeSerializersT>
     >;
     ALL_FIELDS: AllFields<
       MaintainIdRangeForRenewableObjectSequence<DeSerializers>

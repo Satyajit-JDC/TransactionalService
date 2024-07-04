@@ -32,11 +32,7 @@ export class MaintainIncotermsImpactForImportOrExport<
   /**
    * All key fields of the MaintainIncotermsImpactForImportOrExport entity
    */
-  static _keys = ['ID', 'incoTerm', 'IsActiveEntity'];
-  /**
-   * Id.
-   */
-  declare id: DeserializedType<T, 'Edm.Guid'>;
+  static _keys = ['incoTerm', 'IsActiveEntity'];
   /**
    * Created At.
    * @nullable
@@ -99,7 +95,6 @@ export class MaintainIncotermsImpactForImportOrExport<
 export interface MaintainIncotermsImpactForImportOrExportType<
   T extends DeSerializers = DefaultDeSerializers
 > {
-  id: DeserializedType<T, 'Edm.Guid'>;
   createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;

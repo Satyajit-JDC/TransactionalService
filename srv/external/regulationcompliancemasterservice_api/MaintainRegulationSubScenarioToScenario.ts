@@ -19,10 +19,7 @@ import {
   TransactionSourceScenarioType
 } from './TransactionSourceScenario';
 import { ObjectCategory, ObjectCategoryType } from './ObjectCategory';
-import {
-  RegulationSubCategory,
-  RegulationSubCategoryType
-} from './RegulationSubCategory';
+import { RegulationSubType, RegulationSubTypeType } from './RegulationSubType';
 
 /**
  * This class represents the entity "MaintainRegulationSubScenarioToScenario" of service "RegulationComplianceMasterService".
@@ -44,7 +41,7 @@ export class MaintainRegulationSubScenarioToScenario<
   /**
    * All key fields of the MaintainRegulationSubScenarioToScenario entity
    */
-  static _keys = ['ID', 'IsActiveEntity'];
+  static _keys = ['ID', 'regulationSubScenario_category', 'IsActiveEntity'];
   /**
    * Id.
    */
@@ -81,12 +78,8 @@ export class MaintainRegulationSubScenarioToScenario<
   /**
    * Regulation Sub Scenario Category.
    * Maximum length: 20.
-   * @nullable
    */
-  declare regulationSubScenarioCategory?: DeserializedType<
-    T,
-    'Edm.String'
-  > | null;
+  declare regulationSubScenarioCategory: DeserializedType<T, 'Edm.String'>;
   /**
    * Description.
    * Maximum length: 50.
@@ -118,9 +111,9 @@ export class MaintainRegulationSubScenarioToScenario<
    */
   declare objectCategory?: ObjectCategory<T> | null;
   /**
-   * One-to-one navigation property to the {@link RegulationSubCategory} entity.
+   * One-to-one navigation property to the {@link RegulationSubType} entity.
    */
-  declare regulationSubScenario?: RegulationSubCategory<T> | null;
+  declare regulationSubScenario?: RegulationSubType<T> | null;
   /**
    * One-to-one navigation property to the {@link MaintainRegulationSubScenarioToScenario} entity.
    */
@@ -139,7 +132,7 @@ export interface MaintainRegulationSubScenarioToScenarioType<
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   transactionSourceScenarioCategory?: DeserializedType<T, 'Edm.String'> | null;
   objectCategoryCategory?: DeserializedType<T, 'Edm.String'> | null;
-  regulationSubScenarioCategory?: DeserializedType<T, 'Edm.String'> | null;
+  regulationSubScenarioCategory: DeserializedType<T, 'Edm.String'>;
   description?: DeserializedType<T, 'Edm.String'> | null;
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
@@ -147,6 +140,6 @@ export interface MaintainRegulationSubScenarioToScenarioType<
   regulationType?: MaintainRegulationTypeType<T> | null;
   transactionSourceScenario?: TransactionSourceScenarioType<T> | null;
   objectCategory?: ObjectCategoryType<T> | null;
-  regulationSubScenario?: RegulationSubCategoryType<T> | null;
+  regulationSubScenario?: RegulationSubTypeType<T> | null;
   siblingEntity?: MaintainRegulationSubScenarioToScenarioType<T> | null;
 }

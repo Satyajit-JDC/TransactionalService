@@ -18,22 +18,22 @@ import { transformVariadicArgumentToArray } from '@sap-cloud-sdk/util';
 import {
   MaintainRegulationType,
   MaintainTransactionType,
-  MaintainRegulationTransactionTypeTs,
+  MaintainRegulationTransactionType,
   MaintainFuelMapping,
-  MaintainRegulationObjecttype,
+  MaintainRegulationObjectType,
   MaintainRegulationGroup,
   MaintainRegulationMaterialGroup,
   MaintainAdjustmentReasonCode,
   MaintainInventoryPostingPlant,
   MaintainIncotermsImpactForImportOrExport,
-  MaintainRegulationToleranceForDateMatch,
-  MaintainRegulatonToleranceForVolumeMatch,
-  MaintainRegulationTransactionTypeBu,
+  MaintainDateToleranceForAutoMatch,
+  MaintainVolumeToleranceForAutoMatch,
+  MaintainRegulationTransactionTypeWithImpact,
   MaintainMovementType,
-  MaintainMovementTypeToTransactionCategoryImpact,
+  MaintainMovementTypeToTransactionCategoryMapping,
   MaintainRenewableMovementType,
-  MaintainRenewableMaterialConfiguration,
-  MaintainCompanyIdToPlant,
+  MaintainRfs2Material,
+  MaintainCompanyIdToPlantMapping,
   MaintainCompanyIdOrPlantToFacilityId,
   MaintainRegulationSubScenarioToScenario,
   MaintainRegulationSubScenarioAction,
@@ -42,11 +42,11 @@ import {
   MaintainIdRangeForRenewableObjectSequence,
   MaintainRegulationGroupView,
   MaintainRegulationMaterialGroupView,
-  MaintainIdRangeForRenewableObjects,
-  MaintainIdRangeForReconciliationGroups,
+  MaintainIdRangeForRenewableObject,
+  MaintainIdRangeForReconciliationGroup,
   RegulationCategory,
   Countries,
-  Uom,
+  RegulationUom,
   TransactionCategory,
   FuelCategory,
   FuelSubCategory,
@@ -56,10 +56,10 @@ import {
   PassRetainIndicator,
   Mode,
   Rfs2DebitType,
-  FuelCode,
+  Rfs2FuelCode,
   TransactionSourceScenario,
-  RegulationSubCategory,
-  Action,
+  RegulationSubType,
+  ActionInventory,
   Countries_Texts,
   ObjectType_Texts,
   Mode_Texts,
@@ -143,12 +143,12 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainRegulationTransactionTypeTs<DeSerializersT>,
+      MaintainRegulationTransactionType<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<MaintainFuelMapping<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<
-      MaintainRegulationObjecttype<DeSerializersT>,
+      MaintainRegulationObjectType<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
@@ -172,32 +172,29 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainRegulationToleranceForDateMatch<DeSerializersT>,
+      MaintainDateToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainRegulatonToleranceForVolumeMatch<DeSerializersT>,
+      MaintainVolumeToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainRegulationTransactionTypeBu<DeSerializersT>,
+      MaintainRegulationTransactionTypeWithImpact<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<MaintainMovementType<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<
-      MaintainMovementTypeToTransactionCategoryImpact<DeSerializersT>,
+      MaintainMovementTypeToTransactionCategoryMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
       MaintainRenewableMovementType<DeSerializersT>,
       DeSerializersT
     >
+  | GetAllRequestBuilder<MaintainRfs2Material<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<
-      MaintainRenewableMaterialConfiguration<DeSerializersT>,
-      DeSerializersT
-    >
-  | GetAllRequestBuilder<
-      MaintainCompanyIdToPlant<DeSerializersT>,
+      MaintainCompanyIdToPlantMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
@@ -233,16 +230,16 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainIdRangeForRenewableObjects<DeSerializersT>,
+      MaintainIdRangeForRenewableObject<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainIdRangeForReconciliationGroups<DeSerializersT>,
+      MaintainIdRangeForReconciliationGroup<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<RegulationCategory<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<Countries<DeSerializersT>, DeSerializersT>
-  | GetAllRequestBuilder<Uom<DeSerializersT>, DeSerializersT>
+  | GetAllRequestBuilder<RegulationUom<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<TransactionCategory<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<FuelCategory<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<FuelSubCategory<DeSerializersT>, DeSerializersT>
@@ -252,13 +249,13 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
   | GetAllRequestBuilder<PassRetainIndicator<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<Mode<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<Rfs2DebitType<DeSerializersT>, DeSerializersT>
-  | GetAllRequestBuilder<FuelCode<DeSerializersT>, DeSerializersT>
+  | GetAllRequestBuilder<Rfs2FuelCode<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<
       TransactionSourceScenario<DeSerializersT>,
       DeSerializersT
     >
-  | GetAllRequestBuilder<RegulationSubCategory<DeSerializersT>, DeSerializersT>
-  | GetAllRequestBuilder<Action<DeSerializersT>, DeSerializersT>
+  | GetAllRequestBuilder<RegulationSubType<DeSerializersT>, DeSerializersT>
+  | GetAllRequestBuilder<ActionInventory<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<Countries_Texts<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<ObjectType_Texts<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<Mode_Texts<DeSerializersT>, DeSerializersT>
@@ -271,12 +268,12 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainRegulationTransactionTypeTs<DeSerializersT>,
+      MaintainRegulationTransactionType<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<MaintainFuelMapping<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<
-      MaintainRegulationObjecttype<DeSerializersT>,
+      MaintainRegulationObjectType<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
@@ -300,32 +297,29 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainRegulationToleranceForDateMatch<DeSerializersT>,
+      MaintainDateToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainRegulatonToleranceForVolumeMatch<DeSerializersT>,
+      MaintainVolumeToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainRegulationTransactionTypeBu<DeSerializersT>,
+      MaintainRegulationTransactionTypeWithImpact<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<MaintainMovementType<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<
-      MaintainMovementTypeToTransactionCategoryImpact<DeSerializersT>,
+      MaintainMovementTypeToTransactionCategoryMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
       MaintainRenewableMovementType<DeSerializersT>,
       DeSerializersT
     >
+  | GetByKeyRequestBuilder<MaintainRfs2Material<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<
-      MaintainRenewableMaterialConfiguration<DeSerializersT>,
-      DeSerializersT
-    >
-  | GetByKeyRequestBuilder<
-      MaintainCompanyIdToPlant<DeSerializersT>,
+      MaintainCompanyIdToPlantMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
@@ -361,16 +355,16 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainIdRangeForRenewableObjects<DeSerializersT>,
+      MaintainIdRangeForRenewableObject<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainIdRangeForReconciliationGroups<DeSerializersT>,
+      MaintainIdRangeForReconciliationGroup<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<RegulationCategory<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<Countries<DeSerializersT>, DeSerializersT>
-  | GetByKeyRequestBuilder<Uom<DeSerializersT>, DeSerializersT>
+  | GetByKeyRequestBuilder<RegulationUom<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<TransactionCategory<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<FuelCategory<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<FuelSubCategory<DeSerializersT>, DeSerializersT>
@@ -380,16 +374,13 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
   | GetByKeyRequestBuilder<PassRetainIndicator<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<Mode<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<Rfs2DebitType<DeSerializersT>, DeSerializersT>
-  | GetByKeyRequestBuilder<FuelCode<DeSerializersT>, DeSerializersT>
+  | GetByKeyRequestBuilder<Rfs2FuelCode<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<
       TransactionSourceScenario<DeSerializersT>,
       DeSerializersT
     >
-  | GetByKeyRequestBuilder<
-      RegulationSubCategory<DeSerializersT>,
-      DeSerializersT
-    >
-  | GetByKeyRequestBuilder<Action<DeSerializersT>, DeSerializersT>
+  | GetByKeyRequestBuilder<RegulationSubType<DeSerializersT>, DeSerializersT>
+  | GetByKeyRequestBuilder<ActionInventory<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<Countries_Texts<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<ObjectType_Texts<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<Mode_Texts<DeSerializersT>, DeSerializersT>;
@@ -412,30 +403,30 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainRegulationTransactionTypeTs<DeSerializersT>,
+      MaintainRegulationTransactionType<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRegulationTransactionTypeTs<DeSerializersT>,
+      MaintainRegulationTransactionType<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRegulationTransactionTypeTs<DeSerializersT>,
+      MaintainRegulationTransactionType<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<MaintainFuelMapping<DeSerializersT>, DeSerializersT>
   | UpdateRequestBuilder<MaintainFuelMapping<DeSerializersT>, DeSerializersT>
   | DeleteRequestBuilder<MaintainFuelMapping<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<
-      MaintainRegulationObjecttype<DeSerializersT>,
+      MaintainRegulationObjectType<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRegulationObjecttype<DeSerializersT>,
+      MaintainRegulationObjectType<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRegulationObjecttype<DeSerializersT>,
+      MaintainRegulationObjectType<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
@@ -499,54 +490,54 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainRegulationToleranceForDateMatch<DeSerializersT>,
+      MaintainDateToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRegulationToleranceForDateMatch<DeSerializersT>,
+      MaintainDateToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRegulationToleranceForDateMatch<DeSerializersT>,
+      MaintainDateToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainRegulatonToleranceForVolumeMatch<DeSerializersT>,
+      MaintainVolumeToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRegulatonToleranceForVolumeMatch<DeSerializersT>,
+      MaintainVolumeToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRegulatonToleranceForVolumeMatch<DeSerializersT>,
+      MaintainVolumeToleranceForAutoMatch<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainRegulationTransactionTypeBu<DeSerializersT>,
+      MaintainRegulationTransactionTypeWithImpact<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRegulationTransactionTypeBu<DeSerializersT>,
+      MaintainRegulationTransactionTypeWithImpact<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRegulationTransactionTypeBu<DeSerializersT>,
+      MaintainRegulationTransactionTypeWithImpact<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<MaintainMovementType<DeSerializersT>, DeSerializersT>
   | UpdateRequestBuilder<MaintainMovementType<DeSerializersT>, DeSerializersT>
   | DeleteRequestBuilder<MaintainMovementType<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<
-      MaintainMovementTypeToTransactionCategoryImpact<DeSerializersT>,
+      MaintainMovementTypeToTransactionCategoryMapping<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainMovementTypeToTransactionCategoryImpact<DeSerializersT>,
+      MaintainMovementTypeToTransactionCategoryMapping<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainMovementTypeToTransactionCategoryImpact<DeSerializersT>,
+      MaintainMovementTypeToTransactionCategoryMapping<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
@@ -561,28 +552,19 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       MaintainRenewableMovementType<DeSerializersT>,
       DeSerializersT
     >
+  | CreateRequestBuilder<MaintainRfs2Material<DeSerializersT>, DeSerializersT>
+  | UpdateRequestBuilder<MaintainRfs2Material<DeSerializersT>, DeSerializersT>
+  | DeleteRequestBuilder<MaintainRfs2Material<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<
-      MaintainRenewableMaterialConfiguration<DeSerializersT>,
+      MaintainCompanyIdToPlantMapping<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRenewableMaterialConfiguration<DeSerializersT>,
+      MaintainCompanyIdToPlantMapping<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRenewableMaterialConfiguration<DeSerializersT>,
-      DeSerializersT
-    >
-  | CreateRequestBuilder<
-      MaintainCompanyIdToPlant<DeSerializersT>,
-      DeSerializersT
-    >
-  | UpdateRequestBuilder<
-      MaintainCompanyIdToPlant<DeSerializersT>,
-      DeSerializersT
-    >
-  | DeleteRequestBuilder<
-      MaintainCompanyIdToPlant<DeSerializersT>,
+      MaintainCompanyIdToPlantMapping<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
@@ -682,27 +664,27 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainIdRangeForRenewableObjects<DeSerializersT>,
+      MaintainIdRangeForRenewableObject<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainIdRangeForRenewableObjects<DeSerializersT>,
+      MaintainIdRangeForRenewableObject<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainIdRangeForRenewableObjects<DeSerializersT>,
+      MaintainIdRangeForRenewableObject<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainIdRangeForReconciliationGroups<DeSerializersT>,
+      MaintainIdRangeForReconciliationGroup<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainIdRangeForReconciliationGroups<DeSerializersT>,
+      MaintainIdRangeForReconciliationGroup<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainIdRangeForReconciliationGroups<DeSerializersT>,
+      MaintainIdRangeForReconciliationGroup<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<RegulationCategory<DeSerializersT>, DeSerializersT>
@@ -711,9 +693,9 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
   | CreateRequestBuilder<Countries<DeSerializersT>, DeSerializersT>
   | UpdateRequestBuilder<Countries<DeSerializersT>, DeSerializersT>
   | DeleteRequestBuilder<Countries<DeSerializersT>, DeSerializersT>
-  | CreateRequestBuilder<Uom<DeSerializersT>, DeSerializersT>
-  | UpdateRequestBuilder<Uom<DeSerializersT>, DeSerializersT>
-  | DeleteRequestBuilder<Uom<DeSerializersT>, DeSerializersT>
+  | CreateRequestBuilder<RegulationUom<DeSerializersT>, DeSerializersT>
+  | UpdateRequestBuilder<RegulationUom<DeSerializersT>, DeSerializersT>
+  | DeleteRequestBuilder<RegulationUom<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<TransactionCategory<DeSerializersT>, DeSerializersT>
   | UpdateRequestBuilder<TransactionCategory<DeSerializersT>, DeSerializersT>
   | DeleteRequestBuilder<TransactionCategory<DeSerializersT>, DeSerializersT>
@@ -741,9 +723,9 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
   | CreateRequestBuilder<Rfs2DebitType<DeSerializersT>, DeSerializersT>
   | UpdateRequestBuilder<Rfs2DebitType<DeSerializersT>, DeSerializersT>
   | DeleteRequestBuilder<Rfs2DebitType<DeSerializersT>, DeSerializersT>
-  | CreateRequestBuilder<FuelCode<DeSerializersT>, DeSerializersT>
-  | UpdateRequestBuilder<FuelCode<DeSerializersT>, DeSerializersT>
-  | DeleteRequestBuilder<FuelCode<DeSerializersT>, DeSerializersT>
+  | CreateRequestBuilder<Rfs2FuelCode<DeSerializersT>, DeSerializersT>
+  | UpdateRequestBuilder<Rfs2FuelCode<DeSerializersT>, DeSerializersT>
+  | DeleteRequestBuilder<Rfs2FuelCode<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<
       TransactionSourceScenario<DeSerializersT>,
       DeSerializersT
@@ -756,12 +738,12 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       TransactionSourceScenario<DeSerializersT>,
       DeSerializersT
     >
-  | CreateRequestBuilder<RegulationSubCategory<DeSerializersT>, DeSerializersT>
-  | UpdateRequestBuilder<RegulationSubCategory<DeSerializersT>, DeSerializersT>
-  | DeleteRequestBuilder<RegulationSubCategory<DeSerializersT>, DeSerializersT>
-  | CreateRequestBuilder<Action<DeSerializersT>, DeSerializersT>
-  | UpdateRequestBuilder<Action<DeSerializersT>, DeSerializersT>
-  | DeleteRequestBuilder<Action<DeSerializersT>, DeSerializersT>
+  | CreateRequestBuilder<RegulationSubType<DeSerializersT>, DeSerializersT>
+  | UpdateRequestBuilder<RegulationSubType<DeSerializersT>, DeSerializersT>
+  | DeleteRequestBuilder<RegulationSubType<DeSerializersT>, DeSerializersT>
+  | CreateRequestBuilder<ActionInventory<DeSerializersT>, DeSerializersT>
+  | UpdateRequestBuilder<ActionInventory<DeSerializersT>, DeSerializersT>
+  | DeleteRequestBuilder<ActionInventory<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<Countries_Texts<DeSerializersT>, DeSerializersT>
   | UpdateRequestBuilder<Countries_Texts<DeSerializersT>, DeSerializersT>
   | DeleteRequestBuilder<Countries_Texts<DeSerializersT>, DeSerializersT>

@@ -130,13 +130,6 @@ export class MaintainIncotermsImpactForImportOrExportApi<
   }
 
   private _schema?: {
-    ID: OrderableEdmTypeField<
-      MaintainIncotermsImpactForImportOrExport<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      false,
-      true
-    >;
     CREATED_AT: OrderableEdmTypeField<
       MaintainIncotermsImpactForImportOrExport<DeSerializers>,
       DeSerializersT,
@@ -227,11 +220,6 @@ export class MaintainIncotermsImpactForImportOrExportApi<
     if (!this._schema) {
       const fieldBuilder = this.fieldBuilder;
       this._schema = {
-        /**
-         * Static representation of the {@link id} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        ID: fieldBuilder.buildEdmTypeField('ID', 'Edm.Guid', false),
         /**
          * Static representation of the {@link createdAt} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.

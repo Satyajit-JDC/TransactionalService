@@ -801,7 +801,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         // On crreate of Manual adjustment for RVO/RIN
         // code revamp
         // this.on("OnCreateManualAdjustment", async (oDatarequest)=> {
-        this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (oDataRequest) => {
+        this.on('READ', 'ManualAdjRegulationComplianceTransactionTest', async (oDataRequest) => {
             const oManualAdjPayloadData: EventPayload = {} as EventPayload;
             oManualAdjPayloadData.MaterialDescription = oDataRequest.data.MaterialDescription;
             oManualAdjPayloadData._RenewableMaterialDocument.DocumentDate = oDataRequest.data.documentDate,
@@ -1063,8 +1063,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         // })
         this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs(, {} as ILogUtility);
-            return oRegulationComplianceBaseInstance.aMaintainTransactionType.data;
+            await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs();
+            return oRegulationComplianceBaseInstance.aMaintainTransactionType;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);

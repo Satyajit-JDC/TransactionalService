@@ -8,7 +8,7 @@ import { MaintainRegulationSubScenarioToScenarioRequestBuilder } from './Maintai
 import { MaintainRegulationTypeApi } from './MaintainRegulationTypeApi';
 import { TransactionSourceScenarioApi } from './TransactionSourceScenarioApi';
 import { ObjectCategoryApi } from './ObjectCategoryApi';
-import { RegulationSubCategoryApi } from './RegulationSubCategoryApi';
+import { RegulationSubTypeApi } from './RegulationSubTypeApi';
 import {
   CustomField,
   defaultDeSerializers,
@@ -85,7 +85,7 @@ export class MaintainRegulationSubScenarioToScenarioApi<
     REGULATION_SUB_SCENARIO: OneToOneLink<
       MaintainRegulationSubScenarioToScenario<DeSerializersT>,
       DeSerializersT,
-      RegulationSubCategoryApi<DeSerializersT>
+      RegulationSubTypeApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
@@ -103,7 +103,7 @@ export class MaintainRegulationSubScenarioToScenarioApi<
       MaintainRegulationTypeApi<DeSerializersT>,
       TransactionSourceScenarioApi<DeSerializersT>,
       ObjectCategoryApi<DeSerializersT>,
-      RegulationSubCategoryApi<DeSerializersT>,
+      RegulationSubTypeApi<DeSerializersT>,
       MaintainRegulationSubScenarioToScenarioApi<DeSerializersT>
     ]
   ): this {
@@ -213,7 +213,7 @@ export class MaintainRegulationSubScenarioToScenarioApi<
       MaintainRegulationSubScenarioToScenario<DeSerializers>,
       DeSerializersT,
       'Edm.String',
-      true,
+      false,
       true
     >;
     DESCRIPTION: OrderableEdmTypeField<
@@ -278,7 +278,7 @@ export class MaintainRegulationSubScenarioToScenarioApi<
     REGULATION_SUB_SCENARIO: OneToOneLink<
       MaintainRegulationSubScenarioToScenario<DeSerializersT>,
       DeSerializersT,
-      RegulationSubCategoryApi<DeSerializersT>
+      RegulationSubTypeApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
@@ -346,7 +346,7 @@ export class MaintainRegulationSubScenarioToScenarioApi<
         REGULATION_SUB_SCENARIO_CATEGORY: fieldBuilder.buildEdmTypeField(
           'regulationSubScenario_category',
           'Edm.String',
-          true
+          false
         ),
         /**
          * Static representation of the {@link description} property for query construction.
