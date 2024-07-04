@@ -1,11 +1,10 @@
 import cds from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import {
-    MaintainRfs2Material, MaintainTransactionType, MaintainAdjustmentReasonCode, 
+    MaintainRfs2Material, MaintainTransactionType, MaintainAdjustmentReasonCode, RegulationUom,
     Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView, MaintainRegulationObjectType,
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryMapping,
-    MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory,
-    RegulationUom
+    MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory
 } from '../external/regulationcompliancemasterservice_api';
 import { EventPayload } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
@@ -16,7 +15,9 @@ import { RFS2ConstantValues, destinationNames, messageTypes, language } from './
 import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
-import { Za_MaterialCharacteristics_R, materialcharacteristicsApi} from '../external/materialcharacteristics_api';
+import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
+import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
+import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -28,15 +29,15 @@ export class RegulationComplianceBaseClass {
     public oRegulationDataIsReady!: Promise<unknown>;
     public oRFS2CreditData!: MaintainRegulationMaterialGroupView;
     public oRFS2DebitData!: MaintainRegulationMaterialGroupView;
-    public oMaintainRegulationObjecttype!: MaintainRegulationObjectType;
-    public aMaintainRegulationObjecttype!: MaintainRegulationObjectType[];
+    public oMaintainRegulationObjectType!: MaintainRegulationObjectType;
+    public aMaintainRegulationObjectType!: MaintainRegulationObjectType[];
     public oMaintainRegulationSubScenarioToScenarioType!: MaintainRegulationSubScenarioToScenarioType;
     public oMaintainMovementType!: MaintainMovementType;
     public aMaintainMovementType!: MaintainMovementType[];
-    public oMaintainMovementTypeToTransactionCategoryImpact!: MaintainMovementTypeToTransactionCategoryMapping;
-    public aMaintainMovementTypeToTransactionCategoryImpact!: MaintainMovementTypeToTransactionCategoryMapping[];
-    public aMaintainRenewableMaterialConfiguration!: MaintainRfs2Material[];
-    public oMaintainRegulationTransactionTypeTs!: MaintainRegulationTransactionType;
+    public oMaintainMovementTypeToTransactionCategoryMapping!: MaintainMovementTypeToTransactionCategoryMapping;
+    public aMaintainMovementTypeToTransactionCategoryMapping!: MaintainMovementTypeToTransactionCategoryMapping[];
+    public aMaintainRfs2Material!: MaintainRfs2Material[];
+    public oMaintainRegulationTransactionType!: MaintainRegulationTransactionType;
     public oMaintainRegulationType!: MaintainRegulationType;
     public aMaintainRegulationType!: MaintainRegulationType[];
     public aMaintainTransactionType!: MaintainTransactionType[];
@@ -49,7 +50,7 @@ export class RegulationComplianceBaseClass {
     public mFuelSubCategory!: { [index: string]: FuelSubCategory };
     public aObjectCategory!: ObjectCategory[];
     public aMaintainAdjustmentReasonCode!: MaintainAdjustmentReasonCode[];
-    public aUom!: RegulationUom[];
+    public aRegulationUom!: RegulationUom[];
     public aImpact!: Impact[];
 
     //-------- Start of Base constructor ------------------
@@ -243,7 +244,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        this.oMaintainRegulationObjecttype = oData;
+                        this.oMaintainRegulationObjectType = oData;
                     });
             } else {
                 (await maintainRegulationObjectTypeApi.requestBuilder().getAll()
@@ -252,7 +253,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        this.aMaintainRegulationObjecttype.push(oData);
+                        this.aMaintainRegulationObjectType.push(oData);
                     });
             }
         } catch (error) {
@@ -277,9 +278,9 @@ export class RegulationComplianceBaseClass {
     async setMovementType() {
         const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype) {
+            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "'";
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "'";
 
                 (await maintainMovementTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -321,9 +322,9 @@ export class RegulationComplianceBaseClass {
     async setMvtTypeTransationRelevance() {
         const { maintainMovementTypeToTransactionCategoryMappingApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oMaintainMovementType) {
+            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType && this.oMaintainMovementType) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode +
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode +
                     "' and movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
 
                 (await maintainMovementTypeToTransactionCategoryMappingApi.requestBuilder().getAll()
@@ -334,7 +335,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        this.oMaintainMovementTypeToTransactionCategoryImpact = oData;
+                        this.oMaintainMovementTypeToTransactionCategoryMapping = oData;
                     });
             } else {
                 (await maintainMovementTypeToTransactionCategoryMappingApi.requestBuilder().getAll()
@@ -343,7 +344,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        this.aMaintainMovementTypeToTransactionCategoryImpact.push(oData);
+                        this.aMaintainMovementTypeToTransactionCategoryMapping.push(oData);
                     });
             }
         } catch (error) {
@@ -368,12 +369,12 @@ export class RegulationComplianceBaseClass {
     async setMaterialConfiguration() {
         const { maintainRfs2MaterialApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjecttype && this.oEventPayloadData._RenewableMaterialDocument.DocumentDate) {
+            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType && this.oEventPayloadData._RenewableMaterialDocument.DocumentDate) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and objectType_code eq '" + this.oMaintainRegulationObjecttype.objectTypeCode + "' and year eq " +
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq " +
                     new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString();
 
-                this.aMaintainRenewableMaterialConfiguration = await maintainRfs2MaterialApi.requestBuilder().getAll()
+                this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
@@ -382,7 +383,7 @@ export class RegulationComplianceBaseClass {
                     });
             }
             //  else {
-            //     this.aMaintainRenewableMaterialConfiguration = await maintainRenewableMaterialConfigurationApi.requestBuilder().getAll()
+            //     this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
             //         .middleware(resilience({ retry: 3, circuitBreaker: true }))
             //         .execute({
             //             destinationName: destinationNames.regulationComplianceMasterService
@@ -457,7 +458,7 @@ export class RegulationComplianceBaseClass {
 
             if (this.oRFS2RegulationData) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory + "'";
+                    "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory + "'";
 
                 (await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -467,7 +468,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        this.oMaintainRegulationTransactionTypeTs = oData;
+                        this.oMaintainRegulationTransactionType = oData;
                     });
             }
             else {
@@ -477,7 +478,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach((oData) => {
-                        this.oMaintainRegulationTransactionTypeTs = oData;
+                        this.oMaintainRegulationTransactionType = oData;
                     });
             }
         } catch (error) {
@@ -710,7 +711,7 @@ export class RegulationComplianceBaseClass {
                     destinationName: destinationNames.regulationComplianceMasterService
                 })).
                 forEach(oData => {
-                    this.aUom.push(oData);
+                    this.aRegulationUom.push(oData);
                 });
         } catch (error) {
             console.log(error);
@@ -801,7 +802,7 @@ export class RegulationComplianceBaseClass {
                 oLogData.regulationType = this.oRFS2RegulationData.regulationType as string;
             }
             if (!oLogData.regulationSubObjectType) {
-                oLogData.regulationSubObjectType = this.oMaintainRegulationObjecttype.objectTypeCode as string;
+                oLogData.regulationSubObjectType = this.oMaintainRegulationObjectType.objectTypeCode as string;
             }
             if (!oLogData.applicationModule) {
                 oLogData.applicationModule = this.oRFS2RegulationData.regulationType as string;

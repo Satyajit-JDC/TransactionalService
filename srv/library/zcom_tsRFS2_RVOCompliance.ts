@@ -26,7 +26,7 @@ export class RFS2_RVOCompliance {
     private async _validateData(): Promise<boolean> {
         // set reg object type data
         await this._oRegulationComplianceBaseClassInstance.setRegulationObjectType();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType) {
             // data available
         } else {
             return false;
@@ -45,7 +45,7 @@ export class RFS2_RVOCompliance {
 
         // set mvt type relevance data
         await this._oRegulationComplianceBaseClassInstance.setMvtTypeTransationRelevance();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryImpact) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping) {
             // data available
         } else {
             return false;
@@ -53,7 +53,7 @@ export class RFS2_RVOCompliance {
 
         // set mat config data
         await this._oRegulationComplianceBaseClassInstance.setMaterialConfiguration();
-        if (this._oRegulationComplianceBaseClassInstance.aMaintainRenewableMaterialConfiguration) {
+        if (this._oRegulationComplianceBaseClassInstance.aMaintainRfs2Material) {
             // data available
         } else {
             return false;
@@ -69,7 +69,7 @@ export class RFS2_RVOCompliance {
 
         // set Regulation Transaction Types data
         await this._oRegulationComplianceBaseClassInstance.setRegulationTransactionTypeTs();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionTypeTs) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType) {
             // data available
         } else {
             return false;
@@ -164,7 +164,7 @@ export class RFS2_RVOCompliance {
         }
 
         // get Material Config data
-        const aMaterialConfig = this._oRegulationComplianceBaseClassInstance.aMaintainRenewableMaterialConfiguration;
+        const aMaterialConfig = this._oRegulationComplianceBaseClassInstance.aMaintainRfs2Material;
         for (let index = 0; index < aMaterialConfig.length; index++) {
             const oMaterialConfig = aMaterialConfig[index],
                 oMatDocData = this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument;
@@ -176,21 +176,21 @@ export class RFS2_RVOCompliance {
                     regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                     // objectCategory: oRegulationMaterialGrpData.category,
                     objectCategoryDesc: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.description,
-                    objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype.objectTypeCode,
-                    objectTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype.description,
+                    objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
+                    objectTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.description,
                     // sourceScenario: oMovementTypesData.sourceScenario, //master have to update
                     subObjectScenario: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory,
                     subObjectScenarioDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.description,
-                    transactionCategory: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryImpact.transactionCategoryCategory, //master have to update
-                    transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionTypeTs.transactionType,
-                    transactionTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionTypeTs.description,
+                    transactionCategory: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory, //master have to update
+                    // transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionType,
+                    // transactionTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.,
                     // extTransactionNumber
                     // matchedExtTransactionNumber
                     // billofLading: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.bi,  //oEventData.billofLading,
                     // impact: oMovementTypesData.impactCategory,   //master have to update
                     // businessPartnerNumber: oEventData.businessPartnerNumber,
                     // businessPartnerDesc: oEventData.businessPartnerDesc,
-                    movementType: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryImpact.movementTypeMovementType,
+                    movementType: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.movementTypeMovementType,
                     // incotermsPart1: oEventData.incotermsPart1,
                     // incotermsPart2: oEventData.incotermsPart2,
                     fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory,
@@ -376,9 +376,9 @@ export class RFS2_RVOCompliance {
                     // renewableDeliveryDocNoDocumentItemNumber
                     // renewableDeliveryDocNoDocumentSubItem
                     // renewableDeliveryDocNoMaterialDocumentYear
-                    renewableMaterialDocNoDocumentType: 'G',
-                    renewableMaterialDocNoGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.obligationMaterialDocumentNumber,
-                    renewableMaterialDocNoDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.obligationMaterialDocumentItemNumber,
+                    renewableMaterialDocumentType: 'G',
+                    renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.obligationMaterialDocumentNumber,
+                    renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.obligationMaterialDocumentItemNumber,
                     // renewableMaterialDocNoDocumentSubItem
                     // renewableMaterialDocNoMaterialDocumentYear
                     // renewableReverseMaterialDocNoDocumentType
@@ -387,11 +387,11 @@ export class RFS2_RVOCompliance {
                     // renewableReverseMaterialDocNoDocumentSubItem
                     // renewableReverseMaterialDocNoMaterialDocumentYear
                     sourceOrgCompanyCode: oMatDocData.CompanyCode,
-                    sourceOrgCompanyPlant: oMatDocData.Plant,
-                    sourceOrgCompanyStorageLocation: oMatDocData.StorageLocation,
-                    sourceOrgCompanyMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
-                    sourceOrgCompanyMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription, //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
-                    sourceOrgCompanyCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    sourceOrgPlant: oMatDocData.Plant,
+                    sourceOrgStorageLocation: oMatDocData.StorageLocation,
+                    sourceOrgMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
+                    sourceOrgMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription, //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
+                    sourceOrgCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
                     // sourceOrgCompanyRegion: oRegulationTypeData.regionCode,
                     // destinationOrgCompanyCode: 
                     // destinationOrgCompanyPlant
@@ -402,17 +402,17 @@ export class RFS2_RVOCompliance {
                     // fuelLogisticsCompanyCode
                     // fuelLogisticsCompanyPlant
                     // fuelLogisticsCompanyStorageLocation
-                    fuelLogisticsCompanyMaterialNumber: oMatDocData.RenewableMaterial,
-                    fuelLogisticsCompanyMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
-                    // fuelLogisticsCompanyCountryKey
-                    // fuelLogisticsCompanyRegion
+                    fuelLogisticsMaterialNumber: oMatDocData.RenewableMaterial,
+                    fuelLogisticsMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
+                    // fuelLogisticsCountryKey
+                    // fuelLogisticsRegion
                     regulationLogisticsCompanyCode: oMatDocData.CompanyCode,
-                    regulationLogisticsCompanyPlant: oMatDocData.Plant,
-                    regulationLogisticsCompanyStorageLocation: oMatDocData.StorageLocation,
-                    regulationLogisticsCompanyMaterialNumber: oMatDocData.RenewableMaterial,
-                    regulationLogisticsCompanyMaterialNumberDes: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
-                    regulationLogisticsCompanyCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
-                    regulationLogisticsCompanyRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    regulationLogisticsPlant: oMatDocData.Plant,
+                    regulationLogisticsStorageLocation: oMatDocData.StorageLocation,
+                    regulationLogisticsMaterialNumber: oMatDocData.RenewableMaterial,
+                    regulationLogisticsMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
+                    regulationLogisticsCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    regulationLogisticsRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
                     // nominationNumber
                     // nominationKey
                     // nominationKeyItem
