@@ -1,8 +1,8 @@
 import {
     MaintainRegulationGroupView, MaintainRegulationType, MaintainRegulationMaterialGroupView,
-    MaintainMovementTypeToTransactionCategoryImpact,
-    MaintainMovementType, MaintainRegulationObjecttype, MaintainRegulationSubScenarioToScenarioType,
-    MaintainRegulationTransactionTypeTs, Rfs2DebitType, FuelCategory, FuelSubCategory
+    MaintainMovementTypeToTransactionCategoryMapping,
+    MaintainMovementType, MaintainRegulationObjectType, MaintainRegulationSubScenarioToScenarioType,
+    MaintainRegulationTransactionType, Rfs2DebitType, FuelCategory, FuelSubCategory
 } from '../../external/regulationcompliancemasterservice_api';
 
 export interface ILogUtility {
@@ -36,9 +36,9 @@ export interface IMaintainRegulationMaterialGroupView {
 }
 
 export interface IMaintainMovementTypeToTransactionCategoryImpact {
-    map: { [index: string]: MaintainMovementTypeToTransactionCategoryImpact };
+    map: { [index: string]: MaintainMovementTypeToTransactionCategoryMapping };
     transactionCategoryCategory: string;
-    data: MaintainMovementTypeToTransactionCategoryImpact[]
+    data: MaintainMovementTypeToTransactionCategoryMapping[]
 }
 
 export interface IMaintainMovementType {
@@ -49,9 +49,9 @@ export interface IMaintainMovementType {
 }
 
 export interface IMaintainRegulationObjecttype {
-    map: { [index: string]: MaintainRegulationObjecttype };
+    map: { [index: string]: MaintainRegulationObjectType };
     objectType: string;
-    data: MaintainRegulationObjecttype[]
+    data: MaintainRegulationObjectType[]
 }
 
 export interface IMaintainRegulationSubscenariotoScenario {
@@ -60,7 +60,7 @@ export interface IMaintainRegulationSubscenariotoScenario {
 }
 
 export interface IMaintainRegulationTransactionTypeTs {
-    map: { [index: string]: MaintainRegulationTransactionTypeTs };
+    map: { [index: string]: MaintainRegulationTransactionType };
 }
 
 export interface IRfs2DebitType {

@@ -32,15 +32,15 @@ service RegulationComplianceTransactionService {
 
     entity MaintainRegulationType                       as projection on master.MaintainRegulationType;
     // entity MaintainTransactionType as projection on master.MaintainRegulationTransactionTypeTS;
-    entity GetMaintainRegulationTransactionTypeTs       as projection on master.MaintainRegulationTransactionTypeTS;
+    entity GetMaintainRegulationTransactionTypeTs       as projection on master.MaintainRegulationTransactionType;
     entity TransactionType                              as projection on master.TransactionCategory;
-    entity MaintainRegulationTransactionType            as projection on master.MaintainRegulationTransactionTypeTS;
-    entity MaintainRegulationObjecttype                 as projection on master.MaintainRegulationObjecttype;
-    entity MaintainRenewableMaterialConfiguration       as projection on master.MaintainRenewableMaterialConfiguration;
+    entity MaintainRegulationTransactionType            as projection on master.MaintainRegulationTransactionType;
+    entity MaintainRegulationObjecttype                 as projection on master.MaintainRegulationObjectType;
+    entity MaintainRenewableMaterialConfiguration       as projection on master.MaintainRFS2Material;
     entity GetFuelCategory                              as projection on master.FuelCategory;
     entity GetReasonCode                                as projection on master.MaintainAdjustmentReasonCode;
     entity GetObjectCategory                            as projection on master.ObjectCategory;
-    entity GetUOM                                       as projection on master.UOM;
+    entity GetUOM                                       as projection on master.RegulationUOM;
     entity GetImpact                                    as projection on master.Impact;
     entity GetFuelSubCategory                           as projection on master.FuelSubCategory;
     entity GetMovementType                              as projection on master.MaintainMovementType;
