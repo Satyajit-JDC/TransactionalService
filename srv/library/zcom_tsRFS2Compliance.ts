@@ -28,18 +28,18 @@ export class RFS2ComplianceClass {
     // check for subscenarion and create relavant object
     async _checkSubScenarioAndCreateObject(){
         // check is object category not available
-        if(!this.oRegulationComplianceBaseClassInstance.oRFS2CreditData && !this.oRegulationComplianceBaseClassInstance.oRFS2DebitData){
+        if(!this.oRegulationComplianceBaseClassInstance.oRFS2CreditData.category && !this.oRegulationComplianceBaseClassInstance.oRFS2DebitData.category){
             // set material group data
             await this.oRegulationComplianceBaseClassInstance.setRegulationMaterialGroup();
         }
 
         // check is object category available now
-        if(this.oRegulationComplianceBaseClassInstance.oRFS2CreditData || this.oRegulationComplianceBaseClassInstance.oRFS2DebitData){
+        if(this.oRegulationComplianceBaseClassInstance.oRFS2CreditData.category || this.oRegulationComplianceBaseClassInstance.oRFS2DebitData.category){
             // set sub scenario data
             await this.oRegulationComplianceBaseClassInstance.setRgulationSubScnario();
 
             // check is subscenarion available
-            if(this.oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType){
+            if(this.oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory){
                 const sRgulationSubScnario = this.oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory;
                 // RFS2_RVO scenario
                 if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){

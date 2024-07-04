@@ -63,7 +63,7 @@ export class RegulationComplianceBaseClass {
         
         this.oRegulationDataIsReady = new Promise(async (resolve, reject) => {
             // check is regulation data available
-            if (!this.oRFS2RegulationData) {
+            if (!this.oRFS2RegulationData.regulationType) {
                 // regulation group present then set Regulation Type to class object
                 if (oEventPayloadData.RegulationGroupName) {
                     try {
@@ -132,7 +132,7 @@ export class RegulationComplianceBaseClass {
     // set material group data and object category
     async setRegulationMaterialGroup() {
         try {
-            if (this.oRFS2RegulationData) {
+            if (this.oRFS2RegulationData.regulationType) {
                 // create object
                 const { maintainRegulationMaterialGroupViewApi } = regulationcompliancemasterserviceApi();
 
@@ -180,13 +180,13 @@ export class RegulationComplianceBaseClass {
     async setRgulationSubScnario() {
         try {
             const { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
-            if (this.oEventPayloadData.RenewableEventType && this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+            if (this.oEventPayloadData.RenewableEventType && this.oRFS2RegulationData.regulationType && (this.oRFS2CreditData.category || this.oRFS2DebitData.category)) {
                 const sSourceScenario = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
                     RFS2ConstantValues.eventTypeMDJ : this.oEventPayloadData.RenewableEventType.substring(0, 2);
                 const sFilterSubObjectScenario = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType
                     + "' and transactionSourceScenario_category eq '" + sSourceScenario +
                     "' and objectCategory_category eq '"
-                    + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
+                    + (this.oRFS2CreditData.category ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
 
                 // call Cloud SDK
                 (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
@@ -233,7 +233,7 @@ export class RegulationComplianceBaseClass {
     async setRegulationObjectType() {
         const { maintainRegulationObjectTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+            if (this.oRFS2RegulationData.regulationType && (this.oRFS2CreditData.category || this.oRFS2DebitData.category)) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectCategory_category eq '" +
                     (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
@@ -280,7 +280,7 @@ export class RegulationComplianceBaseClass {
     async setMovementType() {
         const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "'";
 
@@ -324,7 +324,7 @@ export class RegulationComplianceBaseClass {
     async setMvtTypeTransationRelevance() {
         const { maintainMovementTypeToTransactionCategoryMappingApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType && this.oMaintainMovementType) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oMaintainMovementType.movementType) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode +
                     "' and movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
@@ -371,7 +371,7 @@ export class RegulationComplianceBaseClass {
     async setMaterialConfiguration() {
         const { maintainRfs2MaterialApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType && this.oEventPayloadData._RenewableMaterialDocument.DocumentDate) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oEventPayloadData._RenewableMaterialDocument) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq " +
                     new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString();
@@ -413,7 +413,7 @@ export class RegulationComplianceBaseClass {
     async setRegulationTypes() {
         const { maintainRegulationTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData) {
+            if (this.oRFS2RegulationData.regulationType) {
                 const sFilters = "regulationType eq '" + this.oRFS2RegulationData.regulationType + "'";
 
                 (await maintainRegulationTypeApi.requestBuilder().getAll()
@@ -458,7 +458,7 @@ export class RegulationComplianceBaseClass {
         try {
             const { maintainRegulationTransactionTypeApi } = regulationcompliancemasterserviceApi();
 
-            if (this.oRFS2RegulationData) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory + "'";
 
@@ -791,8 +791,8 @@ export class RegulationComplianceBaseClass {
             const oResourceManager = new ResourceManager("../../_i18n/i18n"),
                 oBundle = oResourceManager.getTextBundle(language),
                 logObjectID = this.oEventPayloadData.RenewableEventType +
-                    this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument +
-                    this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem,
+                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
+                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "",
                 { logUtilityServiceApi } = logutilityserviceApi();
 
             // fill unfilled common data
