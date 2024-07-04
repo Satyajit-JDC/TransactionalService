@@ -52,13 +52,11 @@ export class MaintainIncotermsImpactForImportOrExportRequestBuilder<
 
   /**
    * Returns a request builder for retrieving one `MaintainIncotermsImpactForImportOrExport` entity based on its keys.
-   * @param id Key property. See {@link MaintainIncotermsImpactForImportOrExport.id}.
    * @param incoTerm Key property. See {@link MaintainIncotermsImpactForImportOrExport.incoTerm}.
    * @param isActiveEntity Key property. See {@link MaintainIncotermsImpactForImportOrExport.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainIncotermsImpactForImportOrExport` entity based on its keys.
    */
   getByKey(
-    id: DeserializedType<T, 'Edm.Guid'>,
     incoTerm: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainIncotermsImpactForImportOrExport<T>, T> {
@@ -66,7 +64,6 @@ export class MaintainIncotermsImpactForImportOrExportRequestBuilder<
       MaintainIncotermsImpactForImportOrExport<T>,
       T
     >(this.entityApi, {
-      ID: id,
       incoTerm: incoTerm,
       IsActiveEntity: isActiveEntity
     });
@@ -88,13 +85,11 @@ export class MaintainIncotermsImpactForImportOrExportRequestBuilder<
 
   /**
    * Returns a request builder for deleting an entity of type `MaintainIncotermsImpactForImportOrExport`.
-   * @param id Key property. See {@link MaintainIncotermsImpactForImportOrExport.id}.
    * @param incoTerm Key property. See {@link MaintainIncotermsImpactForImportOrExport.incoTerm}.
    * @param isActiveEntity Key property. See {@link MaintainIncotermsImpactForImportOrExport.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainIncotermsImpactForImportOrExport`.
    */
   delete(
-    id: string,
     incoTerm: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainIncotermsImpactForImportOrExport<T>, T>;
@@ -107,8 +102,7 @@ export class MaintainIncotermsImpactForImportOrExportRequestBuilder<
     entity: MaintainIncotermsImpactForImportOrExport<T>
   ): DeleteRequestBuilder<MaintainIncotermsImpactForImportOrExport<T>, T>;
   delete(
-    idOrEntity: any,
-    incoTerm?: string,
+    incoTermOrEntity: any,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainIncotermsImpactForImportOrExport<T>, T> {
     return new DeleteRequestBuilder<
@@ -116,11 +110,10 @@ export class MaintainIncotermsImpactForImportOrExportRequestBuilder<
       T
     >(
       this.entityApi,
-      idOrEntity instanceof MaintainIncotermsImpactForImportOrExport
-        ? idOrEntity
+      incoTermOrEntity instanceof MaintainIncotermsImpactForImportOrExport
+        ? incoTermOrEntity
         : {
-            ID: idOrEntity!,
-            incoTerm: incoTerm!,
+            incoTerm: incoTermOrEntity!,
             IsActiveEntity: isActiveEntity!
           }
     );

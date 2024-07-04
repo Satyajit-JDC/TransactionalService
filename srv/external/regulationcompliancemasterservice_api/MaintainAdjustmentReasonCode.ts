@@ -31,11 +31,7 @@ export class MaintainAdjustmentReasonCode<
   /**
    * All key fields of the MaintainAdjustmentReasonCode entity
    */
-  static _keys = ['ID', 'reasonCode', 'IsActiveEntity'];
-  /**
-   * Id.
-   */
-  declare id: DeserializedType<T, 'Edm.Guid'>;
+  static _keys = ['reasonCode', 'IsActiveEntity'];
   /**
    * Created At.
    * @nullable
@@ -94,7 +90,6 @@ export class MaintainAdjustmentReasonCode<
 export interface MaintainAdjustmentReasonCodeType<
   T extends DeSerializers = DefaultDeSerializers
 > {
-  id: DeserializedType<T, 'Edm.Guid'>;
   createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;

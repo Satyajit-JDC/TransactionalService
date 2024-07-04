@@ -5,8 +5,8 @@
  */
 import { MaintainRegulationSubScenarioAction } from './MaintainRegulationSubScenarioAction';
 import { MaintainRegulationSubScenarioActionRequestBuilder } from './MaintainRegulationSubScenarioActionRequestBuilder';
-import { RegulationSubCategoryApi } from './RegulationSubCategoryApi';
-import { ActionApi } from './ActionApi';
+import { RegulationSubTypeApi } from './RegulationSubTypeApi';
+import { ActionInventoryApi } from './ActionInventoryApi';
 import {
   CustomField,
   defaultDeSerializers,
@@ -56,7 +56,7 @@ export class MaintainRegulationSubScenarioActionApi<
     REGULATION_SUB_SCENARIO: OneToOneLink<
       MaintainRegulationSubScenarioAction<DeSerializersT>,
       DeSerializersT,
-      RegulationSubCategoryApi<DeSerializersT>
+      RegulationSubTypeApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link action} for query construction.
@@ -65,7 +65,7 @@ export class MaintainRegulationSubScenarioActionApi<
     ACTION: OneToOneLink<
       MaintainRegulationSubScenarioAction<DeSerializersT>,
       DeSerializersT,
-      ActionApi<DeSerializersT>
+      ActionInventoryApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
@@ -80,8 +80,8 @@ export class MaintainRegulationSubScenarioActionApi<
 
   _addNavigationProperties(
     linkedApis: [
-      RegulationSubCategoryApi<DeSerializersT>,
-      ActionApi<DeSerializersT>,
+      RegulationSubTypeApi<DeSerializersT>,
+      ActionInventoryApi<DeSerializersT>,
       MaintainRegulationSubScenarioActionApi<DeSerializersT>
     ]
   ): this {
@@ -195,7 +195,7 @@ export class MaintainRegulationSubScenarioActionApi<
     REGULATION_SUB_SCENARIO: OneToOneLink<
       MaintainRegulationSubScenarioAction<DeSerializersT>,
       DeSerializersT,
-      RegulationSubCategoryApi<DeSerializersT>
+      RegulationSubTypeApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link action} for query construction.
@@ -204,7 +204,7 @@ export class MaintainRegulationSubScenarioActionApi<
     ACTION: OneToOneLink<
       MaintainRegulationSubScenarioAction<DeSerializersT>,
       DeSerializersT,
-      ActionApi<DeSerializersT>
+      ActionInventoryApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.

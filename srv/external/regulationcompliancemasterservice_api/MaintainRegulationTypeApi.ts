@@ -7,7 +7,7 @@ import { MaintainRegulationType } from './MaintainRegulationType';
 import { MaintainRegulationTypeRequestBuilder } from './MaintainRegulationTypeRequestBuilder';
 import { RegulationCategoryApi } from './RegulationCategoryApi';
 import { CountriesApi } from './CountriesApi';
-import { UomApi } from './UomApi';
+import { RegulationUomApi } from './RegulationUomApi';
 import {
   CustomField,
   defaultDeSerializers,
@@ -80,7 +80,7 @@ export class MaintainRegulationTypeApi<
     REGULATION_UO_M: OneToOneLink<
       MaintainRegulationType<DeSerializersT>,
       DeSerializersT,
-      UomApi<DeSerializersT>
+      RegulationUomApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
@@ -98,7 +98,7 @@ export class MaintainRegulationTypeApi<
       RegulationCategoryApi<DeSerializersT>,
       CountriesApi<DeSerializersT>,
       CountriesApi<DeSerializersT>,
-      UomApi<DeSerializersT>,
+      RegulationUomApi<DeSerializersT>,
       MaintainRegulationTypeApi<DeSerializersT>
     ]
   ): this {
@@ -316,7 +316,7 @@ export class MaintainRegulationTypeApi<
     REGULATION_UO_M: OneToOneLink<
       MaintainRegulationType<DeSerializersT>,
       DeSerializersT,
-      UomApi<DeSerializersT>
+      RegulationUomApi<DeSerializersT>
     >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.

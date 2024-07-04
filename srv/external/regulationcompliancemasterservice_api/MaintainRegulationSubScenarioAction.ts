@@ -10,11 +10,8 @@ import {
   DeserializedType
 } from '@sap-cloud-sdk/odata-v4';
 import type { MaintainRegulationSubScenarioActionApi } from './MaintainRegulationSubScenarioActionApi';
-import {
-  RegulationSubCategory,
-  RegulationSubCategoryType
-} from './RegulationSubCategory';
-import { Action, ActionType } from './Action';
+import { RegulationSubType, RegulationSubTypeType } from './RegulationSubType';
+import { ActionInventory, ActionInventoryType } from './ActionInventory';
 
 /**
  * This class represents the entity "MaintainRegulationSubScenarioAction" of service "RegulationComplianceMasterService".
@@ -69,13 +66,13 @@ export class MaintainRegulationSubScenarioAction<
    */
   declare hasDraftEntity: DeserializedType<T, 'Edm.Boolean'>;
   /**
-   * One-to-one navigation property to the {@link RegulationSubCategory} entity.
+   * One-to-one navigation property to the {@link RegulationSubType} entity.
    */
-  declare regulationSubScenario?: RegulationSubCategory<T> | null;
+  declare regulationSubScenario?: RegulationSubType<T> | null;
   /**
-   * One-to-one navigation property to the {@link Action} entity.
+   * One-to-one navigation property to the {@link ActionInventory} entity.
    */
-  declare action?: Action<T> | null;
+  declare action?: ActionInventory<T> | null;
   /**
    * One-to-one navigation property to the {@link MaintainRegulationSubScenarioAction} entity.
    */
@@ -95,7 +92,7 @@ export interface MaintainRegulationSubScenarioActionType<
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasDraftEntity: DeserializedType<T, 'Edm.Boolean'>;
-  regulationSubScenario?: RegulationSubCategoryType<T> | null;
-  action?: ActionType<T> | null;
+  regulationSubScenario?: RegulationSubTypeType<T> | null;
+  action?: ActionInventoryType<T> | null;
   siblingEntity?: MaintainRegulationSubScenarioActionType<T> | null;
 }

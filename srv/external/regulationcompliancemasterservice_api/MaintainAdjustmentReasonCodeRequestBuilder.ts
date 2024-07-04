@@ -48,20 +48,17 @@ export class MaintainAdjustmentReasonCodeRequestBuilder<
 
   /**
    * Returns a request builder for retrieving one `MaintainAdjustmentReasonCode` entity based on its keys.
-   * @param id Key property. See {@link MaintainAdjustmentReasonCode.id}.
    * @param reasonCode Key property. See {@link MaintainAdjustmentReasonCode.reasonCode}.
    * @param isActiveEntity Key property. See {@link MaintainAdjustmentReasonCode.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainAdjustmentReasonCode` entity based on its keys.
    */
   getByKey(
-    id: DeserializedType<T, 'Edm.Guid'>,
     reasonCode: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainAdjustmentReasonCode<T>, T> {
     return new GetByKeyRequestBuilder<MaintainAdjustmentReasonCode<T>, T>(
       this.entityApi,
       {
-        ID: id,
         reasonCode: reasonCode,
         IsActiveEntity: isActiveEntity
       }
@@ -84,13 +81,11 @@ export class MaintainAdjustmentReasonCodeRequestBuilder<
 
   /**
    * Returns a request builder for deleting an entity of type `MaintainAdjustmentReasonCode`.
-   * @param id Key property. See {@link MaintainAdjustmentReasonCode.id}.
    * @param reasonCode Key property. See {@link MaintainAdjustmentReasonCode.reasonCode}.
    * @param isActiveEntity Key property. See {@link MaintainAdjustmentReasonCode.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainAdjustmentReasonCode`.
    */
   delete(
-    id: string,
     reasonCode: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainAdjustmentReasonCode<T>, T>;
@@ -103,17 +98,15 @@ export class MaintainAdjustmentReasonCodeRequestBuilder<
     entity: MaintainAdjustmentReasonCode<T>
   ): DeleteRequestBuilder<MaintainAdjustmentReasonCode<T>, T>;
   delete(
-    idOrEntity: any,
-    reasonCode?: string,
+    reasonCodeOrEntity: any,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainAdjustmentReasonCode<T>, T> {
     return new DeleteRequestBuilder<MaintainAdjustmentReasonCode<T>, T>(
       this.entityApi,
-      idOrEntity instanceof MaintainAdjustmentReasonCode
-        ? idOrEntity
+      reasonCodeOrEntity instanceof MaintainAdjustmentReasonCode
+        ? reasonCodeOrEntity
         : {
-            ID: idOrEntity!,
-            reasonCode: reasonCode!,
+            reasonCode: reasonCodeOrEntity!,
             IsActiveEntity: isActiveEntity!
           }
     );

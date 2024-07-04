@@ -31,11 +31,7 @@ export class MaintainTransactionType<
   /**
    * All key fields of the MaintainTransactionType entity
    */
-  static _keys = ['ID', 'transactionType', 'IsActiveEntity'];
-  /**
-   * Id.
-   */
-  declare id: DeserializedType<T, 'Edm.Guid'>;
+  static _keys = ['transactionType', 'IsActiveEntity'];
   /**
    * Created At.
    * @nullable
@@ -94,7 +90,6 @@ export class MaintainTransactionType<
 export interface MaintainTransactionTypeType<
   T extends DeSerializers = DefaultDeSerializers
 > {
-  id: DeserializedType<T, 'Edm.Guid'>;
   createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
