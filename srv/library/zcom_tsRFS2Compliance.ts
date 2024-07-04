@@ -1,43 +1,65 @@
-import cds from '@sap/cds';
-import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { oRegulationComplianceBaseInstance } from '../library/zcom_tsRegulationComplianceBase';
-import { ILogUtility } from '../library/interfaces/zcom_tsRegulationComplicanceInterface';
+import { RegulationComplianceBaseClass } from '../library/zcom_tsRegulationComplianceBase';
+import { RFS2_RF_RINCompliance } from './zcom_tsRFS2_RF_RINCompliance';
+import { RFS2_RVOCompliance } from './zcom_tsRFS2_RVOCompliance';
+import { RFS2_MADJ_RINCompliance } from './zcom_ts_RFS2_MADJ_RINCompliance';
+import { RFS2_MADJ_RVOCompliance } from './zcom_ts_RFS2_MADJ_RVOCompliance';
+import { regulationSubScenario } from '../library/utilities/zcom_tsConstants';
 
-class oRFS2ComplianceClass {
-    async addRegulationCompliances(data:RegulationComplianceTransaction[],logObjectID:string){
-        const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction');
-        const srv = await cds.connect.to ('RegulationComplianceTransactionService');
-        let postMessage: string = "", successErrorFlag : string = "S", technicalMessage: string = "";
-        var TextBundle = require('@sap/textbundle').TextBundle;
-        var bundle = new TextBundle('test/properties/i18n', 'en_EN');
-        try {
-            await srv.post('RegulationComplianceTransaction', data);
-            // postMessage = bundle.getText("RINSCreatedSuccessfully");
-            
-        } catch (error) {
-            console.log(error);
-            // postMessage = bundle.getText("ErrorDuringInsertingData");
-            successErrorFlag = "E";
-            technicalMessage = error as string;
-        }
-        data.forEach(element => {
-            if(element.objectId){
-                const oLogData: ILogUtility = {
-                    object: logObjectID,
-                    message: postMessage,
-                    messageType: successErrorFlag,
-                    regulationType: element.regulationType as ILogUtility["regulationType"],
-                    regulationSubObjectType: element.objectType as ILogUtility["regulationSubObjectType"], //'RVO',
-                    applicationModule: element.regulationType as ILogUtility["applicationModule"], //'RFS2',
-                    applicationSubModule: element.subObjectScenario as ILogUtility["applicationSubModule"], //'RFS2_RVO'
-                    technicalMessage: technicalMessage
-                };
-                oRegulationComplianceBaseInstance.addLog(oLogData);
-            }
-        });
+export class RFS2ComplianceClass {
+    // private elements
+    private _oRFS2_RF_RINComplianceClassInstance!: RFS2_RF_RINCompliance;
+    private _oRFS2_RVOComplianceClassInstance!: RFS2_RVOCompliance;
+    private _oRFS2_MADJ_RINComplianceClassInstance!: RFS2_MADJ_RINCompliance;
+    private _oRFS2_MADJ_RVOComplianceClassInstance!: RFS2_MADJ_RVOCompliance;
+
+    // public elements
+    public oRegulationComplianceBaseClassInstance: RegulationComplianceBaseClass;
+
+    //-------- Start of RFS2 constructor ------------------
+    constructor(oRegulationComplianceBaseClassInstance:RegulationComplianceBaseClass){
+        this.oRegulationComplianceBaseClassInstance = oRegulationComplianceBaseClassInstance;
+
+        // check for subscenarion and create relavant object
+        this._checkSubScenarioAndCreateObject();
     }
-   
-}
+    //-------- End of RFS2 constructor ------------------
 
-const oRFS2ComplianceInstance = new oRFS2ComplianceClass();
-export { oRFS2ComplianceInstance };
+    //-------- Start of Private Methods ------------------
+    // check for subscenarion and create relavant object
+    async _checkSubScenarioAndCreateObject(){
+        // check is object category not available
+        if(!this.oRegulationComplianceBaseClassInstance.oRFS2CreditData && !this.oRegulationComplianceBaseClassInstance.oRFS2DebitData){
+            // set material group data
+            await this.oRegulationComplianceBaseClassInstance.setRegulationMaterialGroup();
+        }
+
+        // check is object category available now
+        if(this.oRegulationComplianceBaseClassInstance.oRFS2CreditData || this.oRegulationComplianceBaseClassInstance.oRFS2DebitData){
+            // set sub scenario data
+            await this.oRegulationComplianceBaseClassInstance.setRgulationSubScnario();
+
+            // check is subscenarion available
+            if(this.oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType){
+                const sRgulationSubScnario = this.oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory;
+                // RFS2_RVO scenario
+                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                    this._oRFS2_RVOComplianceClassInstance = new RFS2_RVOCompliance(this.oRegulationComplianceBaseClassInstance);
+                }
+                // RFS2_RIN_RF scenario
+                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                    this._oRFS2_RF_RINComplianceClassInstance = new RFS2_RF_RINCompliance(this.oRegulationComplianceBaseClassInstance);
+                }
+                // RFS2_MADJ_RVO scenario
+                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                    this._oRFS2_MADJ_RVOComplianceClassInstance = new RFS2_MADJ_RVOCompliance(this.oRegulationComplianceBaseClassInstance);
+                }
+                // RFS2_MADJ_RIN scenario
+                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                    this._oRFS2_MADJ_RINComplianceClassInstance = new RFS2_MADJ_RINCompliance(this.oRegulationComplianceBaseClassInstance);
+                }
+            }
+        }
+    }
+    //-------- End of Private Methods --------------------
+
+}

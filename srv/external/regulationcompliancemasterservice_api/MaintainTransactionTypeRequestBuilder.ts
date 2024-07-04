@@ -48,20 +48,17 @@ export class MaintainTransactionTypeRequestBuilder<
 
   /**
    * Returns a request builder for retrieving one `MaintainTransactionType` entity based on its keys.
-   * @param id Key property. See {@link MaintainTransactionType.id}.
    * @param transactionType Key property. See {@link MaintainTransactionType.transactionType}.
    * @param isActiveEntity Key property. See {@link MaintainTransactionType.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainTransactionType` entity based on its keys.
    */
   getByKey(
-    id: DeserializedType<T, 'Edm.Guid'>,
     transactionType: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainTransactionType<T>, T> {
     return new GetByKeyRequestBuilder<MaintainTransactionType<T>, T>(
       this.entityApi,
       {
-        ID: id,
         transactionType: transactionType,
         IsActiveEntity: isActiveEntity
       }
@@ -84,13 +81,11 @@ export class MaintainTransactionTypeRequestBuilder<
 
   /**
    * Returns a request builder for deleting an entity of type `MaintainTransactionType`.
-   * @param id Key property. See {@link MaintainTransactionType.id}.
    * @param transactionType Key property. See {@link MaintainTransactionType.transactionType}.
    * @param isActiveEntity Key property. See {@link MaintainTransactionType.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainTransactionType`.
    */
   delete(
-    id: string,
     transactionType: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainTransactionType<T>, T>;
@@ -103,17 +98,15 @@ export class MaintainTransactionTypeRequestBuilder<
     entity: MaintainTransactionType<T>
   ): DeleteRequestBuilder<MaintainTransactionType<T>, T>;
   delete(
-    idOrEntity: any,
-    transactionType?: string,
+    transactionTypeOrEntity: any,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainTransactionType<T>, T> {
     return new DeleteRequestBuilder<MaintainTransactionType<T>, T>(
       this.entityApi,
-      idOrEntity instanceof MaintainTransactionType
-        ? idOrEntity
+      transactionTypeOrEntity instanceof MaintainTransactionType
+        ? transactionTypeOrEntity
         : {
-            ID: idOrEntity!,
-            transactionType: transactionType!,
+            transactionType: transactionTypeOrEntity!,
             IsActiveEntity: isActiveEntity!
           }
     );

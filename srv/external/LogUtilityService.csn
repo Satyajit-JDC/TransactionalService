@@ -1,0 +1,251 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.9.4"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "LogUtilityService.LogUtilityService": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "elements": {
+    "ID": {
+     "key": true,
+     "type": "cds.UUID",
+     "notNull": true,
+     "@Core.ComputedDefaultValue": true
+    },
+    "createdAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Created On"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Created By"
+    },
+    "modifiedAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Changed On"
+    },
+    "modifiedBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Changed By"
+    },
+    "object": {
+     "type": "cds.String",
+     "length": 50,
+     "@Common.Label": "Object",
+     "doc": "Object"
+    },
+    "message": {
+     "type": "cds.String",
+     "length": 1000,
+     "@Common.Label": "Message",
+     "doc": "Message"
+    },
+    "messageType": {
+     "type": "cds.LargeString",
+     "@Common.Label": "Message Type",
+     "doc": "Message Type",
+     "@Validation.AllowedValues": [
+      {
+       "$Type": "Validation.AllowedValue",
+       "@Core.SymbolicName": "Success",
+       "Value": "S"
+      },
+      {
+       "$Type": "Validation.AllowedValue",
+       "@Core.SymbolicName": "Error",
+       "Value": "E"
+      },
+      {
+       "$Type": "Validation.AllowedValue",
+       "@Core.SymbolicName": "Warning",
+       "Value": "W"
+      },
+      {
+       "$Type": "Validation.AllowedValue",
+       "@Core.SymbolicName": "Information",
+       "Value": "I"
+      }
+     ]
+    },
+    "regulationType": {
+     "type": "cds.String",
+     "length": 10,
+     "@Common.Label": "Regulation Type",
+     "doc": "Regulation Type"
+    },
+    "regulationSubObjectType": {
+     "type": "cds.String",
+     "length": 10,
+     "@Common.Label": "Regulation Sub Object Type",
+     "doc": "Regulation Sub Object Type"
+    },
+    "applicationModule": {
+     "type": "cds.String",
+     "length": 50,
+     "@Common.Label": "Application Module",
+     "doc": "Application Module"
+    },
+    "applicationSubModule": {
+     "type": "cds.String",
+     "length": 50,
+     "@Common.Label": "Application Sub Module",
+     "doc": "Application Sub Module"
+    },
+    "technicalMessage": {
+     "type": "cds.LargeString",
+     "@Common.Label": "technicalMessage"
+    }
+   },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": "Log entry",
+    "TypeNamePlural": "Log entry",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "object"
+     }
+    }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "object"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "message"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "messageType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationSubObjectType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "applicationModule"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "applicationSubModule"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "object"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "message"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "messageType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubObjectType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "applicationModule"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "applicationSubModule"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "technicalMessage"
+     },
+     "@UI.Hidden": true
+    }
+   ],
+   "@UI.SelectionFields": [
+    "regulationType",
+    "regulationSubObjectType",
+    "applicationModule",
+    "applicationSubModule"
+   ]
+  },
+  "LogUtilityService": {
+   "kind": "service",
+   "@cds.external": true
+  }
+ }
+}

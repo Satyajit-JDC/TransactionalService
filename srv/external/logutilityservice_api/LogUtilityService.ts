@@ -64,7 +64,7 @@ export class LogUtilityService<T extends DeSerializers = DefaultDeSerializers>
   declare object?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Message.
-   * Maximum length: 500.
+   * Maximum length: 1000.
    * @nullable
    */
   declare message?: DeserializedType<T, 'Edm.String'> | null;
@@ -99,7 +99,6 @@ export class LogUtilityService<T extends DeSerializers = DefaultDeSerializers>
   declare applicationSubModule?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Technical Message.
-   * Maximum length: 500.
    * @nullable
    */
   declare technicalMessage?: DeserializedType<T, 'Edm.String'> | null;

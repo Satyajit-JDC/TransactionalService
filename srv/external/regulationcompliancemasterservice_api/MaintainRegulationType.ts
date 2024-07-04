@@ -15,7 +15,7 @@ import {
   RegulationCategoryType
 } from './RegulationCategory';
 import { Countries, CountriesType } from './Countries';
-import { Uom, UomType } from './Uom';
+import { RegulationUom, RegulationUomType } from './RegulationUom';
 
 /**
  * This class represents the entity "MaintainRegulationType" of service "RegulationComplianceMasterService".
@@ -142,9 +142,9 @@ export class MaintainRegulationType<
    */
   declare country?: Countries<T> | null;
   /**
-   * One-to-one navigation property to the {@link Uom} entity.
+   * One-to-one navigation property to the {@link RegulationUom} entity.
    */
-  declare regulationUoM?: Uom<T> | null;
+  declare regulationUoM?: RegulationUom<T> | null;
   /**
    * One-to-one navigation property to the {@link MaintainRegulationType} entity.
    */
@@ -178,6 +178,6 @@ export interface MaintainRegulationTypeType<
   regulationCategory?: RegulationCategoryType<T> | null;
   region?: CountriesType<T> | null;
   country?: CountriesType<T> | null;
-  regulationUoM?: UomType<T> | null;
+  regulationUoM?: RegulationUomType<T> | null;
   siblingEntity?: MaintainRegulationTypeType<T> | null;
 }

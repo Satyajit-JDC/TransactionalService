@@ -10,10 +10,7 @@ import {
   DeserializedType
 } from '@sap-cloud-sdk/odata-v4';
 import type { MaintainIdRangeForRenewableObjectSequenceApi } from './MaintainIdRangeForRenewableObjectSequenceApi';
-import {
-  RegulationSubCategory,
-  RegulationSubCategoryType
-} from './RegulationSubCategory';
+import { RegulationSubType, RegulationSubTypeType } from './RegulationSubType';
 
 /**
  * This class represents the entity "MaintainIdRangeForRenewableObjectSequence" of service "RegulationComplianceMasterService".
@@ -60,9 +57,9 @@ export class MaintainIdRangeForRenewableObjectSequence<
    */
   declare currentSeqence?: DeserializedType<T, 'Edm.Int32'> | null;
   /**
-   * One-to-one navigation property to the {@link RegulationSubCategory} entity.
+   * One-to-one navigation property to the {@link RegulationSubType} entity.
    */
-  declare regulationSubScenario?: RegulationSubCategory<T> | null;
+  declare regulationSubScenario?: RegulationSubType<T> | null;
 
   constructor(_entityApi: MaintainIdRangeForRenewableObjectSequenceApi<T>) {
     super(_entityApi);
@@ -76,5 +73,5 @@ export interface MaintainIdRangeForRenewableObjectSequenceType<
   regulationSubScenarioCategory?: DeserializedType<T, 'Edm.String'> | null;
   inActive?: DeserializedType<T, 'Edm.Boolean'> | null;
   currentSeqence?: DeserializedType<T, 'Edm.Int32'> | null;
-  regulationSubScenario?: RegulationSubCategoryType<T> | null;
+  regulationSubScenario?: RegulationSubTypeType<T> | null;
 }
