@@ -1,8 +1,8 @@
 import cds from '@sap/cds';
 import { Request } from '@sap/cds';
-import { oRegulationComplianceBaseInstance } from './library/zcom_tsRegulationComplianceBase'
+// import { oRegulationComplianceBaseInstance } from './library/zcom_tsRegulationComplianceBase';
 // import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
-import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase'
+import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase';
 
 // import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
@@ -14,7 +14,7 @@ import {
     IRfs2DebitType, IFuelCategory, IFuelSubCategory, EventPayload, ILogUtility
 } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import {
-    MaintainRenewableMaterialConfiguration
+    MaintainRfs2Material
 } from './external/regulationcompliancemasterservice_api';
 import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
 import { queryObjects } from 'v8';
@@ -810,22 +810,39 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             oManualAdjPayloadData._RenewableMaterialDocument.Plant = oDataRequest.data.sourceOrgCompanyPlant,
             oManualAdjPayloadData._RenewableMaterialDocument.RenewableBillOfLading = oDataRequest.data.billofLading,
             oManualAdjPayloadData.RenewableFuelCategory = oDataRequest.data.fuelCategory
+
             // create Base Class Object with Event Data to identify Regulation
+            // set Regulation master data
             const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oManualAdjPayloadData);
             oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType = oDataRequest.data.RegulationType;
+            
             // oRegulationComplianceBaseClassInstance.setImpact
             // wait for promise to get regulations
-    
+            // wait for promise to get regulations
+            oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved) => {
+                if (bResolved) {
                     // RFS2 Regulation is Active
-                    if(oRegulationComplianceBaseClassInstance.oRFS2RegulationData){
+                    if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
+                        if(oDataRequest.data.objectType === RFS2ConstantValues.credit){
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.credit;
+                        }
+                        else if(oDataRequest.data.objectType === RFS2ConstantValues.debit){
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.debit;
+                        }
                         oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
-                     // set Object type
-                     oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype.objectType = oDataRequest.data.objectType;
-           
-                     oRegulationComplianceBaseClassInstance.setObjectCategory();// need to send filters
-                     oRegulationComplianceBaseClassInstance.setImpact();
-                     oRegulationComplianceBaseClassInstance.setAdjustmentReasonCode()
                     }
+                }
+            });
+                    // // RFS2 Regulation is Active
+                    // if(oRegulationComplianceBaseClassInstance.oRFS2RegulationData){
+                    //     oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
+                    //  // set Object type
+                    //  oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype.objectType = oDataRequest.data.objectType;
+           
+                    //  oRegulationComplianceBaseClassInstance.setObjectCategory();// need to send filters
+                    //  oRegulationComplianceBaseClassInstance.setImpact();
+                    //  oRegulationComplianceBaseClassInstance.setAdjustmentReasonCode()
+                    // }
                    
         })
         this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
@@ -833,7 +850,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
                 aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
                 aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
-                aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
+                aMaterialConfig: MaintainRfs2Material[] = [],
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
                 logObjectID: string = "";
             let oObjectID: number;
@@ -998,7 +1015,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 } = ODataRequest.data;
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
-                                    const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsCompanyMaterialNumber + "'";
+                                    const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsMaterialNumber + "'";
                                     // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
                                     //     {} as ILogUtility);
                                 }
@@ -1199,7 +1216,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             }
         })
         this.on('READ', 'TransactionType', async () => {
-            const oImpact = await oRegulationComplianceBaseInstance.getTransactionTypeData();
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            const oImpact = await oRegulationComplianceBaseInstance.setTransactiontype();
             return oImpact;
         })
         this.on('READ', 'GetFuelSubCategory', async (req) => {
@@ -1217,12 +1235,14 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'GetFuelMaterialS4', async (request) => {
             debugger;
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
             console.log(aFuelMaterial);
             return aFuelMaterial;
         })
         this.on('READ', 'GetTransactionType', async () => {
-            const oTransactionTypes = await oRegulationComplianceBaseInstance.getTransactiontype('');
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            const oTransactionTypes = await oRegulationComplianceBaseInstance.setTransactiontype();
             return oTransactionTypes;
         })
 

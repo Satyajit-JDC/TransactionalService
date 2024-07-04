@@ -213,3 +213,6 @@ export interface EventPayload {
         UnitOfMeasure: string;
     }
 }
+export interface EventPayloadMDJ {
+    
+}
