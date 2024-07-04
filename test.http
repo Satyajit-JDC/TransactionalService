@@ -14,7 +14,7 @@ Content-Type: application/json
     "RenewableFuelCategory":"GS",
     "RenewableTransactionType":"PUR",
     "RegulationGroupName":"R001",
-    "RegulationMateGroup":"M003",
+    "RegulationMateGroup":"M001",
     "MaterialDescription":"UNLEADED PREMIUM 91",
     "_RenewableContract":{
       "RenewableMaterial":"",

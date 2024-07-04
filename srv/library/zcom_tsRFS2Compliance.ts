@@ -46,15 +46,15 @@ export class RFS2ComplianceClass {
                     this._oRFS2_RVOComplianceClassInstance = new RFS2_RVOCompliance(this.oRegulationComplianceBaseClassInstance);
                 }
                 // RFS2_RIN_RF scenario
-                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                if(regulationSubScenario.RFS2_RIN_RF === sRgulationSubScnario){
                     this._oRFS2_RF_RINComplianceClassInstance = new RFS2_RF_RINCompliance(this.oRegulationComplianceBaseClassInstance);
                 }
                 // RFS2_MADJ_RVO scenario
-                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                if(regulationSubScenario.RFS2_MADJ_RVO === sRgulationSubScnario){
                     this._oRFS2_MADJ_RVOComplianceClassInstance = new RFS2_MADJ_RVOCompliance(this.oRegulationComplianceBaseClassInstance);
                 }
                 // RFS2_MADJ_RIN scenario
-                if(regulationSubScenario.RFS2_RVO === sRgulationSubScnario){
+                if(regulationSubScenario.RFS2_MADJ_RIN === sRgulationSubScnario){
                     this._oRFS2_MADJ_RINComplianceClassInstance = new RFS2_MADJ_RINCompliance(this.oRegulationComplianceBaseClassInstance);
                 }
             }
