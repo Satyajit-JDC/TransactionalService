@@ -57,7 +57,7 @@ service RegulationComplianceTransactionService {
         };
 
     // CDs View for aggregating Regulation Quantity by Plant
-    @cds.persistence.skip
+
     define view MaintainWorkplaceAgggregationByPlantView as
         select from RegulationComplianceTransaction {
             sourceOrgPlant,
@@ -68,7 +68,7 @@ service RegulationComplianceTransactionService {
             sourceOrgPlant;
 
     // CDs View for aggregating Regulation Quantity by Month
-    @cds.persistence.skip
+
     define view MaintainWorkplaceAgggregationByMonthView as
         select from RegulationComplianceTransaction {
             renewablesDocumentMonth,
@@ -79,7 +79,6 @@ service RegulationComplianceTransactionService {
             renewablesDocumentMonthDes;
 
     // CDS View for aggregating Regulation Quantity by Category
-    @cds.persistence.skip
     define view MaintainWorkplaceAgggregationByCategoryView as
         select from RegulationComplianceTransaction {
             rfs2ObligationType,
