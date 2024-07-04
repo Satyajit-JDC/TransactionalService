@@ -3,7 +3,8 @@ export const RFS2ConstantValues = {
     RFS2: "RFS2",
     credit: "C",
     debit: "D",
-    eventTypeGMCR: "GM-CR-ET"
+    eventTypeGMCR: "GM-CR-ET",
+    MDJ: "MDJ"
 } as const;
 
 // constants related to LCFS Regulation Compliances
