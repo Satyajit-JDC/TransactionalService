@@ -1,4 +1,6 @@
 import cds from '@sap/cds';
+import { Request } from '@sap/cds';
+import { oRegulationComplianceBaseInstance } from './library/zcom_tsRegulationComplianceBase';
 // import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase'
 
@@ -14,6 +16,8 @@ import {
 import {
     MaintainRenewableMaterialConfiguration
 } from './external/regulationcompliancemasterservice_api';
+import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
+import { queryObjects } from 'v8';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { messageTypes } from './library/utilities/zcom_tsConstants';
 
@@ -798,7 +802,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
             let aFinalData: RegulationComplianceTransaction[] = [],
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
-                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
+                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {}, data: [] },
                 aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
                 aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
@@ -822,7 +826,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 reasonCode,
                 reasonCodeDesc,
                 renewablesDocumentComplianceYear,
-                sourceOrgCompanyPlant,
+                sourceOrgPlant,
                 adjustmentBase,
                 billofLading,
                 fuelCategory
@@ -841,6 +845,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 //     {} as ILogUtility
                 // );
                 const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
+
 
                 // read RFS2DebitType
                 await oRegulationComplianceBaseInstance.setRFS2DebitType();
@@ -892,7 +897,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                     fuelQuantity,
                                     renewablesEpaCompanyId,
                                     renewablesEpaFacilityId,
-                                    fuelLogisticsCompanyMaterialNumber,
+                                    fuelLogisticsMaterialNumber,
                                 } = ODataRequest.data;
 
                                 // Fetch material configuration
@@ -930,7 +935,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 businessPartnerNumber: businessPartnerNumber,
                                                 reasonCode: reasonCode,
                                                 reasonCodeDesc: reasonCodeDesc,
-                                                sourceOrgCompanyPlant: sourceOrgCompanyPlant,
+                                                sourceOrgPlant: sourceOrgPlant,
                                                 regulationQuantity: Math.round(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
                                                 regulationQuantityWholeNumber: Math.floor(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
                                                 // regulationUnitOfMeasurement: regulationUoMCategory,  
@@ -938,13 +943,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 renewablesEpaFacilityId: renewablesEpaFacilityId,
                                                 fuelUnitofMeasurement: fuelUnitofMeasurement, //'BBL',
                                                 fuelAlternateUnitofMeasurement: fuelUnitofMeasurement,
-                                                sourceOrgCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
-                                                regulationLogisticsCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
+                                                sourceOrgMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
+                                                regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
                                                 billofLading: billofLading,
                                                 fuelCategory: fuelCategory,
                                                 fuelQuantity: fuelQuantity,
                                                 adjustmentBase: adjustmentBase,
-                                                fuelLogisticsCompanyMaterialNumber: fuelLogisticsCompanyMaterialNumber,
+                                                fuelLogisticsMaterialNumber: fuelLogisticsMaterialNumber,
                                                 renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
@@ -967,8 +972,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 const {
                                     regulationQuantity,
                                     regulationUnitOfMeasurement,
-                                    regulationLogisticsCompanyMaterialNumber,
-                                    sourceOrgCompanyMaterialNumber
+                                    regulationLogisticsMaterialNumber,
+                                    sourceOrgMaterialNumber
                                 } = ODataRequest.data;
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
@@ -998,10 +1003,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                             businessPartnerNumber: businessPartnerNumber,
                                             reasonCode: reasonCode,
                                             reasonCodeDesc: reasonCodeDesc,
-                                            sourceOrgCompanyPlant: sourceOrgCompanyPlant,
+                                            sourceOrgPlant: sourceOrgPlant,
                                             regulationQuantity: regulationQuantity,
                                             regulationUnitOfMeasurement: regulationUnitOfMeasurement,
-                                            regulationLogisticsCompanyMaterialNumber: regulationLogisticsCompanyMaterialNumber,
+                                            regulationLogisticsMaterialNumber: regulationLogisticsMaterialNumber,
                                             billofLading: billofLading,
                                             fuelCategory: fuelCategory,
                                             adjustmentBase: adjustmentBase,
@@ -1035,10 +1040,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
         //     return oRegulationTransactionTypeTsData;
         // })
-        this.on('READ', 'MaintainRegulationTransactionType', async () => {
+        this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setTransactiontype();
-            return oRegulationComplianceBaseInstance.aMaintainTransactionType;
+            await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs(, {} as ILogUtility);
+            return oRegulationComplianceBaseInstance.aMaintainTransactionType.data;
         })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
@@ -1172,17 +1177,32 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 oRegulationComplianceBaseInstance.addLog(oLogData);
             }
         })
-
-        this.on('READ', 'GetFuelSubCategory', async () => {
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setFuelSubCategory();
-            return oRegulationComplianceBaseInstance.aFuelSubCategory;
+        this.on('READ', 'TransactionType', async () => {
+            const oImpact = await oRegulationComplianceBaseInstance.getTransactionTypeData();
+            return oImpact;
+        })
+        this.on('READ', 'GetFuelSubCategory', async (req) => {
+            //const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
+            // {} as ILogUtility);
+            // return oFuelSubCategory.data;
+            const service = await cds.connect.to('RegulationComplianceMasterService');
+            return await service.run(req.query);
         })
 
         this.on('READ', 'GetMovementType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setMovementType();
             return oRegulationComplianceBaseInstance.aMaintainMovementType;
+        })
+        this.on('READ', 'GetFuelMaterialS4', async (request) => {
+            debugger;
+            const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
+            console.log(aFuelMaterial);
+            return aFuelMaterial;
+        })
+        this.on('READ', 'GetTransactionType', async () => {
+            const oTransactionTypes = await oRegulationComplianceBaseInstance.getTransactiontype('');
+            return oTransactionTypes;
         })
 
         return super.init()

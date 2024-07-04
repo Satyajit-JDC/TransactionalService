@@ -1,0 +1,149 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.9.4"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "MaterialCharacteristics": {
+   "kind": "service",
+   "@cds.external": true,
+   "@Aggregation.ApplySupported": {
+    "Transformations": [
+     "aggregate",
+     "groupby",
+     "filter"
+    ],
+    "Rollup": {
+     "#": "None"
+    }
+   },
+   "@Common.ApplyMultiUnitBehaviorForSortingAndFiltering": true,
+   "@Capabilities.FilterFunctions": [
+    "eq",
+    "ne",
+    "gt",
+    "ge",
+    "lt",
+    "le",
+    "and",
+    "or",
+    "contains",
+    "startswith",
+    "endswith",
+    "any",
+    "all"
+   ],
+   "@Capabilities.SupportedFormats": [
+    "application/json",
+    "application/pdf"
+   ],
+   "@PDF.Features": {
+    "DocumentDescriptionReference": "../../../../default/iwbep/common/0001/$metadata",
+    "DocumentDescriptionCollection": "MyDocumentDescriptions",
+    "ArchiveFormat": true,
+    "Border": true,
+    "CoverPage": true,
+    "FitToPage": true,
+    "FontName": true,
+    "FontSize": true,
+    "Margin": true,
+    "Padding": true,
+    "Signature": true,
+    "HeaderFooter": true,
+    "ResultSizeDefault": 20000,
+    "ResultSizeMaximum": 20000
+   },
+   "@Capabilities.KeyAsSegmentSupported": true,
+   "@Capabilities.AsynchronousRequestsSupported": true
+  },
+  "MaterialCharacteristics.ZA_MaterialCharacteristics_R": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "elements": {
+    "ObjectKey": {
+     "key": true,
+     "type": "cds.String",
+     "length": 90,
+     "notNull": true,
+     "@Common.Label": "Object",
+     "@Common.QuickInfo": "Key of Object to be Classified"
+    },
+    "InternalCharacteristic": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "notNull": true,
+     "@Common.IsDigitSequence": true
+    },
+    "CharacteristicValueCounter": {
+     "key": true,
+     "type": "cds.String",
+     "length": 3,
+     "notNull": true,
+     "@Common.IsDigitSequence": true,
+     "@Common.Label": "Counter",
+     "@Common.QuickInfo": "Characteristic value counter"
+    },
+    "IdentifierObjectClass": {
+     "key": true,
+     "type": "cds.String",
+     "length": 1,
+     "notNull": true,
+     "@Common.IsUpperCase": true,
+     "@Common.Label": "Ind.: Object/Class",
+     "@Common.Heading": "O/C",
+     "@Common.QuickInfo": "Indicator: Object/Class"
+    },
+    "ClassType": {
+     "key": true,
+     "type": "cds.String",
+     "length": 3,
+     "notNull": true,
+     "@Common.IsUpperCase": true,
+     "@Common.Label": "Class Type",
+     "@Common.Heading": "Ty."
+    },
+    "InternalCounter": {
+     "key": true,
+     "type": "cds.String",
+     "length": 4,
+     "notNull": true,
+     "@Common.IsDigitSequence": true,
+     "@Common.Label": "Int. counter",
+     "@Common.QuickInfo": "Internal Counter for Archiving Objects by ECM"
+    },
+    "RegulationGroup": {
+     "type": "cds.String",
+     "length": 70,
+     "notNull": true,
+     "@Common.Label": "Characteristic Value"
+    },
+    "RegulationMaterialGroup": {
+     "type": "cds.String",
+     "length": 70,
+     "notNull": true,
+     "@Common.Label": "Characteristic Value"
+    },
+    "FuelCategory": {
+     "type": "cds.String",
+     "length": 70,
+     "notNull": true,
+     "@Common.Label": "Characteristic Value"
+    },
+    "MaterialDescription": {
+     "type": "cds.String",
+     "length": 40,
+     "notNull": true,
+     "@Common.Label": "Material Description"
+    }
+   },
+   "@Common.Label": "API  View for Material Characteristics",
+   "@Capabilities.SearchRestrictions.Searchable": false,
+   "@Capabilities.InsertRestrictions.Insertable": false,
+   "@Capabilities.DeleteRestrictions.Deletable": false,
+   "@Capabilities.UpdateRestrictions.Updatable": false,
+   "@Capabilities.UpdateRestrictions.QueryOptions.SelectSupported": true
+  }
+ }
+}

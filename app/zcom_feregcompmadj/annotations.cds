@@ -70,7 +70,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
             },
             {
                 $Type: 'UI.DataField',
-                Value: sourceOrgCompanyPlant,
+                Value: sourceOrgPlant,
                 Label: '{i18n>Plant}'
             },
             {
@@ -96,7 +96,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Value: regulationLogisticsCompanyMaterialNumber,
+                Value: regulationLogisticsMaterialNumber,
                 Label: '{i18n>RVOMaterial}'
             },
             {
@@ -118,7 +118,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
         Data : [
             {
                 $Type: 'UI.DataField',
-                Value: fuelLogisticsCompanyMaterialNumber,
+                Value: fuelLogisticsMaterialNumber,
                 Label: '{i18n>FuelMaterial}'
             },
             {
@@ -203,12 +203,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
         },
         {
             $Type: 'UI.DataField',
-            Value: regulationLogisticsCompanyMaterialNumber,
+            Value: regulationLogisticsMaterialNumber,
             Label: '{i18n>RVOMaterial}',
         },
         {
             $Type: 'UI.DataField',
-            Value: sourceOrgCompanyPlant,
+            Value: sourceOrgPlant,
             Label: '{i18n>Plant}',
         },
         {
@@ -266,12 +266,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
     @Common.FilterDefaultValue : 'RFS2_MADJ_RVO'
     subObjectScenario
 };
-annotate service.MaintainRegulationTransactionType with {
-    transactionType @Common.Text : {
-            $value : description,
-            ![@UI.TextArrangement] : #TextFirst,
-        }
-};
+// annotate service.MaintainRegulationTransactionType with {
+//     transactionType @Common.Text : {
+//             $value : description,
+//             ![@UI.TextArrangement] : #TextFirst,
+//         }
+// };
 annotate service.ManualAdjRegulationComplianceTransaction with {
     regulationType @(Common.ValueList : {
             $Type : 'Common.ValueListType',
@@ -291,19 +291,24 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
     UI.Identification : []
 );
 annotate service.ManualAdjRegulationComplianceTransaction with {
-    regulationLogisticsCompanyMaterialNumber @(Common.ValueList : {
+    regulationLogisticsMaterialNumber @(Common.ValueList : {
             $Type : 'Common.ValueListType',
             CollectionPath : 'MaintainRenewableMaterialConfiguration',
             Parameters : [
                 {
                     $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : regulationLogisticsCompanyMaterialNumber,
+                    LocalDataProperty : regulationLogisticsMaterialNumber,
                     ValueListProperty : 'material',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType/regulationType',
+                    LocalDataProperty : regulationType,
                 },
             ],
             Label : 'RVO Material',
         },
-        Common.ValueListWithFixedValues : false
+        Common.ValueListWithFixedValues : true
 )};
 annotate service.MaintainRenewableMaterialConfiguration with @(
     UI.PresentationVariant #vh_ManualAdjRegulationComplianceTransaction_sourceOrgCompanyMaterialNumber : {
@@ -474,6 +479,7 @@ annotate service.GetUOM with {
         ![@UI.TextArrangement] : #TextFirst,
     }
 };
+
 // annotate service.ManualAdjRegulationComplianceTransaction with {
 //     fuelUnitofMeasurement @(Common.ValueList : {
 //             $Type : 'Common.ValueListType',
@@ -489,6 +495,7 @@ annotate service.GetUOM with {
 //         },
 //         Common.ValueListWithFixedValues : true
 // )};
+
 annotate service.ManualAdjRegulationComplianceTransaction with {
     objectType @(Common.ValueList : {
             $Type : 'Common.ValueListType',
@@ -507,6 +514,53 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
 annotate service.GetObjectCategory with {
     category @Common.Text : {
         $value : description,
+        ![@UI.TextArrangement] : #TextFirst,
+    }
+};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    transactionCategory @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetMaintainRegulationTransactionTypeTs',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : transactionCategory,
+                    ValueListProperty : 'transactionCategory/category',
+                },
+                
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType/regulationType',
+                    LocalDataProperty : regulationType,
+                },
+            ],
+            Label : '{i18n>TransactionType}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    fuelLogisticsMaterialNumber @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetFuelMaterialS4',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : fuelLogisticsMaterialNumber,
+                    ValueListProperty : 'ObjectKey',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'FuelCategory',
+                    LocalDataProperty : fuelCategory,
+                },
+            ],
+            Label : '{i18n>FuelMaterial}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
+annotate service.GetFuelMaterialS4 with {
+    ObjectKey @Common.Text : {
+        $value : MaterialDescription,
         ![@UI.TextArrangement] : #TextFirst,
     }
 };
