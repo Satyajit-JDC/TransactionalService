@@ -65,28 +65,35 @@ service RegulationComplianceTransactionService {
             sum(regulationQuantity) as TotalRegQuantityByPlant : Integer
         }
         group by
-            sourceOrgPlant;
+            sourceOrgPlant,
+            regulationQuantity;
 
     // CDs View for aggregating Regulation Quantity by Month
 
     define view MaintainWorkplaceAgggregationByMonthView as
         select from RegulationComplianceTransaction {
             renewablesDocumentMonth,
+            renewablesDocumentMonthDes,
             regulationQuantity,
             sum(regulationQuantity) as TotalRegQuantityByMonth : Integer
         }
         group by
-            renewablesDocumentMonthDes;
+            renewablesDocumentMonth,
+            renewablesDocumentMonthDes,
+            regulationQuantity;
 
     // CDS View for aggregating Regulation Quantity by Category
     define view MaintainWorkplaceAgggregationByCategoryView as
         select from RegulationComplianceTransaction {
             rfs2ObligationType,
+            rfs2ObligationTypeDesc,
             regulationQuantity,
             sum(regulationQuantity) as TotalRegQuantityByCategory : Integer
         }
         group by
-            rfs2ObligationTypeDesc;
+            regulationQuantity,
+            rfs2ObligationTypeDesc,
+            rfs2ObligationType;
 
 
 }
