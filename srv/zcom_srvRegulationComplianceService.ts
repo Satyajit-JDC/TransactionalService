@@ -1,6 +1,5 @@
 import cds from '@sap/cds';
 import { Request } from '@sap/cds';
-import { oRegulationComplianceBaseInstance } from './library/zcom_tsRegulationComplianceBase'
 // import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase'
 
@@ -14,7 +13,7 @@ import {
     IRfs2DebitType, IFuelCategory, IFuelSubCategory, EventPayload, ILogUtility
 } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import {
-    MaintainRenewableMaterialConfiguration
+    MaintainRfs2Material
 } from './external/regulationcompliancemasterservice_api';
 import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
 import { queryObjects } from 'v8';
@@ -315,7 +314,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             //     //     }
 
             //     //     // // read mat config
-            //     //     let aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [];
+            //     //     let aMaterialConfig: MaintainRfs2Material[] = [];
             //     //     // if(aRegulationGroups.regType.length>0 && aRegulationMaterialGrp.objectCategory.length>0 && oYear){
             //     //     if (aRegulationGroups.regulationType_regulationType && aRegulationMaterialGrp.objectCategory && oYear && !oLogData.messageType
             //     //         && aRegulationSubscenario.data.length>0
@@ -655,7 +654,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             //     //                                             // ciAverageValue
             //     //                                             // dcode: oEventData.dcode,
             //     //                                             // dcodeDesc master des
-            //     //                                             rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRenewableMaterialConfiguration
+            //     //                                             rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRfs2Material
             //     //                                             rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description,
             //     //                                             // vintageYear: oEventData.vintageYear,
             //     //                                             // rinMultiplier: oEventData.rinMultiplier,
@@ -820,7 +819,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     if(oRegulationComplianceBaseClassInstance.oRFS2RegulationData){
                         oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
                      // set Object type
-                     oRegulationComplianceBaseClassInstance.oMaintainRegulationObjecttype.objectType = oDataRequest.data.objectType;
+                     oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectType = oDataRequest.data.objectType;
            
                      oRegulationComplianceBaseClassInstance.setObjectCategory();// need to send filters
                      oRegulationComplianceBaseClassInstance.setImpact();
@@ -833,7 +832,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
                 aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
                 aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
-                aMaterialConfig: MaintainRenewableMaterialConfiguration[] = [],
+                aMaterialConfig: MaintainRfs2Material[] = [],
                 aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
                 logObjectID: string = "";
             let oObjectID: number;
@@ -945,8 +944,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 objectType: oRegObjectCateory.objectCategoryCategory,
                                                 sourceScenario: 'MDJ',
                                                 subObjectScenario: oRegualtionSubscenario.regulationSubScenarioCategory,//get from material subscenariosubScenario[0].regulationSubScenario,//
-                                                transactionType: oTransactionTypeTs.transactionType,
-                                                transactionTypeDesc: oTransactionTypeTs.description,
+                                                // transactionType: oTransactionTypeTs.transactionType,
+                                                // transactionTypeDesc: oTransactionTypeTs.description,
                                                 transactionCategory: transactionCategory,//'PUR',//Maintain Regulation Transaction Types
                                                 impact: impact,
                                                 documentDate: documentDate,//'2024-06-01',
@@ -977,7 +976,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                                 renewablesTransferMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesSubmissionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                                 renewablesDocumentMonthDes: sMonthDes,
-                                                rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRenewableMaterialConfiguration
+                                                rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRfs2Material
                                                 // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
                                                 regulationUnitOfMeasurement: "RIN"
                                             })
@@ -998,7 +997,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                 } = ODataRequest.data;
                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
                                 if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
-                                    const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" + regulationLogisticsCompanyMaterialNumber + "'";
+                                    const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" +
+                                     oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" +
+                                      regulationLogisticsMaterialNumber + "'";
                                     // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
                                     //     {} as ILogUtility);
                                 }
@@ -1013,8 +1014,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                             objectType: oRegObjectCateory.objectCategoryCategory,//'RVO',
                                             sourceScenario: 'MDJ',
                                             subObjectScenario: oRegualtionSubscenario.regulationSubScenarioCategory,//get from material subscenariosubScenario[0].regulationSubScenario,//
-                                            transactionType: oTransactionTypeTs.transactionType,
-                                            transactionTypeDesc: oTransactionTypeTs.description,
+                                            // transactionType: oTransactionTypeTs.transactionType,
+                                            // transactionTypeDesc: oTransactionTypeTs.description,
                                             transactionCategory: transactionCategory,//'PUR',//Maintain Regulation Transaction Types
                                             impact: impact,
                                             documentDate: documentDate,//'2024-06-01',
@@ -1037,7 +1038,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                                             renewablesTransferMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                             renewablesSubmissionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
                                             renewablesDocumentMonthDes: sMonthDes,
-                                            rfs2ObligationType: aMaterialConfig[0].rvoTypeCategory, //master have to correct MaintainRenewableMaterialConfiguration
+                                            rfs2ObligationType: aMaterialConfig[0].rvoTypeCategory, //master have to correct MaintainRfs2Material
                                             // rfs2ObligationTypeDesc: aRFS2DebitType.map[aMaterialConfig[0].rvoTypeCategory].description, error
                                         });
                                     }//if (oObjectID...
@@ -1069,12 +1070,12 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setRegulationObjectType();
-            return oRegulationComplianceBaseInstance.aMaintainRegulationObjecttype;
+            return oRegulationComplianceBaseInstance.aMaintainRegulationObjectType;
         })
         this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setMaterialConfiguration();
-            return oRegulationComplianceBaseInstance.aMaintainRenewableMaterialConfiguration;
+            return oRegulationComplianceBaseInstance.aMaintainRfs2Material;
         })
         // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
@@ -1098,7 +1099,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'GetUOM', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setUOM();
-            return oRegulationComplianceBaseInstance.aUom;
+            return oRegulationComplianceBaseInstance.aRegulationUom;
         })
         this.on('READ', 'GetImpact', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
@@ -1199,8 +1200,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             }
         })
         this.on('READ', 'TransactionType', async () => {
-            const oImpact = await oRegulationComplianceBaseInstance.getTransactionTypeData();
-            return oImpact;
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            await oRegulationComplianceBaseInstance.setTransactiontype();
+            return oRegulationComplianceBaseInstance.aImpact;
         })
         this.on('READ', 'GetFuelSubCategory', async (req) => {
             //const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
@@ -1217,13 +1219,15 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         this.on('READ', 'GetFuelMaterialS4', async (request) => {
             debugger;
-            const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
-            console.log(aFuelMaterial);
-            return aFuelMaterial;
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            // const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
+            // console.log(aFuelMaterial);
+            // return aFuelMaterial;
         })
         this.on('READ', 'GetTransactionType', async () => {
-            const oTransactionTypes = await oRegulationComplianceBaseInstance.getTransactiontype('');
-            return oTransactionTypes;
+            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+            await oRegulationComplianceBaseInstance.setTransactiontype();
+            return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
         })
 
         return super.init()
