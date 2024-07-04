@@ -1,5 +1,4 @@
 import cds from '@sap/cds';
-import { Request } from '@sap/cds';
 // import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase'
 
@@ -1053,13 +1052,12 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             }
             return ODataRequest.data;
         })
-        this.on('READ', 'MaintainRegulationType', async (req: { query: any; }) => {
+        this.on('READ', 'MaintainRegulationType', async (req) => {
 
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setRegulationTypes();
             // return oRegulationComplianceBaseInstance.aMaintainRegulationType;
-            const service = await cds.connect.to('RegulationComplianceMasterService');
-            return await service.run(req.query);
+            return await valueListWithFilterQuery(req.query);
         })
         // this.on('READ', 'MaintainTransactionTyp', async (request) => {
         //     const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
@@ -1084,7 +1082,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
         //     return oManualAdjustment;
         // })
-        this.on('READ', 'GetFuelCategory', async (req:Request) => {
+        this.on('READ', 'GetFuelCategory', async (req) => {
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setFuelCategory();
             // return oRegulationComplianceBaseInstance.aFuelCategory;
@@ -1095,19 +1093,19 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             await oRegulationComplianceBaseInstance.setAdjustmentReasonCode();
             return oRegulationComplianceBaseInstance.aMaintainAdjustmentReasonCode;
         })
-        this.on('READ', 'GetObjectCategory', async (req:Request) => {
+        this.on('READ', 'GetObjectCategory', async (req) => {
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setObjectCategory();
             // return oRegulationComplianceBaseInstance.aObjectCategory;
             return await valueListWithFilterQuery(req.query);
         })
-        this.on('READ', 'GetUOM', async (req:Request) => {
+        this.on('READ', 'GetUOM', async (req) => {
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setUOM();
             // return oRegulationComplianceBaseInstance.aRegulationUom;
             return await valueListWithFilterQuery(req.query);
         })
-        this.on('READ', 'GetImpact', async (req:Request) => {
+        this.on('READ', 'GetImpact', async (req) => {
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setImpact();
             // return oRegulationComplianceBaseInstance.aImpact;
@@ -1206,20 +1204,20 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 oRegulationComplianceBaseInstance.addLog(oLogData);
             }
         })
-        this.on('READ', 'TransactionType', async (req:Request) => {
+        this.on('READ', 'TransactionType', async (req) => {
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setTransactiontype();
             // return oRegulationComplianceBaseInstance.aImpact;
             return await valueListWithFilterQuery(req.query);
         })
-        this.on('READ', 'GetFuelSubCategory', async (req:Request) => {
+        this.on('READ', 'GetFuelSubCategory', async (req) => {
             //const oFuelSubCategory = await oRegulationComplianceBaseInstance.getFuelSubCategory('',
             // {} as ILogUtility);
             // return oFuelSubCategory.data;
             return await valueListWithFilterQuery(req.query);
         })
 
-        this.on('READ', 'GetMovementType', async (req:Request) => {
+        this.on('READ', 'GetMovementType', async (req) => {
             // const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             // await oRegulationComplianceBaseInstance.setMovementType();
             // return oRegulationComplianceBaseInstance.aMaintainMovementType;
@@ -1228,9 +1226,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'GetFuelMaterialS4', async () => {
           
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            // const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
-            // console.log(aFuelMaterial);
-            // return aFuelMaterial;
+            const aFuelMaterial = await oRegulationComplianceBaseInstance.getFuelMaterialS4API();
+            return aFuelMaterial;
         })
         this.on('READ', 'GetTransactionType', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);

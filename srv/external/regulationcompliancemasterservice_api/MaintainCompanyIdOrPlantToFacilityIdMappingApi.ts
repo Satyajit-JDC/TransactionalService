@@ -3,9 +3,8 @@
  *
  * This is a generated file powered by the SAP Cloud SDK for JavaScript.
  */
-import { MaintainIdRangeForRenewableObject } from './MaintainIdRangeForRenewableObject';
-import { MaintainIdRangeForRenewableObjectRequestBuilder } from './MaintainIdRangeForRenewableObjectRequestBuilder';
-import { RegulationSubTypeApi } from './RegulationSubTypeApi';
+import { MaintainCompanyIdOrPlantToFacilityIdMapping } from './MaintainCompanyIdOrPlantToFacilityIdMapping';
+import { MaintainCompanyIdOrPlantToFacilityIdMappingRequestBuilder } from './MaintainCompanyIdOrPlantToFacilityIdMappingRequestBuilder';
 import {
   CustomField,
   defaultDeSerializers,
@@ -19,11 +18,11 @@ import {
   OrderableEdmTypeField,
   OneToOneLink
 } from '@sap-cloud-sdk/odata-v4';
-export class MaintainIdRangeForRenewableObjectApi<
+export class MaintainCompanyIdOrPlantToFacilityIdMappingApi<
   DeSerializersT extends DeSerializers = DefaultDeSerializers
 > implements
     EntityApi<
-      MaintainIdRangeForRenewableObject<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >
 {
@@ -43,62 +42,45 @@ export class MaintainIdRangeForRenewableObjectApi<
     DeSerializersT extends DeSerializers = DefaultDeSerializers
   >(
     deSerializers: DeSerializersT = defaultDeSerializers as any
-  ): MaintainIdRangeForRenewableObjectApi<DeSerializersT> {
-    return new MaintainIdRangeForRenewableObjectApi(deSerializers);
+  ): MaintainCompanyIdOrPlantToFacilityIdMappingApi<DeSerializersT> {
+    return new MaintainCompanyIdOrPlantToFacilityIdMappingApi(deSerializers);
   }
 
   private navigationPropertyFields!: {
-    /**
-     * Static representation of the one-to-one navigation property {@link regulationSubScenario} for query construction.
-     * Use to reference this property in query operations such as 'select' in the fluent request API.
-     */
-    REGULATION_SUB_SCENARIO: OneToOneLink<
-      MaintainIdRangeForRenewableObject<DeSerializersT>,
-      DeSerializersT,
-      RegulationSubTypeApi<DeSerializersT>
-    >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
      * Use to reference this property in query operations such as 'select' in the fluent request API.
      */
     SIBLING_ENTITY: OneToOneLink<
-      MaintainIdRangeForRenewableObject<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT,
-      MaintainIdRangeForRenewableObjectApi<DeSerializersT>
+      MaintainCompanyIdOrPlantToFacilityIdMappingApi<DeSerializersT>
     >;
   };
 
   _addNavigationProperties(
-    linkedApis: [
-      RegulationSubTypeApi<DeSerializersT>,
-      MaintainIdRangeForRenewableObjectApi<DeSerializersT>
-    ]
+    linkedApis: [MaintainCompanyIdOrPlantToFacilityIdMappingApi<DeSerializersT>]
   ): this {
     this.navigationPropertyFields = {
-      REGULATION_SUB_SCENARIO: new OneToOneLink(
-        'regulationSubScenario',
-        this,
-        linkedApis[0]
-      ),
-      SIBLING_ENTITY: new OneToOneLink('SiblingEntity', this, linkedApis[1])
+      SIBLING_ENTITY: new OneToOneLink('SiblingEntity', this, linkedApis[0])
     };
     return this;
   }
 
-  entityConstructor = MaintainIdRangeForRenewableObject;
+  entityConstructor = MaintainCompanyIdOrPlantToFacilityIdMapping;
 
-  requestBuilder(): MaintainIdRangeForRenewableObjectRequestBuilder<DeSerializersT> {
-    return new MaintainIdRangeForRenewableObjectRequestBuilder<DeSerializersT>(
+  requestBuilder(): MaintainCompanyIdOrPlantToFacilityIdMappingRequestBuilder<DeSerializersT> {
+    return new MaintainCompanyIdOrPlantToFacilityIdMappingRequestBuilder<DeSerializersT>(
       this
     );
   }
 
   entityBuilder(): EntityBuilderType<
-    MaintainIdRangeForRenewableObject<DeSerializersT>,
+    MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
     DeSerializersT
   > {
     return entityBuilder<
-      MaintainIdRangeForRenewableObject<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >(this);
   }
@@ -107,7 +89,7 @@ export class MaintainIdRangeForRenewableObjectApi<
     fieldName: string,
     isNullable: NullableT = false as NullableT
   ): CustomField<
-    MaintainIdRangeForRenewableObject<DeSerializersT>,
+    MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
     DeSerializersT,
     NullableT
   > {
@@ -120,13 +102,13 @@ export class MaintainIdRangeForRenewableObjectApi<
   }
 
   private _fieldBuilder?: FieldBuilder<
-    typeof MaintainIdRangeForRenewableObject,
+    typeof MaintainCompanyIdOrPlantToFacilityIdMapping,
     DeSerializersT
   >;
   get fieldBuilder() {
     if (!this._fieldBuilder) {
       this._fieldBuilder = new FieldBuilder(
-        MaintainIdRangeForRenewableObject,
+        MaintainCompanyIdOrPlantToFacilityIdMapping,
         this.deSerializers
       );
     }
@@ -135,108 +117,94 @@ export class MaintainIdRangeForRenewableObjectApi<
 
   private _schema?: {
     ID: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Guid',
       false,
       true
     >;
     CREATED_AT: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.DateTimeOffset',
       true,
       true
     >;
     CREATED_BY: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
     MODIFIED_AT: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.DateTimeOffset',
       true,
       true
     >;
     MODIFIED_BY: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
-    REGULATION_SUB_SCENARIO_CATEGORY: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+    COMPANY_ID: OrderableEdmTypeField<
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
-    NUMBER_OF_START: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+    PLANT: OrderableEdmTypeField<
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
-      'Edm.Int32',
+      'Edm.String',
       true,
       true
     >;
-    NUMBER_OF_END: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+    FACILITY_ID: OrderableEdmTypeField<
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
-      'Edm.Int32',
-      true,
-      true
-    >;
-    IN_ACTIVE: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
-      DeSerializersT,
-      'Edm.Boolean',
+      'Edm.String',
       true,
       true
     >;
     IS_ACTIVE_ENTITY: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
       false,
       true
     >;
     HAS_ACTIVE_ENTITY: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
       false,
       true
     >;
     HAS_DRAFT_ENTITY: OrderableEdmTypeField<
-      MaintainIdRangeForRenewableObject<DeSerializers>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
       false,
       true
     >;
     /**
-     * Static representation of the one-to-one navigation property {@link regulationSubScenario} for query construction.
-     * Use to reference this property in query operations such as 'select' in the fluent request API.
-     */
-    REGULATION_SUB_SCENARIO: OneToOneLink<
-      MaintainIdRangeForRenewableObject<DeSerializersT>,
-      DeSerializersT,
-      RegulationSubTypeApi<DeSerializersT>
-    >;
-    /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
      * Use to reference this property in query operations such as 'select' in the fluent request API.
      */
     SIBLING_ENTITY: OneToOneLink<
-      MaintainIdRangeForRenewableObject<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT,
-      MaintainIdRangeForRenewableObjectApi<DeSerializersT>
+      MaintainCompanyIdOrPlantToFacilityIdMappingApi<DeSerializersT>
     >;
-    ALL_FIELDS: AllFields<MaintainIdRangeForRenewableObject<DeSerializers>>;
+    ALL_FIELDS: AllFields<
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializers>
+    >;
   };
 
   get schema() {
@@ -285,39 +253,26 @@ export class MaintainIdRangeForRenewableObjectApi<
           true
         ),
         /**
-         * Static representation of the {@link regulationSubScenarioCategory} property for query construction.
+         * Static representation of the {@link companyId} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
-        REGULATION_SUB_SCENARIO_CATEGORY: fieldBuilder.buildEdmTypeField(
-          'regulationSubScenario_category',
+        COMPANY_ID: fieldBuilder.buildEdmTypeField(
+          'companyId',
           'Edm.String',
           true
         ),
         /**
-         * Static representation of the {@link numberOfStart} property for query construction.
+         * Static representation of the {@link plant} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
-        NUMBER_OF_START: fieldBuilder.buildEdmTypeField(
-          'numberOfStart',
-          'Edm.Int32',
-          true
-        ),
+        PLANT: fieldBuilder.buildEdmTypeField('plant', 'Edm.String', true),
         /**
-         * Static representation of the {@link numberOfEnd} property for query construction.
+         * Static representation of the {@link facilityId} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
-        NUMBER_OF_END: fieldBuilder.buildEdmTypeField(
-          'numberOfEnd',
-          'Edm.Int32',
-          true
-        ),
-        /**
-         * Static representation of the {@link inActive} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        IN_ACTIVE: fieldBuilder.buildEdmTypeField(
-          'inActive',
-          'Edm.Boolean',
+        FACILITY_ID: fieldBuilder.buildEdmTypeField(
+          'facilityId',
+          'Edm.String',
           true
         ),
         /**
@@ -352,7 +307,10 @@ export class MaintainIdRangeForRenewableObjectApi<
          *
          * All fields selector.
          */
-        ALL_FIELDS: new AllFields('*', MaintainIdRangeForRenewableObject)
+        ALL_FIELDS: new AllFields(
+          '*',
+          MaintainCompanyIdOrPlantToFacilityIdMapping
+        )
       };
     }
 

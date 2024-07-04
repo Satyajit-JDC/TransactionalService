@@ -41,10 +41,27 @@ export class MaintainIdRangeForReconciliationGroup<
    */
   declare id: DeserializedType<T, 'Edm.Guid'>;
   /**
-   * Regulation Type Id.
+   * Created At.
    * @nullable
    */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
+  declare createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  /**
+   * Created By.
+   * Maximum length: 255.
+   * @nullable
+   */
+  declare createdBy?: DeserializedType<T, 'Edm.String'> | null;
+  /**
+   * Modified At.
+   * @nullable
+   */
+  declare modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  /**
+   * Modified By.
+   * Maximum length: 255.
+   * @nullable
+   */
+  declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
@@ -94,7 +111,10 @@ export interface MaintainIdRangeForReconciliationGroupType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   id: DeserializedType<T, 'Edm.Guid'>;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
+  createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  createdBy?: DeserializedType<T, 'Edm.String'> | null;
+  modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   numberOfStart?: DeserializedType<T, 'Edm.Int32'> | null;
   numberOfEnd?: DeserializedType<T, 'Edm.Int32'> | null;

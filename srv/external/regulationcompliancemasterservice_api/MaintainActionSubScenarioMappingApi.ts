@@ -3,8 +3,10 @@
  *
  * This is a generated file powered by the SAP Cloud SDK for JavaScript.
  */
-import { MaintainCompanyIdOrPlantToFacilityId } from './MaintainCompanyIdOrPlantToFacilityId';
-import { MaintainCompanyIdOrPlantToFacilityIdRequestBuilder } from './MaintainCompanyIdOrPlantToFacilityIdRequestBuilder';
+import { MaintainActionSubScenarioMapping } from './MaintainActionSubScenarioMapping';
+import { MaintainActionSubScenarioMappingRequestBuilder } from './MaintainActionSubScenarioMappingRequestBuilder';
+import { RegulationSubTypeApi } from './RegulationSubTypeApi';
+import { ActionInventoryApi } from './ActionInventoryApi';
 import {
   CustomField,
   defaultDeSerializers,
@@ -18,13 +20,10 @@ import {
   OrderableEdmTypeField,
   OneToOneLink
 } from '@sap-cloud-sdk/odata-v4';
-export class MaintainCompanyIdOrPlantToFacilityIdApi<
+export class MaintainActionSubScenarioMappingApi<
   DeSerializersT extends DeSerializers = DefaultDeSerializers
 > implements
-    EntityApi<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
-      DeSerializersT
-    >
+    EntityApi<MaintainActionSubScenarioMapping<DeSerializersT>, DeSerializersT>
 {
   public deSerializers: DeSerializersT;
 
@@ -42,45 +41,73 @@ export class MaintainCompanyIdOrPlantToFacilityIdApi<
     DeSerializersT extends DeSerializers = DefaultDeSerializers
   >(
     deSerializers: DeSerializersT = defaultDeSerializers as any
-  ): MaintainCompanyIdOrPlantToFacilityIdApi<DeSerializersT> {
-    return new MaintainCompanyIdOrPlantToFacilityIdApi(deSerializers);
+  ): MaintainActionSubScenarioMappingApi<DeSerializersT> {
+    return new MaintainActionSubScenarioMappingApi(deSerializers);
   }
 
   private navigationPropertyFields!: {
+    /**
+     * Static representation of the one-to-one navigation property {@link regulationSubScenario} for query construction.
+     * Use to reference this property in query operations such as 'select' in the fluent request API.
+     */
+    REGULATION_SUB_SCENARIO: OneToOneLink<
+      MaintainActionSubScenarioMapping<DeSerializersT>,
+      DeSerializersT,
+      RegulationSubTypeApi<DeSerializersT>
+    >;
+    /**
+     * Static representation of the one-to-one navigation property {@link action} for query construction.
+     * Use to reference this property in query operations such as 'select' in the fluent request API.
+     */
+    ACTION: OneToOneLink<
+      MaintainActionSubScenarioMapping<DeSerializersT>,
+      DeSerializersT,
+      ActionInventoryApi<DeSerializersT>
+    >;
     /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
      * Use to reference this property in query operations such as 'select' in the fluent request API.
      */
     SIBLING_ENTITY: OneToOneLink<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT,
-      MaintainCompanyIdOrPlantToFacilityIdApi<DeSerializersT>
+      MaintainActionSubScenarioMappingApi<DeSerializersT>
     >;
   };
 
   _addNavigationProperties(
-    linkedApis: [MaintainCompanyIdOrPlantToFacilityIdApi<DeSerializersT>]
+    linkedApis: [
+      RegulationSubTypeApi<DeSerializersT>,
+      ActionInventoryApi<DeSerializersT>,
+      MaintainActionSubScenarioMappingApi<DeSerializersT>
+    ]
   ): this {
     this.navigationPropertyFields = {
-      SIBLING_ENTITY: new OneToOneLink('SiblingEntity', this, linkedApis[0])
+      REGULATION_SUB_SCENARIO: new OneToOneLink(
+        'regulationSubScenario',
+        this,
+        linkedApis[0]
+      ),
+      ACTION: new OneToOneLink('action', this, linkedApis[1]),
+      SIBLING_ENTITY: new OneToOneLink('SiblingEntity', this, linkedApis[2])
     };
     return this;
   }
 
-  entityConstructor = MaintainCompanyIdOrPlantToFacilityId;
+  entityConstructor = MaintainActionSubScenarioMapping;
 
-  requestBuilder(): MaintainCompanyIdOrPlantToFacilityIdRequestBuilder<DeSerializersT> {
-    return new MaintainCompanyIdOrPlantToFacilityIdRequestBuilder<DeSerializersT>(
+  requestBuilder(): MaintainActionSubScenarioMappingRequestBuilder<DeSerializersT> {
+    return new MaintainActionSubScenarioMappingRequestBuilder<DeSerializersT>(
       this
     );
   }
 
   entityBuilder(): EntityBuilderType<
-    MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+    MaintainActionSubScenarioMapping<DeSerializersT>,
     DeSerializersT
   > {
     return entityBuilder<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT
     >(this);
   }
@@ -89,7 +116,7 @@ export class MaintainCompanyIdOrPlantToFacilityIdApi<
     fieldName: string,
     isNullable: NullableT = false as NullableT
   ): CustomField<
-    MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+    MaintainActionSubScenarioMapping<DeSerializersT>,
     DeSerializersT,
     NullableT
   > {
@@ -102,13 +129,13 @@ export class MaintainCompanyIdOrPlantToFacilityIdApi<
   }
 
   private _fieldBuilder?: FieldBuilder<
-    typeof MaintainCompanyIdOrPlantToFacilityId,
+    typeof MaintainActionSubScenarioMapping,
     DeSerializersT
   >;
   get fieldBuilder() {
     if (!this._fieldBuilder) {
       this._fieldBuilder = new FieldBuilder(
-        MaintainCompanyIdOrPlantToFacilityId,
+        MaintainActionSubScenarioMapping,
         this.deSerializers
       );
     }
@@ -117,92 +144,103 @@ export class MaintainCompanyIdOrPlantToFacilityIdApi<
 
   private _schema?: {
     ID: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Guid',
       false,
       true
     >;
     CREATED_AT: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.DateTimeOffset',
       true,
       true
     >;
     CREATED_BY: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
     MODIFIED_AT: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.DateTimeOffset',
       true,
       true
     >;
     MODIFIED_BY: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
-    COMPANY_ID: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+    REGULATION_SUB_SCENARIO_CATEGORY: OrderableEdmTypeField<
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
-    PLANT: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
-      DeSerializersT,
-      'Edm.String',
-      true,
-      true
-    >;
-    FACILITY_ID: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+    ACTION_CATEGORY: OrderableEdmTypeField<
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.String',
       true,
       true
     >;
     IS_ACTIVE_ENTITY: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
       false,
       true
     >;
     HAS_ACTIVE_ENTITY: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
       false,
       true
     >;
     HAS_DRAFT_ENTITY: OrderableEdmTypeField<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializers>,
+      MaintainActionSubScenarioMapping<DeSerializers>,
       DeSerializersT,
       'Edm.Boolean',
       false,
       true
     >;
     /**
+     * Static representation of the one-to-one navigation property {@link regulationSubScenario} for query construction.
+     * Use to reference this property in query operations such as 'select' in the fluent request API.
+     */
+    REGULATION_SUB_SCENARIO: OneToOneLink<
+      MaintainActionSubScenarioMapping<DeSerializersT>,
+      DeSerializersT,
+      RegulationSubTypeApi<DeSerializersT>
+    >;
+    /**
+     * Static representation of the one-to-one navigation property {@link action} for query construction.
+     * Use to reference this property in query operations such as 'select' in the fluent request API.
+     */
+    ACTION: OneToOneLink<
+      MaintainActionSubScenarioMapping<DeSerializersT>,
+      DeSerializersT,
+      ActionInventoryApi<DeSerializersT>
+    >;
+    /**
      * Static representation of the one-to-one navigation property {@link siblingEntity} for query construction.
      * Use to reference this property in query operations such as 'select' in the fluent request API.
      */
     SIBLING_ENTITY: OneToOneLink<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT,
-      MaintainCompanyIdOrPlantToFacilityIdApi<DeSerializersT>
+      MaintainActionSubScenarioMappingApi<DeSerializersT>
     >;
-    ALL_FIELDS: AllFields<MaintainCompanyIdOrPlantToFacilityId<DeSerializers>>;
+    ALL_FIELDS: AllFields<MaintainActionSubScenarioMapping<DeSerializers>>;
   };
 
   get schema() {
@@ -251,25 +289,20 @@ export class MaintainCompanyIdOrPlantToFacilityIdApi<
           true
         ),
         /**
-         * Static representation of the {@link companyId} property for query construction.
+         * Static representation of the {@link regulationSubScenarioCategory} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
-        COMPANY_ID: fieldBuilder.buildEdmTypeField(
-          'companyId',
+        REGULATION_SUB_SCENARIO_CATEGORY: fieldBuilder.buildEdmTypeField(
+          'regulationSubScenario_category',
           'Edm.String',
           true
         ),
         /**
-         * Static representation of the {@link plant} property for query construction.
+         * Static representation of the {@link actionCategory} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
-        PLANT: fieldBuilder.buildEdmTypeField('plant', 'Edm.String', true),
-        /**
-         * Static representation of the {@link facilityId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        FACILITY_ID: fieldBuilder.buildEdmTypeField(
-          'facilityId',
+        ACTION_CATEGORY: fieldBuilder.buildEdmTypeField(
+          'action_category',
           'Edm.String',
           true
         ),
@@ -305,7 +338,7 @@ export class MaintainCompanyIdOrPlantToFacilityIdApi<
          *
          * All fields selector.
          */
-        ALL_FIELDS: new AllFields('*', MaintainCompanyIdOrPlantToFacilityId)
+        ALL_FIELDS: new AllFields('*', MaintainActionSubScenarioMapping)
       };
     }
 

@@ -190,13 +190,6 @@ export class MaintainRenewableMovementTypeApi<
       true,
       true
     >;
-    REGULATION_TYPE_ID: OrderableEdmTypeField<
-      MaintainRenewableMovementType<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      true,
-      true
-    >;
     REGULATION_TYPE_REGULATION_TYPE: OrderableEdmTypeField<
       MaintainRenewableMovementType<DeSerializers>,
       DeSerializersT,
@@ -215,13 +208,6 @@ export class MaintainRenewableMovementTypeApi<
       MaintainRenewableMovementType<DeSerializers>,
       DeSerializersT,
       'Edm.Guid',
-      true,
-      true
-    >;
-    INVENTORY_MOVEMENT_TYPE_MOVEMENT_TYPE: OrderableEdmTypeField<
-      MaintainRenewableMovementType<DeSerializers>,
-      DeSerializersT,
-      'Edm.String',
       true,
       true
     >;
@@ -352,15 +338,6 @@ export class MaintainRenewableMovementTypeApi<
           true
         ),
         /**
-         * Static representation of the {@link regulationTypeId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_TYPE_ID: fieldBuilder.buildEdmTypeField(
-          'regulationType_ID',
-          'Edm.Guid',
-          true
-        ),
-        /**
          * Static representation of the {@link regulationTypeRegulationType} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
@@ -385,15 +362,6 @@ export class MaintainRenewableMovementTypeApi<
         INVENTORY_MOVEMENT_TYPE_ID: fieldBuilder.buildEdmTypeField(
           'inventoryMovementType_ID',
           'Edm.Guid',
-          true
-        ),
-        /**
-         * Static representation of the {@link inventoryMovementTypeMovementType} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        INVENTORY_MOVEMENT_TYPE_MOVEMENT_TYPE: fieldBuilder.buildEdmTypeField(
-          'inventoryMovementType_movementType',
-          'Edm.String',
           true
         ),
         /**

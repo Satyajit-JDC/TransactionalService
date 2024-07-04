@@ -162,13 +162,6 @@ export class MaintainInventoryPostingPlantApi<
       true,
       true
     >;
-    REGULATION_TYPE_ID: OrderableEdmTypeField<
-      MaintainInventoryPostingPlant<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      true,
-      true
-    >;
     REGULATION_TYPE_REGULATION_TYPE: OrderableEdmTypeField<
       MaintainInventoryPostingPlant<DeSerializers>,
       DeSerializersT,
@@ -282,15 +275,6 @@ export class MaintainInventoryPostingPlantApi<
         MODIFIED_BY: fieldBuilder.buildEdmTypeField(
           'modifiedBy',
           'Edm.String',
-          true
-        ),
-        /**
-         * Static representation of the {@link regulationTypeId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_TYPE_ID: fieldBuilder.buildEdmTypeField(
-          'regulationType_ID',
-          'Edm.Guid',
           true
         ),
         /**

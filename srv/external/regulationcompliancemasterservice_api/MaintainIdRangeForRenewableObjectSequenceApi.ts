@@ -128,6 +128,34 @@ export class MaintainIdRangeForRenewableObjectSequenceApi<
       false,
       true
     >;
+    CREATED_AT: OrderableEdmTypeField<
+      MaintainIdRangeForRenewableObjectSequence<DeSerializers>,
+      DeSerializersT,
+      'Edm.DateTimeOffset',
+      true,
+      true
+    >;
+    CREATED_BY: OrderableEdmTypeField<
+      MaintainIdRangeForRenewableObjectSequence<DeSerializers>,
+      DeSerializersT,
+      'Edm.String',
+      true,
+      true
+    >;
+    MODIFIED_AT: OrderableEdmTypeField<
+      MaintainIdRangeForRenewableObjectSequence<DeSerializers>,
+      DeSerializersT,
+      'Edm.DateTimeOffset',
+      true,
+      true
+    >;
+    MODIFIED_BY: OrderableEdmTypeField<
+      MaintainIdRangeForRenewableObjectSequence<DeSerializers>,
+      DeSerializersT,
+      'Edm.String',
+      true,
+      true
+    >;
     REGULATION_SUB_SCENARIO_CATEGORY: OrderableEdmTypeField<
       MaintainIdRangeForRenewableObjectSequence<DeSerializers>,
       DeSerializersT,
@@ -172,6 +200,42 @@ export class MaintainIdRangeForRenewableObjectSequenceApi<
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
         ID: fieldBuilder.buildEdmTypeField('ID', 'Edm.Guid', false),
+        /**
+         * Static representation of the {@link createdAt} property for query construction.
+         * Use to reference this property in query operations such as 'select' in the fluent request API.
+         */
+        CREATED_AT: fieldBuilder.buildEdmTypeField(
+          'createdAt',
+          'Edm.DateTimeOffset',
+          true
+        ),
+        /**
+         * Static representation of the {@link createdBy} property for query construction.
+         * Use to reference this property in query operations such as 'select' in the fluent request API.
+         */
+        CREATED_BY: fieldBuilder.buildEdmTypeField(
+          'createdBy',
+          'Edm.String',
+          true
+        ),
+        /**
+         * Static representation of the {@link modifiedAt} property for query construction.
+         * Use to reference this property in query operations such as 'select' in the fluent request API.
+         */
+        MODIFIED_AT: fieldBuilder.buildEdmTypeField(
+          'modifiedAt',
+          'Edm.DateTimeOffset',
+          true
+        ),
+        /**
+         * Static representation of the {@link modifiedBy} property for query construction.
+         * Use to reference this property in query operations such as 'select' in the fluent request API.
+         */
+        MODIFIED_BY: fieldBuilder.buildEdmTypeField(
+          'modifiedBy',
+          'Edm.String',
+          true
+        ),
         /**
          * Static representation of the {@link regulationSubScenarioCategory} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.

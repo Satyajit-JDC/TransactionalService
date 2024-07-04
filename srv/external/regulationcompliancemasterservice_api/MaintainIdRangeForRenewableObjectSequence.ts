@@ -38,6 +38,28 @@ export class MaintainIdRangeForRenewableObjectSequence<
    */
   declare id: DeserializedType<T, 'Edm.Guid'>;
   /**
+   * Created At.
+   * @nullable
+   */
+  declare createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  /**
+   * Created By.
+   * Maximum length: 255.
+   * @nullable
+   */
+  declare createdBy?: DeserializedType<T, 'Edm.String'> | null;
+  /**
+   * Modified At.
+   * @nullable
+   */
+  declare modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  /**
+   * Modified By.
+   * Maximum length: 255.
+   * @nullable
+   */
+  declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
+  /**
    * Regulation Sub Scenario Category.
    * Maximum length: 20.
    * @nullable
@@ -70,6 +92,10 @@ export interface MaintainIdRangeForRenewableObjectSequenceType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   id: DeserializedType<T, 'Edm.Guid'>;
+  createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  createdBy?: DeserializedType<T, 'Edm.String'> | null;
+  modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
+  modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   regulationSubScenarioCategory?: DeserializedType<T, 'Edm.String'> | null;
   inActive?: DeserializedType<T, 'Edm.Boolean'> | null;
   currentSeqence?: DeserializedType<T, 'Edm.Int32'> | null;

@@ -35,11 +35,7 @@ export class MaintainRegulationMaterialGroup<
   /**
    * All key fields of the MaintainRegulationMaterialGroup entity
    */
-  static _keys = ['ID', 'regulationMaterialGroup', 'IsActiveEntity'];
-  /**
-   * Id.
-   */
-  declare id: DeserializedType<T, 'Edm.Guid'>;
+  static _keys = ['regulationMaterialGroup', 'IsActiveEntity'];
   /**
    * Created At.
    * @nullable
@@ -102,7 +98,6 @@ export class MaintainRegulationMaterialGroup<
 export interface MaintainRegulationMaterialGroupType<
   T extends DeSerializers = DefaultDeSerializers
 > {
-  id: DeserializedType<T, 'Edm.Guid'>;
   createdAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;

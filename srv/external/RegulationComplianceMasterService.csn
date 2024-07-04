@@ -23,12 +23,6 @@
    "@cds.external": true,
    "@cds.persistence.skip": true,
    "elements": {
-    "ID": {
-     "key": true,
-     "type": "cds.UUID",
-     "notNull": true,
-     "@Core.ComputedDefaultValue": true
-    },
     "createdAt": {
      "type": "cds.Timestamp",
      "@odata.Precision": 7,
@@ -68,6 +62,7 @@
      "type": "cds.String",
      "length": 5,
      "notNull": true,
+     "@Common.Label": "Regulation Type",
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
@@ -95,11 +90,13 @@
         "regulationCategory_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Regulation Category"
     },
     "regulationCategory_category": {
      "type": "cds.String",
      "length": 5,
+     "@Common.Label": "Regulation Category",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "CollectionPath": "RegulationCategory",
@@ -142,19 +139,19 @@
        ]
       }
      ],
-     "@Common.Label": "Country/Region",
+     "@Common.Label": "Region",
      "doc": "Country/region code as specified by ISO 3166-1"
     },
     "region_code": {
      "type": "cds.String",
      "length": 3,
+     "@Common.Label": "Region",
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
-     "@Common.Label": "Country/Region",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
-      "Label": "Country/Region",
+      "Label": "Region",
       "CollectionPath": "Countries",
       "Parameters": [
        {
@@ -193,19 +190,19 @@
        ]
       }
      ],
-     "@Common.Label": "Country/Region",
+     "@Common.Label": "Country",
      "doc": "Country/region code as specified by ISO 3166-1"
     },
     "country_code": {
      "type": "cds.String",
      "length": 3,
+     "@Common.Label": "Country",
      "@Common.FieldControl": {
       "#": "Mandatory"
      },
-     "@Common.Label": "Country/Region",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
-      "Label": "Country/Region",
+      "Label": "Country",
       "CollectionPath": "Countries",
       "Parameters": [
        {
@@ -226,17 +223,20 @@
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
     },
     "materialYearly": {
      "type": "cds.String",
-     "length": 2
+     "length": 2,
+     "@Common.Label": "Material Yearly"
     },
     "fuelUom": {
      "type": "cds.String",
      "length": 4,
+     "@Common.Label": "Fuel UoM",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
@@ -244,6 +244,7 @@
     "fuelAlternateUom": {
      "type": "cds.String",
      "length": 4,
+     "@Common.Label": "Fuel Alternate UoM",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
@@ -268,14 +269,16 @@
         "regulationUoM_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Regulation UoM"
     },
     "regulationUoM_category": {
      "type": "cds.String",
      "length": 3,
+     "@Common.Label": "Regulation UoM",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
-      "CollectionPath": "UOM",
+      "CollectionPath": "RegulationUOM",
       "Parameters": [
        {
         "$Type": "Common.ValueListParameterInOut",
@@ -543,6 +546,7 @@
      "type": "cds.String",
      "length": 5,
      "notNull": true,
+     "@Common.Label": "Transaction Type",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
@@ -550,6 +554,7 @@
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
@@ -764,11 +769,13 @@
         "transactionType_transactionType"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Transaction Type"
     },
     "transactionType_transactionType": {
      "type": "cds.String",
-     "length": 5
+     "length": 5,
+     "@Common.Label": "Transaction Type"
     },
     "regulationType": {
      "type": "cds.Association",
@@ -790,14 +797,13 @@
         "regulationType_regulationType"
        ]
       }
-     ]
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID"
+     ],
+     "@Common.Label": "Regulation Type"
     },
     "regulationType_regulationType": {
      "type": "cds.String",
-     "length": 5
+     "length": 5,
+     "@Common.Label": "Regulation Type"
     },
     "transactionCategory": {
      "type": "cds.Association",
@@ -819,11 +825,13 @@
         "transactionCategory_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Transaction Category"
     },
     "transactionCategory_category": {
      "type": "cds.String",
-     "length": 4
+     "length": 4,
+     "@Common.Label": "Transaction Category"
     },
     "IsActiveEntity": {
      "key": true,
@@ -1297,14 +1305,13 @@
         "regulationType_regulationType"
        ]
       }
-     ]
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID"
+     ],
+     "@Common.Label": "Regulation Type"
     },
     "regulationType_regulationType": {
      "type": "cds.String",
-     "length": 5
+     "length": 5,
+     "@Common.Label": "Regulation Type"
     },
     "objectType": {
      "type": "cds.Association",
@@ -1326,14 +1333,16 @@
         "objectType_code"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Object Type"
     },
     "objectType_code": {
      "type": "cds.String",
      "length": 4,
+     "@Common.Label": "Object Type",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
-      "Label": "ObjectType",
+      "Label": "Object Type",
       "CollectionPath": "ObjectType",
       "Parameters": [
        {
@@ -1370,15 +1379,18 @@
         "objectCategory_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Object Category"
     },
     "objectCategory_category": {
      "type": "cds.String",
-     "length": 3
+     "length": 3,
+     "@Common.Label": "Object Category"
     },
     "description": {
      "type": "cds.String",
-     "length": 50
+     "length": 50,
+     "@Common.Label": "Description"
     },
     "IsActiveEntity": {
      "key": true,
@@ -1478,12 +1490,6 @@
    "@cds.external": true,
    "@cds.persistence.skip": true,
    "elements": {
-    "ID": {
-     "key": true,
-     "type": "cds.UUID",
-     "notNull": true,
-     "@Core.ComputedDefaultValue": true
-    },
     "createdAt": {
      "type": "cds.Timestamp",
      "@odata.Precision": 7,
@@ -1522,11 +1528,13 @@
      "key": true,
      "type": "cds.String",
      "length": 5,
-     "notNull": true
+     "notNull": true,
+     "@Common.Label": "Regulation Group"
     },
     "description": {
      "type": "cds.String",
-     "length": 50
+     "length": 50,
+     "@Common.Label": "Description"
     },
     "manageRegulationTypeAndActive": {
      "type": "cds.Composition",
@@ -1716,12 +1724,6 @@
    "@cds.external": true,
    "@cds.persistence.skip": true,
    "elements": {
-    "ID": {
-     "key": true,
-     "type": "cds.UUID",
-     "notNull": true,
-     "@Core.ComputedDefaultValue": true
-    },
     "createdAt": {
      "type": "cds.Timestamp",
      "@odata.Precision": 7,
@@ -1761,6 +1763,7 @@
      "type": "cds.String",
      "length": 5,
      "notNull": true,
+     "@Common.Label": "Regulation Material Group",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
@@ -1768,6 +1771,7 @@
     "description": {
      "type": "cds.String",
      "length": 50,
+     "@Common.Label": "Description",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
@@ -2209,38 +2213,6 @@
       }
      ],
      "@Common.Label": "Regulation Type"
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainRegulationType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationType_regulationType"
-        },
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationCategory_category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "region_code"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "country_code"
-       }
-      ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -2778,10 +2750,6 @@
      ],
      "@Common.Label": "Regulation Type"
     },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type"
-    },
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
@@ -2952,10 +2920,6 @@
      ],
      "@Common.Label": "Regulation Type"
     },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type"
-    },
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
@@ -3124,10 +3088,6 @@
        ]
       }
      ],
-     "@Common.Label": "Regulation Type"
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID",
      "@Common.Label": "Regulation Type"
     },
     "regulationType_regulationType": {
@@ -3386,10 +3346,8 @@
      "@Common.Label": "Changed By"
     },
     "movementType": {
-     "key": true,
      "type": "cds.String",
      "length": 4,
-     "notNull": true,
      "@Common.Label": "MovementType",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -3417,39 +3375,6 @@
       }
      ],
      "@Common.Label": "Regulation Type"
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainRegulationType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationType_regulationType"
-        },
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationCategory_category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "region_code"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "country_code"
-       }
-      ]
-     },
-     "@Common.ValueListWithFixedValues": false,
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -3897,10 +3822,6 @@
      ],
      "@Common.Label": "Regulation Type"
     },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type"
-    },
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
@@ -3963,13 +3884,13 @@
       {
        "ref": [
         "movementType",
-        "movementType"
+        "ID"
        ]
       },
       "=",
       {
        "ref": [
-        "movementType_movementType"
+        "movementType_ID"
        ]
       }
      ],
@@ -3977,11 +3898,6 @@
     },
     "movementType_ID": {
      "type": "cds.UUID",
-     "@Common.Label": "Movement Type"
-    },
-    "movementType_movementType": {
-     "type": "cds.String",
-     "length": 4,
      "@Common.Label": "Movement Type"
     },
     "originRelevant": {
@@ -4263,42 +4179,6 @@
      ],
      "@Common.Label": "Regulation Type"
     },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainRegulationType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationType_regulationType"
-        },
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationCategory_category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "region_code"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "country_code"
-       }
-      ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
-    },
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
@@ -4396,13 +4276,13 @@
       {
        "ref": [
         "inventoryMovementType",
-        "movementType"
+        "ID"
        ]
       },
       "=",
       {
        "ref": [
-        "inventoryMovementType_movementType"
+        "inventoryMovementType_ID"
        ]
       }
      ],
@@ -4410,43 +4290,6 @@
     },
     "inventoryMovementType_ID": {
      "type": "cds.UUID",
-     "@Common.Label": "Inventory Movement Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainMovementType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "inventoryMovementType_movementType"
-        },
-        "ValueListProperty": "movementType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "movementType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationType_regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "objectType_code"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "subObjectScenario"
-       }
-      ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
-    },
-    "inventoryMovementType_movementType": {
-     "type": "cds.String",
-     "length": 4,
      "@Common.Label": "Inventory Movement Type",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
@@ -4754,14 +4597,13 @@
         "regulationType_regulationType"
        ]
       }
-     ]
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID"
+     ],
+     "@Common.Label": "Regulation Type"
     },
     "regulationType_regulationType": {
      "type": "cds.String",
-     "length": 5
+     "length": 5,
+     "@Common.Label": "Regulation Type"
     },
     "objectType": {
      "type": "cds.Association",
@@ -4783,14 +4625,16 @@
         "objectType_code"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Object Type"
     },
     "objectType_code": {
      "type": "cds.String",
      "length": 4,
+     "@Common.Label": "Object Type",
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
-      "Label": "ObjectType",
+      "Label": "Object Type",
       "CollectionPath": "ObjectType",
       "Parameters": [
        {
@@ -4809,7 +4653,8 @@
     },
     "year": {
      "type": "cds.String",
-     "length": 4
+     "length": 4,
+     "@Common.Label": "Year"
     },
     "rvoType": {
      "type": "cds.Association",
@@ -4831,11 +4676,13 @@
         "rvoType_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "RVO Type"
     },
     "rvoType_category": {
      "type": "cds.String",
-     "length": 3
+     "length": 3,
+     "@Common.Label": "RVO Type"
     },
     "dCode": {
      "type": "cds.Association",
@@ -4857,26 +4704,32 @@
         "dCode_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "DCode"
     },
     "dCode_category": {
      "type": "cds.String",
-     "length": 3
+     "length": 3,
+     "@Common.Label": "DCode"
     },
     "material": {
-     "type": "cds.LargeString"
+     "type": "cds.LargeString",
+     "@Common.Label": "Material"
     },
     "obligationPercent": {
      "type": "cds.Decimal",
      "precision": 16,
-     "scale": 3
+     "scale": 3,
+     "@Common.Label": "Obligation Percent"
     },
     "rinMultiplier": {
-     "type": "cds.Integer"
+     "type": "cds.Integer",
+     "@Common.Label": "RIN Multiplyer"
     },
     "description": {
      "type": "cds.String",
-     "length": 50
+     "length": 50,
+     "@Common.Label": "Description"
     },
     "IsActiveEntity": {
      "key": true,
@@ -5119,7 +4972,7 @@
     "PreparationAction": "RegulationComplianceMasterService.draftPrepare"
    }
   },
-  "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId": {
+  "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityIdMapping": {
    "kind": "entity",
    "@cds.external": true,
    "@cds.persistence.skip": true,
@@ -5167,26 +5020,17 @@
     "companyId": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Company ID",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Company ID"
     },
     "plant": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Plant",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Plant"
     },
     "facilityId": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Facility ID",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Facility ID"
     },
     "IsActiveEntity": {
      "key": true,
@@ -5226,7 +5070,7 @@
     "SiblingEntity": {
      "type": "cds.Association",
      "@cds.ambiguous": "missing on condition?",
-     "target": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId",
+     "target": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityIdMapping",
      "cardinality": {
       "max": 1
      },
@@ -5245,7 +5089,7 @@
       }
      },
      "returns": {
-      "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId"
+      "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityIdMapping"
      }
     },
     "draftActivate": {
@@ -5256,7 +5100,7 @@
       }
      },
      "returns": {
-      "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId"
+      "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityIdMapping"
      }
     },
     "draftEdit": {
@@ -5270,71 +5114,7 @@
       }
      },
      "returns": {
-      "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityId"
-     }
-    }
-   },
-   "@UI.FieldGroup#GeneratedGroup": {
-    "$Type": "UI.FieldGroupType",
-    "Data": [
-     {
-      "$Type": "UI.DataField",
-      "Value": {
-       "=": "companyId"
-      }
-     },
-     {
-      "$Type": "UI.DataField",
-      "Value": {
-       "=": "plant"
-      }
-     },
-     {
-      "$Type": "UI.DataField",
-      "Value": {
-       "=": "facilityId"
-      }
-     }
-    ]
-   },
-   "@UI.Facets": [
-    {
-     "$Type": "UI.ReferenceFacet",
-     "ID": "GeneratedFacet1",
-     "Label": "General Information",
-     "Target": {
-      "=": "@UI.FieldGroup#GeneratedGroup"
-     }
-    }
-   ],
-   "@UI.LineItem": [
-    {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "companyId"
-     }
-    },
-    {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "plant"
-     }
-    },
-    {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "facilityId"
-     }
-    }
-   ],
-   "@UI.HeaderInfo": {
-    "$Type": "UI.HeaderInfoType",
-    "TypeName": {},
-    "TypeNamePlural": {},
-    "Title": {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "facilityId"
+      "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityIdMapping"
      }
     }
    },
@@ -5350,11 +5130,39 @@
    "@cds.external": true,
    "@cds.persistence.skip": true,
    "elements": {
-    "ID": {
-     "key": true,
-     "type": "cds.UUID",
-     "notNull": true,
-     "@Core.ComputedDefaultValue": true
+    "createdAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Created On"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Created By"
+    },
+    "modifiedAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Changed On"
+    },
+    "modifiedBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Changed By"
     },
     "regulationType": {
      "type": "cds.Association",
@@ -5378,39 +5186,6 @@
       }
      ],
      "@Common.Label": "Regulation Type"
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainRegulationType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationType_regulationType"
-        },
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationCategory_category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "region_code"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "country_code"
-       }
-      ]
-     },
-     "@Common.ValueListWithFixedValues": true,
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -5783,7 +5558,7 @@
     "PreparationAction": "RegulationComplianceMasterService.draftPrepare"
    }
   },
-  "RegulationComplianceMasterService.MaintainRegulationSubScenarioAction": {
+  "RegulationComplianceMasterService.MaintainActionSubScenarioMapping": {
    "kind": "entity",
    "@cds.external": true,
    "@cds.persistence.skip": true,
@@ -5793,6 +5568,40 @@
      "type": "cds.UUID",
      "notNull": true,
      "@Core.ComputedDefaultValue": true
+    },
+    "createdAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Created On"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Created By"
+    },
+    "modifiedAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Changed On"
+    },
+    "modifiedBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Changed By"
     },
     "regulationSubScenario": {
      "type": "cds.Association",
@@ -5820,27 +5629,7 @@
     "regulationSubScenario_category": {
      "type": "cds.String",
      "length": 20,
-     "@Common.Label": "Regulation Sub Scenario",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "RegulationSubCategory",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationSubScenario_category"
-        },
-        "ValueListProperty": "category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "description"
-       }
-      ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Regulation Sub Scenario"
     },
     "action": {
      "type": "cds.Association",
@@ -5868,27 +5657,7 @@
     "action_category": {
      "type": "cds.String",
      "length": 10,
-     "@Common.Label": "Action",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "Action",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "action_category"
-        },
-        "ValueListProperty": "category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "description"
-       }
-      ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Action"
     },
     "IsActiveEntity": {
      "key": true,
@@ -5928,7 +5697,7 @@
     "SiblingEntity": {
      "type": "cds.Association",
      "@cds.ambiguous": "missing on condition?",
-     "target": "RegulationComplianceMasterService.MaintainRegulationSubScenarioAction",
+     "target": "RegulationComplianceMasterService.MaintainActionSubScenarioMapping",
      "cardinality": {
       "max": 1
      },
@@ -5947,7 +5716,7 @@
       }
      },
      "returns": {
-      "type": "RegulationComplianceMasterService.MaintainRegulationSubScenarioAction"
+      "type": "RegulationComplianceMasterService.MaintainActionSubScenarioMapping"
      }
     },
     "draftActivate": {
@@ -5958,7 +5727,7 @@
       }
      },
      "returns": {
-      "type": "RegulationComplianceMasterService.MaintainRegulationSubScenarioAction"
+      "type": "RegulationComplianceMasterService.MaintainActionSubScenarioMapping"
      }
     },
     "draftEdit": {
@@ -5972,61 +5741,9 @@
       }
      },
      "returns": {
-      "type": "RegulationComplianceMasterService.MaintainRegulationSubScenarioAction"
+      "type": "RegulationComplianceMasterService.MaintainActionSubScenarioMapping"
      }
     }
-   },
-   "@UI.FieldGroup#GeneratedGroup": {
-    "$Type": "UI.FieldGroupType",
-    "Data": [
-     {
-      "$Type": "UI.DataField",
-      "Value": {
-       "=": "regulationSubScenario_category"
-      }
-     },
-     {
-      "$Type": "UI.DataField",
-      "Value": {
-       "=": "action_category"
-      }
-     }
-    ]
-   },
-   "@UI.Facets": [
-    {
-     "$Type": "UI.ReferenceFacet",
-     "ID": "GeneratedFacet1",
-     "Label": "General Information",
-     "Target": {
-      "=": "@UI.FieldGroup#GeneratedGroup"
-     }
-    }
-   ],
-   "@UI.LineItem": [
-    {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "regulationSubScenario_category"
-     }
-    },
-    {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "action_category"
-     }
-    }
-   ],
-   "@UI.HeaderInfo": {
-    "$Type": "UI.HeaderInfoType",
-    "Title": {
-     "$Type": "UI.DataField",
-     "Value": {
-      "=": "regulationSubScenario_category"
-     }
-    },
-    "TypeName": {},
-    "TypeNamePlural": {}
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -6068,36 +5785,6 @@
       }
      ],
      "@Common.Label": "Regulation Type"
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainRegulationType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationType_regulationType"
-        },
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "description"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "region_code"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "country_code"
-       }
-      ]
-     },
-     "@Common.ValueListWithFixedValues": true
     },
     "regulationType_regulationType": {
      "type": "cds.String",
@@ -6158,9 +5845,6 @@
        ]
       }
      ]
-    },
-    "regulationGroup_ID": {
-     "type": "cds.UUID"
     },
     "regulationGroup_regulationGroup": {
      "type": "cds.String",
@@ -6280,37 +5964,6 @@
      ],
      "@Common.Label": "Regulation Type"
     },
-    "regulationType_ID": {
-     "type": "cds.UUID",
-     "@Common.Label": "Regulation Type",
-     "@Common.ValueList": {
-      "$Type": "Common.ValueListType",
-      "CollectionPath": "MaintainRegulationType",
-      "Parameters": [
-       {
-        "$Type": "Common.ValueListParameterInOut",
-        "LocalDataProperty": {
-         "=": "regulationType_regulationType"
-        },
-        "ValueListProperty": "regulationType"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "description"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "regulationCategory_category"
-       },
-       {
-        "$Type": "Common.ValueListParameterDisplayOnly",
-        "ValueListProperty": "country_code"
-       }
-      ],
-      "Label": "Regulation Type"
-     },
-     "@Common.ValueListWithFixedValues": false
-    },
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
@@ -6408,9 +6061,6 @@
       }
      ]
     },
-    "regulationMaterialGroup_ID": {
-     "type": "cds.UUID"
-    },
     "regulationMaterialGroup_regulationMaterialGroup": {
      "type": "cds.String",
      "length": 5
@@ -6506,6 +6156,40 @@
      "notNull": true,
      "@Core.ComputedDefaultValue": true
     },
+    "createdAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Created On"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Created By"
+    },
+    "modifiedAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Changed On"
+    },
+    "modifiedBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Changed By"
+    },
     "regulationSubScenario": {
      "type": "cds.Association",
      "@cds.ambiguous": "missing on condition?",
@@ -6571,9 +6255,6 @@
       }
      ]
     },
-    "regulationGroup_ID": {
-     "type": "cds.UUID"
-    },
     "regulationGroup_regulationGroup": {
      "type": "cds.String",
      "length": 5
@@ -6615,9 +6296,6 @@
       }
      ]
     },
-    "regulationMaterialGroup_ID": {
-     "type": "cds.UUID"
-    },
     "regulationMaterialGroup_regulationMaterialGroup": {
      "type": "cds.String",
      "length": 5
@@ -6644,6 +6322,40 @@
      "notNull": true,
      "@Core.ComputedDefaultValue": true
     },
+    "createdAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Created On"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Created By"
+    },
+    "modifiedAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Changed On"
+    },
+    "modifiedBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Changed By"
+    },
     "regulationSubScenario": {
      "type": "cds.Association",
      "@cds.ambiguous": "missing on condition?",
@@ -6664,23 +6376,28 @@
         "regulationSubScenario_category"
        ]
       }
-     ]
+     ],
+     "@Common.Label": "Regulation Sub Scenario"
     },
     "regulationSubScenario_category": {
      "type": "cds.String",
-     "length": 20
+     "length": 20,
+     "@Common.Label": "Regulation Sub Scenario"
     },
     "numberOfStart": {
-     "type": "cds.Integer"
+     "type": "cds.Integer",
+     "@Common.Label": "Number Of Start"
     },
     "numberOfEnd": {
-     "type": "cds.Integer"
+     "type": "cds.Integer",
+     "@Common.Label": "Number Of End"
     },
     "inActive": {
      "type": "cds.Boolean",
      "default": {
       "val": false
-     }
+     },
+     "@Common.Label": "In Active"
     },
     "IsActiveEntity": {
      "key": true,
@@ -6790,6 +6507,40 @@
      "notNull": true,
      "@Core.ComputedDefaultValue": true
     },
+    "createdAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Created On"
+    },
+    "createdBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Immutable": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Created By"
+    },
+    "modifiedAt": {
+     "type": "cds.Timestamp",
+     "@odata.Precision": 7,
+     "@odata.Type": "Edm.DateTimeOffset",
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "@Common.Label": "Changed On"
+    },
+    "modifiedBy": {
+     "type": "cds.String",
+     "length": 255,
+     "@UI.HiddenFilter": true,
+     "@Core.Computed": true,
+     "doc": "User's unique ID",
+     "@Common.Label": "Changed By"
+    },
     "regulationType": {
      "type": "cds.Association",
      "@cds.ambiguous": "missing on condition?",
@@ -6810,20 +6561,21 @@
         "regulationType_regulationType"
        ]
       }
-     ]
-    },
-    "regulationType_ID": {
-     "type": "cds.UUID"
+     ],
+     "@Common.Label": "Regulation Type"
     },
     "regulationType_regulationType": {
      "type": "cds.String",
-     "length": 5
+     "length": 5,
+     "@Common.Label": "Regulation Type"
     },
     "numberOfStart": {
-     "type": "cds.Integer"
+     "type": "cds.Integer",
+     "@Common.Label": "Number Of Start"
     },
     "numberOfEnd": {
-     "type": "cds.Integer"
+     "type": "cds.Integer",
+     "@Common.Label": "Number Of End"
     },
     "IsActiveEntity": {
      "key": true,

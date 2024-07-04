@@ -80,11 +80,6 @@ export class MaintainRegulationTransactionType<
     'Edm.String'
   > | null;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -145,7 +140,6 @@ export interface MaintainRegulationTransactionTypeType<
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   transactionTypeTransactionType?: DeserializedType<T, 'Edm.String'> | null;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   transactionCategoryCategory?: DeserializedType<T, 'Edm.String'> | null;
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;

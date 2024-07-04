@@ -190,7 +190,7 @@ export class RFS2_RVOCompliance {
                     // impact: oMovementTypesData.impactCategory,   //master have to update
                     // businessPartnerNumber: oEventData.businessPartnerNumber,
                     // businessPartnerDesc: oEventData.businessPartnerDesc,
-                    movementType: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.movementTypeMovementType,
+                   // movementType: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.movementTypeMovementType,
                     // incotermsPart1: oEventData.incotermsPart1,
                     // incotermsPart2: oEventData.incotermsPart2,
                     fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory,

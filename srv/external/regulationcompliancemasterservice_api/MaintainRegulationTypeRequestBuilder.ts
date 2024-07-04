@@ -48,20 +48,17 @@ export class MaintainRegulationTypeRequestBuilder<
 
   /**
    * Returns a request builder for retrieving one `MaintainRegulationType` entity based on its keys.
-   * @param id Key property. See {@link MaintainRegulationType.id}.
    * @param regulationType Key property. See {@link MaintainRegulationType.regulationType}.
    * @param isActiveEntity Key property. See {@link MaintainRegulationType.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainRegulationType` entity based on its keys.
    */
   getByKey(
-    id: DeserializedType<T, 'Edm.Guid'>,
     regulationType: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainRegulationType<T>, T> {
     return new GetByKeyRequestBuilder<MaintainRegulationType<T>, T>(
       this.entityApi,
       {
-        ID: id,
         regulationType: regulationType,
         IsActiveEntity: isActiveEntity
       }
@@ -84,13 +81,11 @@ export class MaintainRegulationTypeRequestBuilder<
 
   /**
    * Returns a request builder for deleting an entity of type `MaintainRegulationType`.
-   * @param id Key property. See {@link MaintainRegulationType.id}.
    * @param regulationType Key property. See {@link MaintainRegulationType.regulationType}.
    * @param isActiveEntity Key property. See {@link MaintainRegulationType.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainRegulationType`.
    */
   delete(
-    id: string,
     regulationType: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainRegulationType<T>, T>;
@@ -103,17 +98,15 @@ export class MaintainRegulationTypeRequestBuilder<
     entity: MaintainRegulationType<T>
   ): DeleteRequestBuilder<MaintainRegulationType<T>, T>;
   delete(
-    idOrEntity: any,
-    regulationType?: string,
+    regulationTypeOrEntity: any,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainRegulationType<T>, T> {
     return new DeleteRequestBuilder<MaintainRegulationType<T>, T>(
       this.entityApi,
-      idOrEntity instanceof MaintainRegulationType
-        ? idOrEntity
+      regulationTypeOrEntity instanceof MaintainRegulationType
+        ? regulationTypeOrEntity
         : {
-            ID: idOrEntity!,
-            regulationType: regulationType!,
+            regulationType: regulationTypeOrEntity!,
             IsActiveEntity: isActiveEntity!
           }
     );

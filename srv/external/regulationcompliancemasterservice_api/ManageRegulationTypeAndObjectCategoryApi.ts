@@ -165,13 +165,6 @@ export class ManageRegulationTypeAndObjectCategoryApi<
       false,
       true
     >;
-    REGULATION_TYPE_ID: OrderableEdmTypeField<
-      ManageRegulationTypeAndObjectCategory<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
-      true,
-      true
-    >;
     REGULATION_TYPE_REGULATION_TYPE: OrderableEdmTypeField<
       ManageRegulationTypeAndObjectCategory<DeSerializers>,
       DeSerializersT,
@@ -183,13 +176,6 @@ export class ManageRegulationTypeAndObjectCategoryApi<
       ManageRegulationTypeAndObjectCategory<DeSerializers>,
       DeSerializersT,
       'Edm.String',
-      true,
-      true
-    >;
-    REGULATION_MATERIAL_GROUP_ID: OrderableEdmTypeField<
-      ManageRegulationTypeAndObjectCategory<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
       true,
       true
     >;
@@ -270,15 +256,6 @@ export class ManageRegulationTypeAndObjectCategoryApi<
          */
         ID: fieldBuilder.buildEdmTypeField('ID', 'Edm.Guid', false),
         /**
-         * Static representation of the {@link regulationTypeId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_TYPE_ID: fieldBuilder.buildEdmTypeField(
-          'regulationType_ID',
-          'Edm.Guid',
-          true
-        ),
-        /**
          * Static representation of the {@link regulationTypeRegulationType} property for query construction.
          * Use to reference this property in query operations such as 'select' in the fluent request API.
          */
@@ -294,15 +271,6 @@ export class ManageRegulationTypeAndObjectCategoryApi<
         OBJECT_CATEGORY_CATEGORY: fieldBuilder.buildEdmTypeField(
           'objectCategory_category',
           'Edm.String',
-          true
-        ),
-        /**
-         * Static representation of the {@link regulationMaterialGroupId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_MATERIAL_GROUP_ID: fieldBuilder.buildEdmTypeField(
-          'regulationMaterialGroup_ID',
-          'Edm.Guid',
           true
         ),
         /**
