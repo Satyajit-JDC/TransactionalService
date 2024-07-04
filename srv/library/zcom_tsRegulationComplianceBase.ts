@@ -23,40 +23,40 @@ export class RegulationComplianceBaseClass {
 
     // public elements
     public oEventPayloadData: EventPayload;
-    public oRFS2RegulationData!: MaintainRegulationGroupView;
-    public oRegulationDataIsReady!: Promise<unknown>;
-    public oRFS2CreditData!: MaintainRegulationMaterialGroupView;
-    public oRFS2DebitData!: MaintainRegulationMaterialGroupView;
-    public oMaintainRegulationObjectType!: MaintainRegulationObjectType;
-    public aMaintainRegulationObjectType!: MaintainRegulationObjectType[];
-    public oMaintainRegulationSubScenarioToScenarioType!: MaintainRegulationSubScenarioToScenarioType;
-    public oMaintainMovementType!: MaintainMovementType;
-    public aMaintainMovementType!: MaintainMovementType[];
-    public oMaintainMovementTypeToTransactionCategoryMapping!: MaintainMovementTypeToTransactionCategoryMapping;
-    public aMaintainMovementTypeToTransactionCategoryMapping!: MaintainMovementTypeToTransactionCategoryMapping[];
-    public aMaintainRfs2Material!: MaintainRfs2Material[];
-    public oMaintainRegulationTransactionType!: MaintainRegulationTransactionType;
-    public oMaintainRegulationType!: MaintainRegulationType;
-    public aMaintainRegulationType!: MaintainRegulationType[];
-    public aMaintainTransactionType!: MaintainTransactionType[];
-    public mMaintainTransactionType!: { [index: string]: MaintainTransactionType };
-    public aRfs2DebitType!: Rfs2DebitType[];
-    public mRfs2DebitType!: { [index: string]: Rfs2DebitType };
-    public aFuelCategory!: FuelCategory[];
-    public mFuelCategory!: { [index: string]: FuelCategory };
-    public aFuelSubCategory!: FuelSubCategory[];
-    public mFuelSubCategory!: { [index: string]: FuelSubCategory };
-    public aObjectCategory!: ObjectCategory[];
-    public aMaintainAdjustmentReasonCode!: MaintainAdjustmentReasonCode[];
-    public aRegulationUom!: RegulationUom[];
-    public aImpact!: Impact[];
+    public oRFS2RegulationData: MaintainRegulationGroupView = {} as MaintainRegulationGroupView;
+    public oRegulationDataIsReady: Promise<unknown>;
+    public oRFS2CreditData: MaintainRegulationMaterialGroupView = {} as MaintainRegulationMaterialGroupView;
+    public oRFS2DebitData: MaintainRegulationMaterialGroupView = {} as MaintainRegulationMaterialGroupView;
+    public oMaintainRegulationObjectType: MaintainRegulationObjectType = {} as MaintainRegulationObjectType;
+    public aMaintainRegulationObjectType: MaintainRegulationObjectType[] = [];
+    public oMaintainRegulationSubScenarioToScenarioType: MaintainRegulationSubScenarioToScenarioType = {} as MaintainRegulationSubScenarioToScenarioType;
+    public oMaintainMovementType: MaintainMovementType = {} as MaintainMovementType;
+    public aMaintainMovementType: MaintainMovementType[] = [];
+    public oMaintainMovementTypeToTransactionCategoryMapping: MaintainMovementTypeToTransactionCategoryMapping = {} as MaintainMovementTypeToTransactionCategoryMapping;
+    public aMaintainMovementTypeToTransactionCategoryMapping: MaintainMovementTypeToTransactionCategoryMapping[] = [];
+    public aMaintainRfs2Material: MaintainRfs2Material[] = [];
+    public oMaintainRegulationTransactionType: MaintainRegulationTransactionType = {} as MaintainRegulationTransactionType;
+    public oMaintainRegulationType: MaintainRegulationType = {} as MaintainRegulationType;
+    public aMaintainRegulationType: MaintainRegulationType[] = [];
+    public aMaintainTransactionType: MaintainTransactionType[] = [];
+    public mMaintainTransactionType: { [index: string]: MaintainTransactionType } = {};
+    public aRfs2DebitType: Rfs2DebitType[] = [];
+    public mRfs2DebitType: { [index: string]: Rfs2DebitType } = {};
+    public aFuelCategory: FuelCategory[] = [];
+    public mFuelCategory: { [index: string]: FuelCategory } = {};
+    public aFuelSubCategory: FuelSubCategory[] = [];
+    public mFuelSubCategory: { [index: string]: FuelSubCategory } = {};
+    public aObjectCategory: ObjectCategory[] = [];
+    public aMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode[] = [];
+    public aRegulationUom: RegulationUom[] = [];
+    public aImpact: Impact[] = [];
 
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
 
         // initialize the data
-
+        
         this.oRegulationDataIsReady = new Promise(async (resolve, reject) => {
             // check is regulation data available
             if (!this.oRFS2RegulationData) {
@@ -79,7 +79,7 @@ export class RegulationComplianceBaseClass {
         });
     }
     //-------- End of Base constructor ------------------
-
+    
     // --------- Start of Setter methods ------------------
     // set RFS2 Class Instance Object
     set setRFS2ComplianceClassObject(oRFS2ClassObjectInstance: RFS2ComplianceClass) {
