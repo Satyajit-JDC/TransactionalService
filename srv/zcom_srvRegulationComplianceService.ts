@@ -1234,6 +1234,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             await oRegulationComplianceBaseInstance.setTransactiontype();
             return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
         })
+        this.on('READ', 'GetRegulationSubType', async (req) => {
+            return await valueListWithFilterQuery(req.query);
+        })
+        
 
         return super.init()
     }
