@@ -54,41 +54,22 @@ export class RegulationComplianceBaseClass {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
 
         // initialize the data
-        // this.oRFS2RegulationData = {} as MaintainRegulationGroupView;
-        // this.oMaintainRegulationObjecttype = {} as MaintainRegulationObjecttype;
-        // this.aMaintainRegulationObjecttype = [] as MaintainRegulationObjecttype[];
-        // this.oMaintainRegulationSubScenarioToScenarioType = {} as MaintainRegulationSubScenarioToScenarioType;
-        // this.oMaintainMovementType = {} as MaintainMovementType;
-        // this.aMaintainMovementType = [] as MaintainMovementType[];
-        // this.oMaintainMovementTypeToTransactionCategoryImpact = {} as MaintainMovementTypeToTransactionCategoryImpact;
-        // this.aMaintainMovementTypeToTransactionCategoryImpact = [] as MaintainMovementTypeToTransactionCategoryImpact[];
-        // this.aMaintainRenewableMaterialConfiguration = [] as MaintainRenewableMaterialConfiguration[];
-        // this.oMaintainRegulationTransactionTypeTs = {} as MaintainRegulationTransactionTypeTs;
-        // this.oMaintainRegulationType = {} as MaintainRegulationType;
-        // this.aMaintainRegulationType = [] as MaintainRegulationType[];
-        // this.aMaintainTransactionType = [] as MaintainTransactionType[];
-        // this.mMaintainTransactionType = {} as { [index: string]: MaintainRegulationTransactionTypeTs };
-        // this.aRfs2DebitType = [] as Rfs2DebitType[];
-        // this.mRfs2DebitType = {} as { [index: string]: Rfs2DebitType };
-        // this.aFuelCategory = [] as FuelCategory[];
-        // this.mFuelCategory = {} as { [index: string]: FuelCategory };
-        // this.aFuelSubCategory = [] as FuelSubCategory[];
-        // this.mFuelSubCategory = {} as { [index: string]: FuelSubCategory };
-        // this.aObjectCategory = [] as ObjectCategory[];
-        // this.aMaintainAdjustmentReasonCode = [] as MaintainAdjustmentReasonCode[];
-        // this.aUom = [] as Uom[];
-        // this.aImpact = [] as Impact[];
 
-        // regulation group present then set Regulation Type to class object
-        if (oEventPayloadData.RegulationGroupName) {
-            this.oRegulationDataIsReady = new Promise(async (resolve,reject) => {
-                try {
-                    await this.setRegulations();
-                    resolve(true);
-                } catch (error) {
-                    reject(false);
-                }
-            });
+        // check is regulation data available
+        if(!this.oRFS2RegulationData){
+            // regulation group present then set Regulation Type to class object
+            if (oEventPayloadData.RegulationGroupName) {
+                new Promise(async (resolve,reject) => {
+                    try {
+                        await this.setRegulations();
+                        resolve(true);
+                    } catch (error) {
+                        reject(false);
+                    }
+                });
+            }
+        } else { // regulation type available
+            // do nothing
         }
     }
     //-------- End of Base constructor ------------------
@@ -127,7 +108,7 @@ export class RegulationComplianceBaseClass {
                     sErrorMsg = error.stack as string;
                 }
                 // in case of S4 event log the message
-                if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+                if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                     const oLogData: ILogUtility = {} as ILogUtility;
                     oLogData.message = "FailedToReadRegulationGroupFromMasterData";
                     oLogData.technicalMessage = sErrorMsg;
@@ -156,11 +137,11 @@ export class RegulationComplianceBaseClass {
                     })).forEach((oData) => {
                         // RFS2 
                         if (this.oRFS2RegulationData.regulationType === RFS2ConstantValues.RFS2) {
-                            // RFS2 Credit Scenario
+                            // RFS2 RF RIN (Credit) Scenario
                             if (oData.category === RFS2ConstantValues.credit) {
                                 this.oRFS2CreditData = oData;
                             }
-                            // RFS2 Debit Scenario
+                            // RFS2 RVO (Debit) Scenario
                             if (oData.category === RFS2ConstantValues.debit) {
                                 this.oRFS2DebitData = oData;
                             }
@@ -175,7 +156,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadObjectCategoryFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -188,9 +169,11 @@ export class RegulationComplianceBaseClass {
     // set sub scenario data
     async setRgulationSubScnario() {
         try {
-            if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+            if (this.oEventPayloadData.RenewableEventType && this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+                const sSourceScenario = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ? 
+                                        RFS2ConstantValues.eventTypeMDJ : this.oEventPayloadData.RenewableEventType.substring(0,2);
                 const sFilterSubObjectScenario = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType
-                    + "' and transactionSourceScenario_category eq '"+this.oEventPayloadData.RenewableEventType+
+                    + "' and transactionSourceScenario_category eq '"+sSourceScenario+
                     "' and objectCategory_category eq '"
                     + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'",
                     { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
@@ -216,7 +199,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadRegulationSubScenarioToScenarioFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -263,7 +246,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadObjectTypeFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -307,7 +290,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadMovementTypeFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -354,7 +337,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadMovementTypeRelevanceFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -396,7 +379,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadMaterialConfigurationFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -440,7 +423,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadRegulationTypeFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -477,7 +460,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadRegulationTransactionTypesFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -510,7 +493,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadTransactionTypeFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -541,7 +524,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadRFS2DebitTypeFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -572,7 +555,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadFuelCategoryFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -603,7 +586,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadFuelCategoryFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -633,7 +616,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadAdjustmentReasonCodeFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -663,7 +646,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadObjectCategoryFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -693,7 +676,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadUnitOfMeasurementFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
@@ -723,7 +706,7 @@ export class RegulationComplianceBaseClass {
                 sErrorMsg = error.stack as string;
             }
             // in case of S4 event log the message
-            if (this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeGMCR) {
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 const oLogData: ILogUtility = {} as ILogUtility;
                 oLogData.message = "FailedToReadImpactFromMasterData";
                 oLogData.technicalMessage = sErrorMsg;
