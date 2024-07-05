@@ -253,3 +253,11 @@ type EventData {
         UnitOfMeasure                  : String;
     }
 }
+
+define view MaintainWorkplaceAgggregationByPlantView as
+    select from RegulationComplianceTransaction {
+        sourceOrgPlant,
+        sum ( regulationQuantity ) as TotalRegQuantityByPlant : Integer
+        
+    } group by sourceOrgPlant
+        order by sourceOrgPlant desc limit 4;
