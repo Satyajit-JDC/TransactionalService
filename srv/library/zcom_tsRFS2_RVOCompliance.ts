@@ -18,6 +18,7 @@ export class RFS2_RVOCompliance {
             if (await this._validateData()) {
                 await this._postRFS2Debit();
             }
+            resolve(true);
         });
     }
     //-------- End of RFS2 Debit constructor ------------------
@@ -111,8 +112,6 @@ export class RFS2_RVOCompliance {
         await this._oRegulationComplianceBaseClassInstance.setAdjustmentReasonCode();
         if (this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode.reasonCode) {
             // data available
-        } else {
-            return false;
         }
 
         return true;
@@ -186,11 +185,11 @@ export class RFS2_RVOCompliance {
                     objectCategoryDesc: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.description,
                     objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
                     objectTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.description,
-                    // sourceScenario: this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.sourceScenario as string, //master have to update code list
+                    sourceScenario: this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.sourceScenario,
                     subObjectScenario: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory,
                     subObjectScenarioDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.description,
                     transactionCategory: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory, //master have to update
-                    // transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionType, //trans update length to 5
+                    transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionTypeTransactionType,
                     transactionTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionType?.description,
                     // extTransactionNumber
                     // matchedExtTransactionNumber
@@ -212,10 +211,9 @@ export class RFS2_RVOCompliance {
                     // productionType: oEventData.productionType,
                     // cancelledUser: oEventData.cancelledUser,
                     // submitted: oEventData.submitted,
-                    // passRetainIndicator: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewablePassRetainIndicator, //trns have to update to String(6)
+                    passRetainIndicator: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewablePassRetainIndicator, //trns have to update to String(6)
                     dealNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenwableDealDocument,
-                    // oi: oEventData.oi,
-                    // Contract: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract, //update from trns
+                    contractDocumentNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract,
                     contractItemNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableCotractItem,
                     processingStatus: createdStatus.key,
                     objectStatusDesc: createdStatus.value,
@@ -242,7 +240,7 @@ export class RFS2_RVOCompliance {
                     originRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
                     destinationRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
                     reasonCode: oMatDocData.RenewableReasonReasonCode,
-                    reasonCodeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode.description,
+                    reasonCodeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode?.description,
                     regulationCompanyName: oMatDocData.CompanyCode,
                     // internalComments
                     // externalComments
@@ -314,7 +312,7 @@ export class RFS2_RVOCompliance {
                     // ciAverageValue
                     // dcode: oEventData.dcode,
                     // dcodeDesc master des
-                    rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRenewableMaterialConfiguration
+                    rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
                     rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
                     vintageYear: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.VintageYear,
                     rinMultiplier: Number(this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableRinMultiplierription),
@@ -385,8 +383,8 @@ export class RFS2_RVOCompliance {
                     // renewableDeliveryDocNoDocumentSubItem
                     // renewableDeliveryDocNoMaterialDocumentYear
                     renewableMaterialDocumentType: 'G',
-                    renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.obligationMaterialDocumentNumber,
-                    renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.obligationMaterialDocumentItemNumber,
+                    renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
+                    renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,
                     // renewableMaterialDocNoDocumentSubItem
                     // renewableMaterialDocNoMaterialDocumentYear
                     // renewableReverseMaterialDocNoDocumentType

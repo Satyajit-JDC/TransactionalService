@@ -14,8 +14,8 @@ import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes, language } from './utilities/zcom_tsConstants';
 import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
-import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
+// import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
+// import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
 import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
  
@@ -858,7 +858,7 @@ export class RegulationComplianceBaseClass {
     }
     async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
-        let aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
+        const aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
         (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .select(
