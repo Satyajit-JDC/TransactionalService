@@ -12,13 +12,14 @@ export class RFS2_RF_RINCompliance {
     //-------- Start of RFS2 Credit constructor ------------------
     constructor(oRegulationComplianceBaseClassInstance:RegulationComplianceBaseClass){
         this._oRegulationComplianceBaseClassInstance = oRegulationComplianceBaseClassInstance;
-            new Promise(async (resolve) => {
-                // validate data
-                if (await this._validateData()) {
-                    await this._postRFS2Credit();
-                }
-                resolve(true);
-            });
+            
+        new Promise(async (resolve) => {
+            // validate data
+            if (await this._validateData()) {
+                await this._postRFS2Credit();
+            }
+            resolve(true);
+        });
     }
     //-------- End of RFS2 Credit constructor ------------------
         //-------- Start of private methods ------------------
@@ -105,6 +106,12 @@ export class RFS2_RF_RINCompliance {
             } else {
                 return false;
             }
+            // set Adjustment Reason Code
+            await this._oRegulationComplianceBaseClassInstance.setAdjustmentReasonCode();
+            if (this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode.reasonCode) {
+                // data available
+            }
+
             return true;
         }
     
@@ -169,264 +176,262 @@ export class RFS2_RF_RINCompliance {
                     oMatDocData = this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument;
                 if (oMaterialConfig.obligationPercent) {
                     aFinalData.push({
-                        // objectId: oObjectID,
-                        regulationType: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
-                        regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.description,
-                        regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2CreditData.category,
-                        // objectCategory: oRegulationMaterialGrpData.category,
-                        objectCategoryDesc: this._oRegulationComplianceBaseClassInstance.oRFS2CreditData.description,
-                        objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
-                        objectTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.description,
-                        // sourceScenario: oMovementTypesData.sourceScenario, //master have to update
-                        subObjectScenario: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory,
-                        subObjectScenarioDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.description,
-                        transactionCategory: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory, //master have to update
-                        // transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionType,
-                        // transactionTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.,
-                        // extTransactionNumber
-                        // matchedExtTransactionNumber
-                        // billofLading: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.bi,  //oEventData.billofLading,
-                        // impact: oMovementTypesData.impactCategory,   //master have to update
-                        // businessPartnerNumber: oEventData.businessPartnerNumber,
-                        // businessPartnerDesc: oEventData.businessPartnerDesc,
-                       // movementType: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.movementTypeMovementType,
-                        // incotermsPart1: oEventData.incotermsPart1,
-                        // incotermsPart2: oEventData.incotermsPart2,
-                        fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory,
-                        fuelCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelCategory[this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory].description,
-                        fuelSubCategory: "BD", //HC oEventData.fuelSubCategory, //Maintain Fuel Mapping
-                        fuelSubCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelSubCategory["BD"].description,
-                        // feedStock: oEventData.feedStock,
-                        // negativeImpact: oMovementTypesData.negativeImpact, //master have to update
-                        // creditPercentage: oEventData.creditPercentage,
-                        // movementScenario: oEventData.movementScenario,
-                        // productionType: oEventData.productionType,
-                        // cancelledUser: oEventData.cancelledUser,
-                        // submitted: oEventData.submitted,
-                        // passRetainIndicator: oEventData.passRetainIndicator,
-                        // dealNumber: oEventData.dealNumber,
-                        // oi: oEventData.oi,
-                        // Contract: 
-                        // contractItemNo: oEventData.contractItemNo,
-                        processingStatus: createdStatus.key,
-                        objectStatusDesc: createdStatus.value,
-                        // priceStatus
-                        // matchStatus
-                        // reconcilliationGroupID: oEventData.reconcilliationGroupID,
-                        // autoMatch: oEventData.autoMatch,
-                        // groupBalanced: oEventData.groupBalanced,
-                        // renewablesEpaCompanyId: oEventData.renewablesEpaCompanyId,
-                        // renewablesEpaFacilityId: oEventData.renewablesEpaFacilityId,
-                        fuelQuantity: parseFloat(oMatDocData.Quantity),
-                        // fuelQuantityRaw: oEventData.fuelQuantityRaw,
-                        fuelUnitofMeasurement: oMatDocData.UnitOfMeasure, //oEventData.fuelUnitofMeasurement,
-                        // fuelQuantityinAlternateUOM: (oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),
-                        // fuelQuantityinAlternateUOMRaw: (oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),
-                        fuelAlternateUnitofMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.fuelAlternateUom,
-                        // numeratorforConversiontoBaseUnitsOfMeasure: Number(oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),
-                        // denominatorforConversiontoBaseUnitsOfMeasure: (oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),
-                        regulationQuantity: Math.round(parseFloat(oMatDocData.Quantity) * Number(oMaterialConfig.obligationPercent)),
-                        regulationQuantityWholeNumber: (parseFloat(oMatDocData.Quantity) * Number(oMaterialConfig.obligationPercent)),
-                        regulationUnitOfMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationUoMCategory,
-                        originCountry: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
-                        // destinationCountry: oRegulationTypeData.countryCode,
-                        originRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
-                        // destinationRegion:
-                        // reasonCode: oEventData.
-                        // reasonCodeDesc
-                        regulationCompanyName: oMatDocData.CompanyCode, //oEventData.sourceOrgCompanyCode,
-                        // internalComments
-                        // externalComments
-                        // regulatoryComments
-                        // renewableRootGUID
-                        // renewablepParentROGUID
-                        // internalObjectGUID
-                        // externalObjectGUID
-                        // dealUUID
-                        // dealItemUUID
-                        // adjustmentBase
-                        // valuationPool
-                        // dealStrategy
-                        // dealStrategyDescription
-                        // valuationType
-                        // exchangeAgreementNumber
-                        // provFinalPrice
-                        // ignoreProvPrice
-                        // fuelGallonConditionAmountOrPercentScale
-                        // fuelGallonConditionUnitCurrencyOrPercent
-                        // fuelGallonConditionPricingUnit
-                        // fuelGallonConditionUnit
-                        // rinPriceConditionAmountOrPercentScale
-                        // rinPriceConditionUnitCurrencyOrPercent
-                        // rinPriceConditionPricingUnit
-                        // rinPriceConditionUnit
-                        postingDate: oMatDocData.RenewableMaterialDocPostgDte as unknown as CdsDate,
-                        renewablesPostingMonth: new Date(oMatDocData.RenewableMaterialDocPostgDte).getMonth().toString().padStart(2, "0") as Month,
-                        renewablesPostingQuarter: (Math.floor((new Date(oMatDocData.RenewableMaterialDocPostgDte).getMonth() + 3) / 3)).toString() as Quarter,
-                        renewablesPostingComplianceYear: new Date(oMatDocData.RenewableMaterialDocPostgDte).getFullYear().toString(),
-                        documentDate: oMatDocData.DocumentDate as unknown as CdsDate,
-                        renewablesDocumentMonth: new Date(oMatDocData.DocumentDate).getMonth().toString().padStart(2, "0") as Month,
-                        renewablesDocumentMonthDes: sMonthDes,
-                        renewablesDocumentQuarter: (Math.floor((new Date(oMatDocData.DocumentDate).getMonth() + 3) / 3)).toString() as Quarter,
-                        renewablesDocumentComplianceYear: new Date(oMatDocData.DocumentDate).getFullYear().toString(),
-                        // reversalPostingDate: oEventData.reversalPostingDate,
-                        // renewablesReversalPostingMonth: new Date(oEventData.reversalPostingDate).getMonth().toString().padStart(2, "0") as Month,
-                        // renewablesReversalPostingQuarter: (Math.floor((new Date(oEventData.reversalPostingDate).getMonth() + 3) / 3)).toString() as Quarter,
-                        // renewablesReversalPostingComplianceYear: new Date(oEventData.reversalPostingDate).getFullYear().toString(),
-                        // productiondate: oEventData.prod
-                        // renewablesProductionMonth
-                        // renewablesProductionQuarter
-                        // renewablesProductionComplianceYear
-                        // transferDate: oEventData.tr
-                        // renewablesTransferMonth
-                        // renewablesTransferQuarter
-                        // renewablesTransferComplianceYear
-                        // submissionDate: oEventData.sub
-                        // renewablesSubmissionMonth
-                        // renewablesSubmissionQuarter
-                        // renewablesSubmissionComplianceYear
-                        // emtsCreditStdCode
-                        // emtsCreditTypeCode
-                        // timesTraded
-                        // fuelPathwayCodeType
-                        // physicalPathwayCodeType
-                        // targetCIValue
-                        // fuelApplicationType
-                        // fuelGroup
-                        // energyDensity
-                        // energyEfficiencyRatioValue
-                        // lcfsActualCarbonIntensity
-                        // fuelName
-                        // aggregationIndicatorforReporting
-                        // ciOption
-                        // ciSpecificValue
-                        // ciMaximumValue
-                        // ciMinimumValue
-                        // ciAverageValue
-                        // dcode: oEventData.dcode,
-                        // dcodeDesc master des
-                        rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRenewableMaterialConfiguration
-                        rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
-                        // vintageYear: oEventData.vintageYear,
-                        // rinMultiplier: oEventData.rinMultiplier,
-                        // qapCertified: oEventData.qapCertified,
-                        // qapCertifiedDesc: oEventData.qa
-                        // emtsQapServiceTypeCode
-                        // emtsBatchNumberText
-                        // emtsProcessCode
-                        // emtsFuelCategoryCode
-                        // emtsCoProductCode
-                        // emtsTransactionTypeCode
-                        // emtsUnitOfMeasureCode
-                        // emtsTransactionStatusCode
-                        // emtsSeparateReasonCode
-                        // emtsRetireReasonCode
-                        // emtsRinStatusCode
-                        // emtsAssignmentCode
-                        // emtsBusinessActivityCode
-                        // emtsBuyOrSellReasonCode
-                        // emtsComplianceLevelCode
-                        // emtsTradingPartnerInvoice
-                        // emtsTradingPartnerBillOfLading
-                        // emtsTradingPartnerPTD
-                        // emtsGenerateReasonCode
-                        // epaCompanyIdFPR
-                        // epafacilityIdFPR: oEventData.ep
-                        // tprCompanyIdFPR
-                        // tprFacilityIdFPR
-                        // referenceContractDocumentType: oEventData.co
-                        referenceContractGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.referenceContractGeneralDocumentNumber,
-                        referenceContractDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.referenceContractDocumentItemNumber,
-                        // referenceContractDocumentSubItem: oEventData.ref
-                        // referenceContractMaterialDocumentYear: oEventData.ref
-                        // referenceContractSequentialSegmentNumber
-                        // rfOrderDocumentType: oEventData.rf
-                        // rfOrderGeneralDocumentNumber
-                        // rfOrderDocumentItemNumber
-                        // rfOrderDocumentSubItem
-                        // rfOrderMaterialDocumentYear
-                        // rfInboundDeliveryDocumentType
-                        // rfInboundDeliveryGeneralDocumentNumber
-                        // rfInboundDeliveryDocumentItemNumber
-                        // rfInboundDeliveryDocumentSubItem
-                        // rfInboundDeliveryMaterialDocumentYear
-                        // rfOutboundDeliveryDocumentType
-                        // rfOutboundDeliveryGeneralDocumentNumber
-                        // rfOutboundDeliveryDocumentItemNumber
-                        // rfOutboundDeliveryDocumentSubItem
-                        // rfOutboundDeliveryMaterialDocumentYear
-                        // fuelOnwardMaterialDocNoDocumentType: oEventData.fu
-                        // fuelOnwardMaterialDocNoGeneralDocumentNumber
-                        // fuelOnwardMaterialDocNoDocumentItemNumber
-                        // fuelOnwardMaterialDocNoDocumentSubItem
-                        // fuelOnwardMaterialDocNoMaterialDocumentYear
-                        // fuelReversalMaterialDocNoDocumentType
-                        // fuelReversalMaterialDocNoGeneralDocumentNumber
-                        // fuelReversalMaterialDocNoDocumentItemNumber
-                        // fuelReversalMaterialDocNoDocumentSubItem
-                        // fuelReversalMaterialDocNoMaterialDocumentYear
-                        // renewableOrderNoDocumentType: oEventData.rene
-                        // renewableOrderNoGeneralDocumentNumber
-                        // renewableOrderNoDocumentItemNumber
-                        // renewableOrderNoDocumentSubItem
-                        // renewableOrderNoMaterialDocumentYear
-                        // renewableDeliveryDocNoDocumentType
-                        // renewableDeliveryDocNoGeneralDocumentNumber
-                        // renewableDeliveryDocNoDocumentItemNumber
-                        // renewableDeliveryDocNoDocumentSubItem
-                        // renewableDeliveryDocNoMaterialDocumentYear
-                        renewableMaterialDocumentType: 'G',
-                        renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument, //oEventData.obligationMaterialDocumentNumber,
-                        renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem, //oEventData.obligationMaterialDocumentItemNumber,
-                        // renewableMaterialDocNoDocumentSubItem
-                        // renewableMaterialDocNoMaterialDocumentYear
-                        // renewableReverseMaterialDocNoDocumentType
-                        // renewableReverseMaterialDocNoGeneralDocumentNumber
-                        // renewableReverseMaterialDocNoDocumentItemNumber
-                        // renewableReverseMaterialDocNoDocumentSubItem
-                        // renewableReverseMaterialDocNoMaterialDocumentYear
-                        sourceOrgCompanyCode: oMatDocData.CompanyCode,
-                        sourceOrgPlant: oMatDocData.Plant,
-                        sourceOrgStorageLocation: oMatDocData.StorageLocation,
-                        sourceOrgMaterialNumber: oMatDocData.RenewableMaterial, //oEventData.sourceOrgCompanyMaterialNumber,
-                        sourceOrgMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription, //HC oEventData.sourceOrgCompanyMaterialNumberDesc,
-                        sourceOrgCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
-                        // sourceOrgCompanyRegion: oRegulationTypeData.regionCode,
-                        // destinationOrgCompanyCode: 
-                        // destinationOrgCompanyPlant
-                        // destinationOrgCompanyStorageLocation
-                        // destinationOrgCompanyMaterialNumber
-                        // destinationOrgCompanyCountryKey
-                        // destinationOrgCompanyRegion
-                        // fuelLogisticsCompanyCode
-                        // fuelLogisticsCompanyPlant
-                        // fuelLogisticsCompanyStorageLocation
-                        fuelLogisticsMaterialNumber: oMatDocData.RenewableMaterial,
-                        fuelLogisticsMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
-                        // fuelLogisticsCountryKey
-                        // fuelLogisticsRegion
-                        regulationLogisticsCompanyCode: oMatDocData.CompanyCode,
-                        regulationLogisticsPlant: oMatDocData.Plant,
-                        regulationLogisticsStorageLocation: oMatDocData.StorageLocation,
-                        regulationLogisticsMaterialNumber: oMatDocData.RenewableMaterial,
-                        regulationLogisticsMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
-                        regulationLogisticsCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
-                        regulationLogisticsRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
-                        // nominationNumber
-                        // nominationKey
-                        // nominationKeyItem
-                        // oilTswTicketKey
-                        // oiltswTicketItemNumber
-                        // oiltswTicketVersion
-                        // oiltswTicketPurpose
-                        // oiltswTicketType
-                        // oiltswExternalticketNumber
-                        // externalPositionNumber
-                        // modeofTransport: oEventData.modeofTransport,
-                        // truckNumber: oEventData.tr
-                        // externalBatchNumber: oEventData.ex
-                        // oilFieldsForRenewablesOriginRegion
-                        // oilFieldsForRenewablesDestinationRegion
+                    regulationType: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
+                    regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.description,
+                    regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
+                    objectCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
+                    objectCategoryDesc: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.description,
+                    objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
+                    objectTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.description,
+                    sourceScenario: this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.sourceScenario,
+                    subObjectScenario: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory,
+                    subObjectScenarioDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.description,
+                    transactionCategory: this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory, //master have to update
+                    transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionTypeTransactionType,
+                    transactionTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionType?.description,
+                    // extTransactionNumber
+                    // matchedExtTransactionNumber
+                    billofLading: oMatDocData.RenewableBillOfLading,
+                    impact: this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.impactCategory,
+                    businessPartnerNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableBusinessPartnerNumber,
+                    businessPartnerDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableBusinessPartnerDesc,
+                    movementType: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.MovementType,
+                    incotermsPart1: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableIncoTerms1,
+                    incotermsPart2: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableIncoTerms2,
+                    fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory,
+                    fuelCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelCategory[this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory].description,
+                    fuelSubCategory: "BD", //HC oEventData.fuelSubCategory, //Maintain Fuel Mapping
+                    fuelSubCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelSubCategory["BD"].description,
+                    // feedStock: oEventData.feedStock,
+                    // negativeImpact: this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.negativeImpact, //master have to update
+                    // creditPercentage: oEventData.creditPercentage,
+                    // movementScenario: oEventData.movementScenario,
+                    // productionType: oEventData.productionType,
+                    // cancelledUser: oEventData.cancelledUser,
+                    // submitted: oEventData.submitted,
+                    passRetainIndicator: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewablePassRetainIndicator, //trns have to update to String(6)
+                    dealNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenwableDealDocument,
+                    contractDocumentNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract,
+                    contractItemNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableCotractItem,
+                    processingStatus: createdStatus.key,
+                    objectStatusDesc: createdStatus.value,
+                    // priceStatus
+                    // matchStatus
+                    // reconcilliationGroupID: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal., //not avilable in payload
+                    // autoMatch: oEventData.autoMatch,
+                    // groupBalanced: oEventData.groupBalanced,
+                    // renewablesEpaCompanyId: oEventData.renewablesEpaCompanyId,
+                    // renewablesEpaFacilityId: oEventData.renewablesEpaFacilityId,
+                    fuelQuantity: parseFloat(oMatDocData.Quantity),
+                    // fuelQuantityRaw: oEventData.fuelQuantityRaw, //payload field required
+                    fuelUnitofMeasurement: oMatDocData.UnitOfMeasure, //oEventData.fuelUnitofMeasurement,
+                    // fuelQuantityinAlternateUOM: (oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),   //qty API required from S4
+                    // fuelQuantityinAlternateUOMRaw: (oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)), //qty API required from S4
+                    fuelAlternateUnitofMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.fuelAlternateUom,
+                    // numeratorforConversiontoBaseUnitsOfMeasure: Number(oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),
+                    // denominatorforConversiontoBaseUnitsOfMeasure: (oEventData.fuelQuantity * Number(oMaterialConfig.obligationPercent)),
+                    regulationQuantity: Math.round(parseFloat(oMatDocData.Quantity) * Number(oMaterialConfig.rinMultiplier)),
+                    regulationQuantityWholeNumber: (parseFloat(oMatDocData.Quantity) * Number(oMaterialConfig.rinMultiplier)),
+                    regulationUnitOfMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationUoMCategory,
+                    originCountry: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    destinationCountry: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    originRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    destinationRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    reasonCode: oMatDocData.RenewableReasonReasonCode,
+                    reasonCodeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode?.description,
+                    regulationCompanyName: oMatDocData.CompanyCode,
+                    // internalComments
+                    // externalComments
+                    // regulatoryComments
+                    // renewableRootGUID
+                    // renewablepParentROGUID
+                    // internalObjectGUID
+                    // externalObjectGUID
+                    // dealUUID
+                    // dealItemUUID
+                    // adjustmentBase
+                    // valuationPool
+                    // dealStrategy //deal section no mapping
+                    // dealStrategyDescription
+                    // valuationType    //S4
+                    // exchangeAgreementNumber  //S4
+                    // provFinalPrice
+                    // ignoreProvPrice
+                    // fuelGallonConditionAmountOrPercentScale
+                    // fuelGallonConditionUnitCurrencyOrPercent
+                    // fuelGallonConditionPricingUnit
+                    // fuelGallonConditionUnit
+                    // rinPriceConditionAmountOrPercentScale
+                    // rinPriceConditionUnitCurrencyOrPercent
+                    // rinPriceConditionPricingUnit
+                    // rinPriceConditionUnit
+                    postingDate: oMatDocData.RenewableMaterialDocPostgDte as unknown as CdsDate,
+                    renewablesPostingMonth: new Date(oMatDocData.RenewableMaterialDocPostgDte).getMonth().toString().padStart(2, "0") as Month,
+                    renewablesPostingQuarter: (Math.floor((new Date(oMatDocData.RenewableMaterialDocPostgDte).getMonth() + 3) / 3)).toString() as Quarter,
+                    renewablesPostingComplianceYear: new Date(oMatDocData.RenewableMaterialDocPostgDte).getFullYear().toString(),
+                    documentDate: oMatDocData.DocumentDate as unknown as CdsDate,
+                    renewablesDocumentMonth: new Date(oMatDocData.DocumentDate).getMonth().toString().padStart(2, "0") as Month,
+                    renewablesDocumentMonthDes: sMonthDes,
+                    renewablesDocumentQuarter: (Math.floor((new Date(oMatDocData.DocumentDate).getMonth() + 3) / 3)).toString() as Quarter,
+                    renewablesDocumentComplianceYear: new Date(oMatDocData.DocumentDate).getFullYear().toString(),
+                    // reversalPostingDate: oEventData.reversalPostingDate,
+                    // renewablesReversalPostingMonth: new Date(oEventData.reversalPostingDate).getMonth().toString().padStart(2, "0") as Month,
+                    // renewablesReversalPostingQuarter: (Math.floor((new Date(oEventData.reversalPostingDate).getMonth() + 3) / 3)).toString() as Quarter,
+                    // renewablesReversalPostingComplianceYear: new Date(oEventData.reversalPostingDate).getFullYear().toString(),
+                    // productiondate: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.
+                    // renewablesProductionMonth
+                    // renewablesProductionQuarter
+                    // renewablesProductionComplianceYear
+                    // transferDate: oEventData.tr
+                    // renewablesTransferMonth
+                    // renewablesTransferQuarter
+                    // renewablesTransferComplianceYear
+                    // submissionDate: oEventData.sub
+                    // renewablesSubmissionMonth
+                    // renewablesSubmissionQuarter
+                    // renewablesSubmissionComplianceYear
+                    // emtsCreditStdCode
+                    // emtsCreditTypeCode
+                    // timesTraded
+                    // fuelPathwayCodeType
+                    // physicalPathwayCodeType
+                    // targetCIValue
+                    // fuelApplicationType
+                    // fuelGroup
+                    // energyDensity
+                    // energyEfficiencyRatioValue
+                    // lcfsActualCarbonIntensity
+                    // fuelName
+                    // aggregationIndicatorforReporting
+                    // ciOption
+                    // ciSpecificValue
+                    // ciMaximumValue
+                    // ciMinimumValue
+                    // ciAverageValue
+                    //dcode: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.Dcode,
+                    // dcodeDesc master des
+                    rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
+                    rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
+                    vintageYear: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.VintageYear,
+                    rinMultiplier: Number(this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableRinMultiplierription),
+                    // qapCertified: oEventData.qapCertified,
+                    // qapCertifiedDesc: oEventData.qa
+                    // emtsQapServiceTypeCode
+                    // emtsBatchNumberText
+                    // emtsProcessCode
+                    // emtsFuelCategoryCode
+                    // emtsCoProductCode
+                    // emtsTransactionTypeCode
+                    // emtsUnitOfMeasureCode
+                    // emtsTransactionStatusCode
+                    // emtsSeparateReasonCode
+                    // emtsRetireReasonCode
+                    // emtsRinStatusCode
+                    // emtsAssignmentCode
+                    // emtsBusinessActivityCode
+                    // emtsBuyOrSellReasonCode
+                    // emtsComplianceLevelCode
+                    // emtsTradingPartnerInvoice
+                    // emtsTradingPartnerBillOfLading
+                    // emtsTradingPartnerPTD
+                    // emtsGenerateReasonCode
+                    // epaCompanyIdFPR
+                    // epafacilityIdFPR: oEventData.ep
+                    // tprCompanyIdFPR
+                    // tprFacilityIdFPR
+                    // referenceContractDocumentType: oEventData.co
+                    referenceContractGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
+                    referenceContractDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,
+                    // referenceContractDocumentSubItem: oEventData.ref
+                    // referenceContractMaterialDocumentYear: oEventData.ref
+                    // referenceContractSequentialSegmentNumber
+                    // rfOrderDocumentType: oEventData.rf
+                    // rfOrderGeneralDocumentNumber
+                    // rfOrderDocumentItemNumber
+                    // rfOrderDocumentSubItem
+                    // rfOrderMaterialDocumentYear
+                    // rfInboundDeliveryDocumentType
+                    // rfInboundDeliveryGeneralDocumentNumber
+                    // rfInboundDeliveryDocumentItemNumber
+                    // rfInboundDeliveryDocumentSubItem
+                    // rfInboundDeliveryMaterialDocumentYear
+                    // rfOutboundDeliveryDocumentType
+                    // rfOutboundDeliveryGeneralDocumentNumber
+                    // rfOutboundDeliveryDocumentItemNumber
+                    // rfOutboundDeliveryDocumentSubItem
+                    // rfOutboundDeliveryMaterialDocumentYear
+                    // fuelOnwardMaterialDocNoDocumentType: oEventData.fu
+                    // fuelOnwardMaterialDocNoGeneralDocumentNumber
+                    // fuelOnwardMaterialDocNoDocumentItemNumber
+                    // fuelOnwardMaterialDocNoDocumentSubItem
+                    // fuelOnwardMaterialDocNoMaterialDocumentYear
+                    // fuelReversalMaterialDocNoDocumentType
+                    // fuelReversalMaterialDocNoGeneralDocumentNumber
+                    // fuelReversalMaterialDocNoDocumentItemNumber
+                    // fuelReversalMaterialDocNoDocumentSubItem
+                    // fuelReversalMaterialDocNoMaterialDocumentYear
+                    // renewableOrderNoDocumentType: oEventData.rene
+                    // renewableOrderNoGeneralDocumentNumber
+                    // renewableOrderNoDocumentItemNumber
+                    // renewableOrderNoDocumentSubItem
+                    // renewableOrderNoMaterialDocumentYear
+                    // renewableDeliveryDocNoDocumentType
+                    // renewableDeliveryDocNoGeneralDocumentNumber
+                    // renewableDeliveryDocNoDocumentItemNumber
+                    // renewableDeliveryDocNoDocumentSubItem
+                    // renewableDeliveryDocNoMaterialDocumentYear
+                    renewableMaterialDocumentType: 'G',
+                    renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
+                    renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,
+                    // renewableMaterialDocNoDocumentSubItem
+                    // renewableMaterialDocNoMaterialDocumentYear
+                    // renewableReverseMaterialDocNoDocumentType
+                    // renewableReverseMaterialDocNoGeneralDocumentNumber
+                    // renewableReverseMaterialDocNoDocumentItemNumber
+                    // renewableReverseMaterialDocNoDocumentSubItem
+                    // renewableReverseMaterialDocNoMaterialDocumentYear
+                    sourceOrgCompanyCode: oMatDocData.CompanyCode,
+                    sourceOrgPlant: oMatDocData.Plant,
+                    sourceOrgStorageLocation: oMatDocData.StorageLocation,
+                    sourceOrgMaterialNumber: oMatDocData.RenewableMaterial,
+                    sourceOrgMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
+                    sourceOrgCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    sourceOrgRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    destinationOrgCompanyCode: oMatDocData.CompanyCode,
+                    destinationOrgPlant: oMatDocData.Plant,
+                    destinationOrgStorageLocation: oMatDocData.StorageLocation,
+                    destinationOrgMaterialNumber: oMatDocData.RenewableMaterial,
+                    destinationOrgCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    destinationOrgRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    fuelLogisticsCompanyCode: oMatDocData.CompanyCode,
+                    fuelLogisticsPlant: oMatDocData.Plant,
+                    fuelLogisticsStorageLocation: oMatDocData.StorageLocation,
+                    fuelLogisticsMaterialNumber: oMatDocData.RenewableMaterial,
+                    fuelLogisticsMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
+                    fuelLogisticsCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    fuelLogisticsRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    regulationLogisticsCompanyCode: oMatDocData.CompanyCode,
+                    regulationLogisticsPlant: oMatDocData.Plant,
+                    regulationLogisticsStorageLocation: oMatDocData.StorageLocation,
+                    regulationLogisticsMaterialNumber: oMatDocData.RenewableMaterial,
+                    regulationLogisticsMaterialNumberDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
+                    regulationLogisticsCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
+                    regulationLogisticsRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
+                    // nominationNumber
+                    // nominationKey
+                    // nominationKeyItem
+                    // oilTswTicketKey
+                    // oiltswTicketItemNumber
+                    // oiltswTicketVersion
+                    // oiltswTicketPurpose
+                    // oiltswTicketType
+                    // oiltswExternalticketNumber
+                    // externalPositionNumber
+                    // modeofTransport: oEventData.modeofTransport,
+                    // truckNumber: oEventData.tr
+                    // externalBatchNumber: oEventData.ex
+                    // oilFieldsForRenewablesOriginRegion
+                    // oilFieldsForRenewablesDestinationRegion
                     });
                 }
             }
