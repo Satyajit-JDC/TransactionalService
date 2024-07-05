@@ -248,63 +248,69 @@ type EventData {
 }
 
  // CDs View for aggregating Regulation Quantity by Plant
-entity MaintainWorkplaceAggregationByPlantView as
+define view MaintainWorkplaceAggregationByPlantView as
     select from RegulationComplianceTransaction {
+        key ID,
         sourceOrgPlant,
         sum ( regulationQuantity ) as TotalRegQuantityByPlant : Integer
         
-    } group by sourceOrgPlant
+    } group by ID,sourceOrgPlant
         order by sourceOrgPlant desc limit 4;
 			
     // CDs View for aggregating Regulation Quantity by Month
-   entity MaintainWorkplaceAggregationByMonthView as
+   define view MaintainWorkplaceAggregationByMonthView as
         select from RegulationComplianceTransaction {
+             key ID,
             renewablesDocumentMonth,
             renewablesDocumentMonthDes,
             sum( regulationQuantity ) as TotalRegQuantityByMonth : Integer
         }
         group by
-            renewablesDocumentMonth,renewablesDocumentMonthDes
+            ID,renewablesDocumentMonth,renewablesDocumentMonthDes
         order by renewablesDocumentMonth desc limit 4;
           
 
     // CDS View for aggregating Regulation Quantity by Category
-    entity MaintainWorkplaceAggregationByCategoryView as
+    define view MaintainWorkplaceAggregationByCategoryView as
         select from RegulationComplianceTransaction {
+             key ID,
             rfs2ObligationType,
             rfs2ObligationTypeDesc,
             sum(regulationQuantity) as TotalRegQuantityByCategory : Integer
         }
         group by
-            rfs2ObligationType,rfs2ObligationTypeDesc
+            ID,rfs2ObligationType,rfs2ObligationTypeDesc
         order by rfs2ObligationType desc limit 4;
 
     // CDS View for aggregating Regulation Quantity by ObjectType   
-   entity MaintainWorkplaceAggregationByObjectTypeView as
+   define view MaintainWorkplaceAggregationByObjectTypeView as
         select from RegulationComplianceTransaction {
+             key ID,
             objectType,
             objectTypeDesc,
             sum(regulationQuantity) as TotalRegQuantityByObjectType : Integer
         }
-        group by objectType, objectTypeDesc
+        group by ID,objectType, objectTypeDesc
         order by objectType desc limit 4;
 
  // CDs View for aggregating Regulation Quantity by Dcode
-   entity MaintainWorkplaceAggregationByDcodeView as
+   define view MaintainWorkplaceAggregationByDcodeView as
         select from RegulationComplianceTransaction {
+            key ID,
             dcode,
             dcodeDesc,
             sum(regulationQuantity) as TotalRegQuantityByDcode : Integer
         }
         group by
-            dcode,dcodeDesc
+            ID,dcode,dcodeDesc
         order by dcode desc limit 4;
  // CDs View for aggregating Regulation Quantity by Status
-     entity MaintainWorkplaceAggregationByStatusView as
+     define view MaintainWorkplaceAggregationByStatusView as
         select from RegulationComplianceTransaction {
+             key ID,
             processingStatus,
             sum(regulationQuantity) as TotalRegQuantityByStatus : Integer
         }
         group by
-            processingStatus
+            ID,processingStatus
         order by processingStatus desc limit 4;
