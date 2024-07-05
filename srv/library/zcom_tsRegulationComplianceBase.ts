@@ -6,7 +6,7 @@ import {
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryMapping,
     MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory
 } from '../external/regulationcompliancemasterservice_api';
-import { EventPayload } from './utilities/zcom_tsRegulationComplicanceInterface';
+import { EventPayload, EventPayloadMDJ } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
 import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
@@ -15,9 +15,9 @@ import { RFS2ConstantValues, destinationNames, messageTypes, language } from './
 import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
-import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
-import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
-import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
+import { materialcharacteristicsApi } from '../external/materialcharacteristics_api';
+// import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
+// import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -52,11 +52,11 @@ export class RegulationComplianceBaseClass {
     public aMaintainAdjustmentReasonCode!: MaintainAdjustmentReasonCode[];
     public aRegulationUom!: RegulationUom[];
     public aImpact!: Impact[];
+    public oEventPayloadMDJData!: EventPayloadMDJ;
 
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
-
         // initialize the data
 
         this.oRegulationDataIsReady = new Promise(async (resolve, reject) => {
@@ -675,14 +675,31 @@ export class RegulationComplianceBaseClass {
     async setObjectCategory() {
         const { objectCategoryApi } = regulationcompliancemasterserviceApi();
         try {
-            (await objectCategoryApi.requestBuilder().getAll()
-                .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                .execute({
-                    destinationName: destinationNames.regulationComplianceMasterService
-                })).
-                forEach(oData => {
-                    this.aObjectCategory.push(oData);
-                });
+            if (this.oRFS2RegulationData && (this.oRFS2DebitData || this.oRFS2CreditData)) {
+                const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
+                    "' and objectCategory_category  eq '" + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
+
+                (await objectCategoryApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $filter: encodeURIComponent(sFilters)
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach(oData => {
+                        this.aObjectCategory.push(oData);
+                    });
+            }
+            else {
+                (await objectCategoryApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach(oData => {
+                        this.aObjectCategory.push(oData);
+                    });
+            }
         } catch (error) {
             console.log(error);
             let sErrorMsg = "";
@@ -844,7 +861,7 @@ export class RegulationComplianceBaseClass {
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
         return await srv.read(RegulationComplianceTransaction).where({ sourceScenario: sourceScenario });
     }
-    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
+    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]> {
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
         let aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
         (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
@@ -868,7 +885,7 @@ export class RegulationComplianceBaseClass {
                 });
 
             });
-            return aFuelMaterial;
-        }
+        return aFuelMaterial;
+    }
 
 }
