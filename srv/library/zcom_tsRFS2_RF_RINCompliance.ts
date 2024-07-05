@@ -17,6 +17,7 @@ export class RFS2_RF_RINCompliance {
                 if (await this._validateData()) {
                     await this._postRFS2Credit();
                 }
+                resolve(true);
             });
     }
     //-------- End of RFS2 Credit constructor ------------------

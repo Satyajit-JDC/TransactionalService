@@ -113,7 +113,7 @@ export interface EventPayload {
         QAPcertified: string;
         Quantity: string;
         UnitOfMeasure: string;
-        RenewablePassRetainIndicator: boolean;
+        RenewablePassRetainIndicator: string;
         RenewableDealNumber: string;
         RenewableDcodeription: string;
         RenewableVintageYearription: string;

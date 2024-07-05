@@ -14,8 +14,8 @@ import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes, language } from './utilities/zcom_tsConstants';
 import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
-import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
+// import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
+// import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
 import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
  
@@ -53,6 +53,7 @@ export class RegulationComplianceBaseClass {
     public mFuelSubCategory: { [index: string]: FuelSubCategory } = {};
     public aObjectCategory: ObjectCategory[] = [];
     public aMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode[] = [];
+    public oMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode = {} as MaintainAdjustmentReasonCode;
     public aRegulationUom: RegulationUom[] = [];
     public aImpact: Impact[] = [];
     public oEventPayloadMDJData!: EventPayloadMDJ;
@@ -467,7 +468,8 @@ export class RegulationComplianceBaseClass {
 
                 (await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent(sFilters)
+                        $filter: encodeURIComponent(sFilters),
+                        $expand: "transactionType"
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -635,7 +637,7 @@ export class RegulationComplianceBaseClass {
         const { maintainAdjustmentReasonCodeApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oEventPayloadData._RenewableMaterialDocument) {
-                const sFilters = "reasonCode eq " + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "";
+                const sFilters = "reasonCode eq '" + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "'";
 
                 (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -645,7 +647,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach(oData => {
-                        this.aMaintainAdjustmentReasonCode.push(oData);
+                        this.oMaintainAdjustmentReasonCode = oData;
                     });
             }
             else {
@@ -872,7 +874,7 @@ export class RegulationComplianceBaseClass {
     }
     async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
-        let aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
+        const aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
         (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
             .middleware(resilience({ retry: 3, circuitBreaker: true }))
             .select(
