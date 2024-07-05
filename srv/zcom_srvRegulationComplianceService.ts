@@ -21,7 +21,12 @@ import { RFS2ConstantValues,messageTypes } from './library/utilities/zcom_tsCons
 
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
-        const messaging = await cds.connect.to("RenewableEvents");
+
+        this.on("actionTrigger", async data => {
+
+
+        });
+        const messaging = "";// await cds.connect.to("RenewableEvents");
         // const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction')
         this.on("sendMessage", async msg => {
             // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
@@ -794,7 +799,9 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             //         oRegulationComplianceBaseInstance.addLog(oLogData);
             //     }
             // }
-        })
+        }),
+
+
 
         // On crreate of Manual adjustment for RVO/RIN
         // code revamp

@@ -9,10 +9,7 @@ export class RFS2Actions extends RegulationActionBase {
         this.initialize();
     }
     private initialize() {
-        // Add your implementation here
-        // console.log(this.getObjectKey());
-        // console.log(this.actionName);
-        // console.log(this.regSubScn);
+// Intialize RFS2 specific variables 
     }
 
 }

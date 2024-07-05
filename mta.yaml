@@ -76,7 +76,7 @@ modules:
             - comsapchscomzcomferegcompmadj.zip
           name: comsapchscomzcomferegcompmadj
           target-path: resources/
-          
+
   - name: comsapchscomzcomferegcompmadj
     type: html5
     path: app/zcom_feregcompmadj
@@ -99,8 +99,8 @@ resources:
   - name: zcom_capRegCompTransSrv-conn
     type: org.cloudfoundry.managed-service
     parameters:
-        service: connectivity
-        service-plan: lite
+      service: connectivity
+      service-plan: lite
   - name: zcom_capRegCompTransSrv-destination
     type: org.cloudfoundry.managed-service
     parameters:
@@ -139,7 +139,7 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
-      
+
   - name: zcom_capRegCompTransSrv-auth
     type: org.cloudfoundry.managed-service
     parameters:

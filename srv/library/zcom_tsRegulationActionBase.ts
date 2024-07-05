@@ -43,5 +43,6 @@ export class RegulationActionBase {
     public doPIP(): boolean {
         return false;
     }
-
+    
+    public doPIP
 }

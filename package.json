@@ -65,7 +65,8 @@
     "undeploy": "cf undeploy zcom_capRegCompTransSrv --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
-    "watch-zcom_feregcompmadj": "cds watch --open zcom_feregcompmadj/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-zcom_feregcompmadj": "cds watch --open zcom_feregcompmadj/webapp/index.html?sap-ui-xx-viewCache=false",
+    "build:models": "npx @cap-js/cds-typer '*' --outputDirectory @cds-models"
   },
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
@@ -109,26 +110,9 @@
           }
         }
       },
-      "RenewableEvents": {
-        "[hybrid]": {
-          "kind": "enterprise-messaging-shared",
-          "queue": {
-            "name": "sap/dev/1/Renewable/Events"
-          },
-          "format": "cloudevents",
-          "subscribePrefix": "sap/dev/1/"
-        },
-        "[production]": {
-          "kind": "enterprise-messaging-shared",
-          "queue": {
-            "name": "sap/dev/1/Renewable/Events"
-          },
-          "format": "cloudevents",
-          "subscribePrefix": "sap/dev/1/"
-        }
-      },
+     
       "db": "hana",
-      "auth": "xsuaa",
+    
       "MaterialCharacteristics": {
         "kind": "odata",
         "model": "srv/external/MaterialCharacteristics",
