@@ -237,7 +237,7 @@ export class RegulationComplianceBaseClass {
             if (this.oRFS2RegulationData.regulationType && (this.oRFS2CreditData.category || this.oRFS2DebitData.category)) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectCategory_category eq '" +
-                    (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
+                    (this.oRFS2CreditData.category ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
 
                 (await maintainRegulationObjectTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -328,11 +328,12 @@ export class RegulationComplianceBaseClass {
             if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oMaintainMovementType.movementType) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode +
-                    "' and movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
+                    "' and movementType/movementType eq '" + this.oMaintainMovementType.movementType + "'";
 
                 (await maintainMovementTypeToTransactionCategoryMappingApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent(sFilters)
+                        $filter: encodeURIComponent(sFilters),
+                        $expand: "movementType"
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -374,8 +375,8 @@ export class RegulationComplianceBaseClass {
         try {
             if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oEventPayloadData._RenewableMaterialDocument) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq " +
-                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString();
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq '" +
+                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString() + "'";
 
                 this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
                     .addCustomQueryParameters({

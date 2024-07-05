@@ -26,7 +26,7 @@ export class RFS2_RVOCompliance {
     private async _validateData(): Promise<boolean> {
         // set reg object type data
         await this._oRegulationComplianceBaseClassInstance.setRegulationObjectType();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectCategoryCategory) {
             // data available
         } else {
             return false;
@@ -34,7 +34,7 @@ export class RFS2_RVOCompliance {
 
         // set movement type data
         await this._oRegulationComplianceBaseClassInstance.setMovementType();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementType) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.movementType) {
             if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.movementType !== this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument.MovementType) {
                 return false;
             }
@@ -45,7 +45,7 @@ export class RFS2_RVOCompliance {
 
         // set mvt type relevance data
         await this._oRegulationComplianceBaseClassInstance.setMvtTypeTransationRelevance();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory) {
             // data available
         } else {
             return false;
@@ -53,7 +53,7 @@ export class RFS2_RVOCompliance {
 
         // set mat config data
         await this._oRegulationComplianceBaseClassInstance.setMaterialConfiguration();
-        if (this._oRegulationComplianceBaseClassInstance.aMaintainRfs2Material) {
+        if (this._oRegulationComplianceBaseClassInstance.aMaintainRfs2Material.length>0) {
             // data available
         } else {
             return false;
@@ -61,7 +61,7 @@ export class RFS2_RVOCompliance {
 
         // set regulation type
         await this._oRegulationComplianceBaseClassInstance.setRegulationTypes();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationType) {
             // data available
         } else {
             return false;
@@ -69,7 +69,7 @@ export class RFS2_RVOCompliance {
 
         // set Regulation Transaction Types data
         await this._oRegulationComplianceBaseClassInstance.setRegulationTransactionTypeTs();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType) {
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.regulationTypeRegulationType) {
             // data available
         } else {
             return false;
@@ -77,7 +77,7 @@ export class RFS2_RVOCompliance {
 
         // set Transaction Type Data
         await this._oRegulationComplianceBaseClassInstance.setTransactiontype();
-        if (this._oRegulationComplianceBaseClassInstance.aMaintainTransactionType) {
+        if (this._oRegulationComplianceBaseClassInstance.aMaintainTransactionType.length>0) {
             // data available
         } else {
             return false;
@@ -85,7 +85,7 @@ export class RFS2_RVOCompliance {
 
         // set RFS2 Debit Type data
         await this._oRegulationComplianceBaseClassInstance.setRFS2DebitType();
-        if (this._oRegulationComplianceBaseClassInstance.aRfs2DebitType) {
+        if (this._oRegulationComplianceBaseClassInstance.aRfs2DebitType.length>0) {
             // data available
         } else {
             return false;
@@ -93,7 +93,7 @@ export class RFS2_RVOCompliance {
 
         // set Fuel Category data
         await this._oRegulationComplianceBaseClassInstance.setFuelCategory();
-        if (this._oRegulationComplianceBaseClassInstance.aFuelCategory) {
+        if (this._oRegulationComplianceBaseClassInstance.aFuelCategory.length>0) {
             // data available
         } else {
             return false;
@@ -101,7 +101,7 @@ export class RFS2_RVOCompliance {
 
         // set Fuel Sub Category data
         await this._oRegulationComplianceBaseClassInstance.setFuelSubCategory();
-        if (this._oRegulationComplianceBaseClassInstance.aFuelSubCategory) {
+        if (this._oRegulationComplianceBaseClassInstance.aFuelSubCategory.length>0) {
             // data available
         } else {
             return false;
