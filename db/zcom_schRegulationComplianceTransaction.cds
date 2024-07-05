@@ -253,3 +253,11 @@ type EventData {
         UnitOfMeasure                  : String;
     }
 }
+
+entity Actions : cuid, managed {
+
+    key actionName : String(20);
+        regSubScn  : String(20);
+
+
+}

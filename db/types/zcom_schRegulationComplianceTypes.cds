@@ -517,3 +517,9 @@ aspect Enterprise {
     oilFieldsForRenewablesOriginRegion            : String(3)    @title: '{i18n>oilFieldsForRenewablesOriginRegion}';
     oilFieldsForRenewablesDestinationRegion       : String(3)    @title: '{i18n>oilFieldsForRenewablesDestinationRegion}';
 }
+
+type UUID_Type : UUID;
+type actionName : String(20);
+type regSubScn : String(20);
+
+

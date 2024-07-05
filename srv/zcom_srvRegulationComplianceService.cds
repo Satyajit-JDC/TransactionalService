@@ -2,8 +2,14 @@ using {com.sap.chs.com.regulationcompliancetransaction as transaction} from '../
 using {RegulationComplianceMasterService as master} from './external/RegulationComplianceMasterService';
 // using {Za_}
 using {MaterialCharacteristics as s4h} from './external/MaterialCharacteristics';
+type returnData :{
+    messageType: String;
+    message: String(500);
+};
+
 
 service RegulationComplianceTransactionService {
+    action actionTrigger(id: String(2), ObjectKey: UUID) returns many returnData;
     action sendMessage(data : transaction.EventData);
 
     entity RegulationComplianceTransaction @(Capabilities: {
@@ -128,4 +134,8 @@ service RegulationComplianceTransactionService {
         group by
             regulationQuantity,
             processingStatus;
+
+    // Action Status
+
+    entity Actions as projection on transaction.Actions;        
 }
