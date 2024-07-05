@@ -21,8 +21,8 @@ import { RFS2ConstantValues, messageTypes } from './library/utilities/zcom_tsCon
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        // this.on("sendMessage", async msg => {
-            messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+        this.on("sendMessage", async msg => {
+            // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
             if (msg.data) {
                 const oEventData = msg.data;
                 // fill data from payload to object
@@ -188,6 +188,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
             // manual adjustment payload
             oMAdjReqPayload.regulationType = oDataRequest.data.regulationType;
+            oMAdjReqPayload.sourceScenario = RFS2ConstantValues.eventTypeMDJ;
             oMAdjReqPayload.objectType = oDataRequest.data.objectType;
             oMAdjReqPayload.transactionCategory = oDataRequest.data.transactionCategory;
             oMAdjReqPayload.impact = oDataRequest.data.impact;
@@ -202,7 +203,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             oMAdjReqPayload.fuelCategory = oDataRequest.data.fuelCategory;
             oMAdjReqPayload.regulationQuantity = oDataRequest.data.regulationQuantity;
             oMAdjReqPayload.regulationUnitOfMeasurement = oDataRequest.data.regulationUnitOfMeasurement;
-            oMAdjReqPayload.regulationLogisticsMaterialNumber = oDataRequest.data.regulationLogisticsCompanyMaterialNumber;
+            oMAdjReqPayload.regulationLogisticsMaterialNumber = oDataRequest.data.regulationLogisticsMaterialNumber;
             oMAdjReqPayload.sourceOrgMaterialNumber = oDataRequest.data.sourceOrgCompanyMaterialNumber;
             oMAdjReqPayload.fuelUnitofMeasurement = oDataRequest.data.fuelUnitofMeasurement;
             oMAdjReqPayload.fuelQuantity = oDataRequest.data.fuelQuantity;
@@ -514,7 +515,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 oLogData: ILogUtility = {} as ILogUtility;
             oLogData.message = "RINSCreatedSuccessfully";
             oLogData.messageType = messageTypes.success;
-
+            console.log(oLogData.message);
             for (let index = 0; index < data.length; index++) {
                 // generate next no
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);

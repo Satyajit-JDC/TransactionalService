@@ -20,6 +20,7 @@ export class RFS2_MADJ_RVOCompliance {
             if (await this._validateData()) {
                 await this._postRFS2MDJDebit();
             }
+            resolve(true);
         });
     }
     //-------- End of RFS2 Debit constructor ------------------
@@ -28,12 +29,12 @@ export class RFS2_MADJ_RVOCompliance {
     private async _validateData(): Promise<boolean> {
 
         // set regulation type
-        // await this._oRegulationComplianceBaseClassInstance.setRegulationTypes();
-        // if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType) {
-        //     // data available
-        // } else {
-        //     return false;
-        // }
+        await this._oRegulationComplianceBaseClassInstance.setRegulationTypes();
+        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType) {
+            // data available
+        } else {
+            return false;
+        }
 
         // set reg object catefory
         await this._oRegulationComplianceBaseClassInstance.setRegulationObjectType();
@@ -194,10 +195,10 @@ export class RFS2_MADJ_RVOCompliance {
             }
         }
         else {
-            const oMatQtyBased = this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData,
-             oMaterialConfig: MaintainRfs2Material = {} as MaintainRfs2Material; 
-            aMaterialConfig.filter(mc=>mc.material === this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.sourceOrgMaterialNumber &&
-                mc.regulationType === this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType &&
+            const oMatQtyBased = this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData;
+             let oMaterialConfig: MaintainRfs2Material[] = []; 
+             oMaterialConfig = aMaterialConfig.filter(mc=>mc.material === this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.regulationLogisticsMaterialNumber &&
+                mc.regulationTypeRegulationType === this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.regulationType &&
                 mc.year === this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.renewablesDocumentComplianceYear &&
                 mc.objectTypeCode === this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode
             )
@@ -212,22 +213,25 @@ export class RFS2_MADJ_RVOCompliance {
                 subObjectScenario: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.regulationSubScenarioCategory,
                 subObjectScenarioDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationSubScenarioToScenarioType.description,
                 transactionType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionTypeTransactionType,
-                 transactionCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.transactionCategory,//'PUR',//Maintain Regulation Transaction Types
+                transactionTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationTransactionType.transactionType?.description,
+                transactionCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.transactionCategory,//'PUR',//Maintain Regulation Transaction Types
                 impact: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.impact,
                 documentDate: dDocDate as unknown as CdsDate,//'2024-06-01',
                 renewablesDocumentMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                 renewablesDocumentMonthDes: sMonthDes,
+
                 renewablesDocumentQuarter: (Math.floor((new Date(dDocDate).getMonth() + 3) / 3)).toString() as Quarter,
                 renewablesDocumentComplianceYear: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.renewablesDocumentComplianceYear,
                 businessPartnerNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.businessPartnerNumber,
                 reasonCode: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.reasonCode,
                 reasonCodeDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.reasonCodeDesc,
                 sourceOrgPlant: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.sourceOrgPlant,
-                regulationQuantity: parseInt(oMatQtyBased.regulationQuantity),
-                regulationQuantityWholeNumber:parseFloat(oMatQtyBased.regulationQuantity), 
+                regulationQuantity: Math.floor(parseFloat(oMatQtyBased.regulationQuantity)),
+                regulationQuantityWholeNumber:Math.floor(parseFloat(oMatQtyBased.regulationQuantity)), 
                 regulationUnitOfMeasurement: oMatQtyBased.regulationUnitOfMeasurement,  
+
                // ,                   sourceOrgCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
-                // regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
+                regulationLogisticsMaterialNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.regulationLogisticsMaterialNumber,//'CELLULOSIC_2024',
                 billofLading: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.billofLading,
                 fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.fuelCategory,
                 adjustmentBase: adjustmentBaseMDJ.quantity,
@@ -236,11 +240,12 @@ export class RFS2_MADJ_RVOCompliance {
                 renewablesProductionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                 renewablesTransferMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                 renewablesSubmissionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
-                rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
-                rfs2ObligationTypeDesc: oMaterialConfig.description,              
+                rfs2ObligationType: oMaterialConfig[0].rvoTypeCategory,
+                rfs2ObligationTypeDesc: oMaterialConfig[0].description,              
                });
 
         }
+        console.log(aFinalData);
         if (aFinalData.length > 0) {
             await this._oRegulationComplianceBaseClassInstance.addRegulationCompliances(aFinalData);
         }

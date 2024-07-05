@@ -374,10 +374,13 @@ export class RegulationComplianceBaseClass {
         const { maintainRfs2MaterialApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oEventPayloadData._RenewableMaterialDocument) {
+                const sDocumentDate = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
+                this.oEventPayloadMDJData.documentDate : this.oEventPayloadData._RenewableMaterialDocument.DocumentDate;
+           
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq '" +
-                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString() + "'";
-
+                    new Date(sDocumentDate).getFullYear().toString() + "'";
+                console.log(sFilters);
                 this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent(sFilters)
@@ -394,6 +397,7 @@ export class RegulationComplianceBaseClass {
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     });
+                console.log(this.aMaintainRfs2Material);
             }
         } catch (error) {
             console.log(error);
@@ -462,9 +466,12 @@ export class RegulationComplianceBaseClass {
         try {
             const { maintainRegulationTransactionTypeApi } = regulationcompliancemasterserviceApi();
 
-            if (this.oRFS2RegulationData.regulationType && this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory) {
+            if (this.oRFS2RegulationData.regulationType && (this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory || this.oEventPayloadMDJData.transactionCategory)) {
+                const sTransactionCategory = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
+                this.oEventPayloadMDJData.transactionCategory : this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory;
+           
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory + "'";
+                    "' and transactionCategory_category eq '" + sTransactionCategory + "'";
 
                 (await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -788,6 +795,7 @@ export class RegulationComplianceBaseClass {
 
     // --------- Start of Getter methods ------------------
     async getNextRenewableId(RegulationSubScenario: string): Promise<number> {
+        console.log(RegulationSubScenario);
         if (RegulationSubScenario) {
             const { operations: {
                 getNextRenewableId
@@ -798,7 +806,7 @@ export class RegulationComplianceBaseClass {
             const oCurrentSeqence = await getNextRenewableId(payload).middleware(resilience({ retry: 3, circuitBreaker: true })).execute({
                 destinationName: destinationNames.regulationComplianceMasterService
             });
-
+            console.log(oCurrentSeqence);
             return Number(oCurrentSeqence);
         } else {
             return 0;
@@ -815,10 +823,15 @@ export class RegulationComplianceBaseClass {
                 { logUtilityServiceApi } = logutilityserviceApi();
             let logObjectID:string = "";
 
-            if(this.oEventPayloadData.RenewableEventType){
+            if(this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ){
                 logObjectID = this.oEventPayloadData.RenewableEventType +
                     this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
                     this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "";
+            }
+            else{
+                logObjectID = this.oEventPayloadMDJData.sourceScenario +
+                    this.oEventPayloadMDJData.regulationLogisticsMaterialNumber ? this.oEventPayloadMDJData.regulationLogisticsMaterialNumber : "";
+         
             }
 
             // fill unfilled common data
@@ -849,6 +862,7 @@ export class RegulationComplianceBaseClass {
 
     // add regulations
     async addRegulationCompliances(data: RegulationComplianceTransaction[]) {
+        console.log("addreg");
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
         try {
             await srv.post('RegulationComplianceTransaction', data);
