@@ -111,6 +111,7 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
     dealUUID                                     : UUID                  @title: '{i18n>UUIDinXformbinary}';
     dealItemUUID                                 : UUID                  @title: '{i18n>UUIDinXformbinary}';
     adjustmentBase                               : AdjustmentBase        @title: '{i18n>adjustmentBase}';
+    tenantID                                     : String(40)            @title: '{i18n>tenantID}';
 }
 
 entity AdjustmentBaseValuelist {
