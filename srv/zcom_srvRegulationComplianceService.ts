@@ -21,8 +21,8 @@ import { RFS2ConstantValues, messageTypes } from './library/utilities/zcom_tsCon
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        this.on("sendMessage", async msg => {
-            // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+        // this.on("sendMessage", async msg => {
+            messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
             if (msg.data) {
                 const oEventData = msg.data;
                 // fill data from payload to object
