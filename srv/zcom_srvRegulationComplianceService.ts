@@ -1,14 +1,14 @@
 import cds from '@sap/cds';
 // import { Query } from '@sap/cds';
 // import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
-import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase'
+import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase';
 
 // import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { Quarter, Month } from '@cds-models';
 import {
     IMaintainRegulationType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario, 
-    IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility
+    IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility,EventPayloadMDJ
 } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import {
     MaintainRfs2Material
@@ -16,13 +16,13 @@ import {
 // import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
 // import { queryObjects } from 'v8';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
-import { messageTypes } from './library/utilities/zcom_tsConstants';
+import { RFS2ConstantValues, messageTypes } from './library/utilities/zcom_tsConstants';
 
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        // this.on("sendMessage", async msg => {
-            messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+        this.on("sendMessage", async msg => {
+            // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
             if (msg.data) {
                 const oEventData = msg.data;
                 // fill data from payload to object
@@ -179,258 +179,298 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         // On crreate of Manual adjustment for RVO/RIN
         // code revamp
         // this.on("OnCreateManualAdjustment", async (oDatarequest)=> {
-        this.on('READ', 'ManualAdjRegulationComplianceTransactionTest', async (oDataRequest) => {
-            const oManualAdjPayloadData: EventPayload = {} as EventPayload;
-            oManualAdjPayloadData.MaterialDescription = oDataRequest.data.MaterialDescription;
-            oManualAdjPayloadData._RenewableMaterialDocument.DocumentDate = oDataRequest.data.documentDate,
-            oManualAdjPayloadData._RenewableProductionOrder.RenewableBusinessPartnerNumber = oDataRequest.data.businessPartnerNumber,
-            oManualAdjPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode = oDataRequest.data.reasonCode,
-            oManualAdjPayloadData._RenewableMaterialDocument.Plant = oDataRequest.data.sourceOrgCompanyPlant,
-            oManualAdjPayloadData._RenewableMaterialDocument.RenewableBillOfLading = oDataRequest.data.billofLading,
-            oManualAdjPayloadData.RenewableFuelCategory = oDataRequest.data.fuelCategory
+        this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (oDataRequest) => {
+            const oMAdjPayloadData: EventPayload = {} as EventPayload,
+                oMAdjReqPayload: EventPayloadMDJ = {} as EventPayloadMDJ;
+            // To assign event type to divert to MDJ process
+            oMAdjPayloadData.RenewableEventType = RFS2ConstantValues.eventTypeMDJ;
+            // oMAdjPayloadData._RenewableMaterialDocument.DocumentDate = oDataRequest.data.documentDate as string;
+
+            // manual adjustment payload
+            oMAdjReqPayload.regulationType = oDataRequest.data.regulationType;
+            oMAdjReqPayload.sourceScenario = RFS2ConstantValues.eventTypeMDJ;
+            oMAdjReqPayload.objectType = oDataRequest.data.objectType;
+            oMAdjReqPayload.transactionCategory = oDataRequest.data.transactionCategory;
+            oMAdjReqPayload.impact = oDataRequest.data.impact;
+            oMAdjReqPayload.documentDate = oDataRequest.data.documentDate;
+            oMAdjReqPayload.businessPartnerNumber = oDataRequest.data.businessPartnerNumber;
+            oMAdjReqPayload.reasonCode = oDataRequest.data.reasonCode;
+            oMAdjReqPayload.reasonCodeDesc = oDataRequest.data.reasonCodeDesc;
+            oMAdjReqPayload.renewablesDocumentComplianceYear = oDataRequest.data.renewablesDocumentComplianceYear;
+            oMAdjReqPayload.sourceOrgPlant = oDataRequest.data.sourceOrgPlant;
+            oMAdjReqPayload.adjustmentBase = oDataRequest.data.adjustmentBase;
+            oMAdjReqPayload.billofLading = oDataRequest.data.billofLading;
+            oMAdjReqPayload.fuelCategory = oDataRequest.data.fuelCategory;
+            oMAdjReqPayload.regulationQuantity = oDataRequest.data.regulationQuantity;
+            oMAdjReqPayload.regulationUnitOfMeasurement = oDataRequest.data.regulationUnitOfMeasurement;
+            oMAdjReqPayload.regulationLogisticsMaterialNumber = oDataRequest.data.regulationLogisticsMaterialNumber;
+            oMAdjReqPayload.sourceOrgMaterialNumber = oDataRequest.data.sourceOrgCompanyMaterialNumber;
+            oMAdjReqPayload.fuelUnitofMeasurement = oDataRequest.data.fuelUnitofMeasurement;
+            oMAdjReqPayload.fuelQuantity = oDataRequest.data.fuelQuantity;
+            oMAdjReqPayload.renewablesEpaCompanyId = oDataRequest.data.renewablesEpaCompanyId;
+            oMAdjReqPayload.renewablesEpaFacilityId = oDataRequest.data.renewablesEpaFacilityId;
+            oMAdjReqPayload.fuelLogisticsMaterialNumber = oDataRequest.data.fuelLogisticsMaterialNumber;
+            // oMAdjPayloadData._RenewableMaterialDocument.DocumentDate = oDataRequest.data.documentDate,
+            // oMAdjPayloadData._RenewableProductionOrder.RenewableBusinessPartnerNumber = oDataRequest.data.businessPartnerNumber,
+            // oMAdjPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode = oDataRequest.data.reasonCode,
+            // oMAdjPayloadData._RenewableMaterialDocument.Plant = oDataRequest.data.sourceOrgCompanyPlant,
+            // oMAdjPayloadData._RenewableMaterialDocument.RenewableBillOfLading = oDataRequest.data.billofLading,
+            // oMAdjPayloadData.RenewableFuelCategory = oDataRequest.data.fuelCategory
+
             // create Base Class Object with Event Data to identify Regulation
-            const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oManualAdjPayloadData);
-            oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType = oDataRequest.data.RegulationType;
+            // set Regulation master data
+            const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oMAdjPayloadData);
+            oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType = oDataRequest.data.regulationType;
+            // Manual adjustment request data
+            oRegulationComplianceBaseClassInstance.oEventPayloadMDJData = oMAdjReqPayload;
+
             // oRegulationComplianceBaseClassInstance.setImpact
             // wait for promise to get regulations
-    
+            oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved) => {
+                if (bResolved) {
                     // RFS2 Regulation is Active
-                    if(oRegulationComplianceBaseClassInstance.oRFS2RegulationData){
+                    if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
+                        // Set Debit/Credit objects
+                        if (oDataRequest.data.objectType === RFS2ConstantValues.credit) {
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oDataRequest.data.regulationType;
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.credit;
+                        }
+                        else if (oDataRequest.data.objectType === RFS2ConstantValues.debit) {
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oDataRequest.data.regulationType;
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.debit;
+                        }
                         oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
-                     // set Object type
-                     oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectType = oDataRequest.data.objectType;
-           
-                     oRegulationComplianceBaseClassInstance.setObjectCategory();// need to send filters
-                     oRegulationComplianceBaseClassInstance.setImpact();
-                     oRegulationComplianceBaseClassInstance.setAdjustmentReasonCode()
                     }
-                   
+                }
+            });
+
         })
-        this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
-            const aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
-                aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
-                aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
-                aMaterialConfig: MaintainRfs2Material[] = [],
-                aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] };
-            let aFinalData: RegulationComplianceTransaction[] = [];
-            let oObjectID: number;
-            // const oReqData: RegulationComplianceTransaction = {};
-            const { regulationType,
-                objectType,
-                transactionCategory,
-                impact,
-                documentDate,
-                businessPartnerNumber,
-                reasonCode,
-                reasonCodeDesc,
-                renewablesDocumentComplianceYear,
-                sourceOrgPlant,
-                adjustmentBase,
-                billofLading,
-                fuelCategory
-            } = ODataRequest.data;
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            // const oRFS2ComplianceInstance = new RFS2ComplianceClass(oRegulationComplianceBaseInstance);
-            // Get regulations( This would be needed when we UOM conversion to happen currently using for regulation object type and category)
-            // const sFilterUom = `regulationType eq '${regulationType}' and regulationCategory_category eq '${regulationType}'`;// and fuelAlternateUom eq 'BBL'`;
-            // aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
-            //     {} as ILogUtility);
-            const oRegulationType = aRegulationType.map[regulationType];
+        // this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
+        //     let aFinalData: RegulationComplianceTransaction[] = [],
+        //         aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
+        //         aTransactionTypeTs: IMaintainRegulationTransactionTypeTs = { map: {} },
+        //         aRegulationSubscenario: IMaintainRegulationSubscenariotoScenario = { map: {}, data: [] },
+        //         aMaterialConfig: MaintainRfs2Material[] = [],
+        //         aRegulationObjectCategory: IMaintainRegulationObjecttype = { map: {}, objectType: "", data: [] },
+        //         logObjectID: string = "";
+        //     let oObjectID: number;
+        //     const oReqData: RegulationComplianceTransaction = {};
+        //     const { regulationType,
+        //         objectType,
+        //         transactionCategory,
+        //         impact,
+        //         documentDate,
+        //         businessPartnerNumber,
+        //         reasonCode,
+        //         reasonCodeDesc,
+        //         renewablesDocumentComplianceYear,
+        //         sourceOrgPlant,
+        //         adjustmentBase,
+        //         billofLading,
+        //         fuelCategory
+        //     } = ODataRequest.data;
+        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+        //     const oRFS2ComplianceInstance = new RFS2ComplianceClass(oRegulationComplianceBaseInstance);
+        //     // Get regulations( This would be needed when we UOM conversion to happen currently using for regulation object type and category)
+        //     const sFilterUom = `regulationType eq '${regulationType}' and regulationCategory_category eq '${regulationType}'`;// and fuelAlternateUom eq 'BBL'`;
+        //     // aRegulationType = await oRegulationComplianceBaseInstance.getRegulationTypes(sFilterUom,
+        //     //     {} as ILogUtility);
+        //     const oRegulationType = aRegulationType.map[regulationType];
 
-            //Get object Type code i.e RIN or RVO
-            if (regulationType && objectType) {
-                // aRegulationObjectCategory = await oRegulationComplianceBaseInstance.getRegulationObjectType("regulationType_regulationType eq '" + regulationType + "' and objectCategory_category eq '" + objectType + "'",
-                //     {} as ILogUtility
-                // );
-                const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
+        //     //Get object Type code i.e RIN or RVO
+        //     if (regulationType && objectType) {
 
-
-                // read RFS2DebitType
-                await oRegulationComplianceBaseInstance.setRFS2DebitType();
-                // const aRFS2DebitType = oRegulationComplianceBaseInstance.aRfs2DebitType;
-                if (oRegObjectCateory.objectCategoryCategory) {
-
-                    //Maintain Regulation Transaction Types
-                    // aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
-                    //     regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
-                    //     {} as ILogUtility);
-                    const oTransactionTypeTs = aTransactionTypeTs.map[regulationType + transactionCategory];
-
-                    if (oTransactionTypeTs.transactionCategoryCategory) {
-                        // Fetch regulation subscenario
-                        // const sfilterSubObjectScenario = "regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'";
-                        // aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
-                        //     regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
-                        //     {} as ILogUtility);
-                        const oRegualtionSubscenario = aRegulationSubscenario.map[regulationType + "MDJ" + objectType]
+        //         aRegulationObjectCategory = await oRegulationComplianceBaseInstance.setObjectCategory();
+        //         const oRegObjectCateory = aRegulationObjectCategory.map[regulationType + objectType];
 
 
-                        if (oRegualtionSubscenario.regulationSubScenarioCategory) {
+        //         // read RFS2DebitType
+        //         await oRegulationComplianceBaseInstance.setRFS2DebitType();
+        //         const aRFS2DebitType = oRegulationComplianceBaseInstance.aRfs2DebitType;
+        //         if (oRegObjectCateory.objectCategoryCategory) {
 
-                            // Month desc
-                            let sMonthDes;
-                            switch (new Date(documentDate).getMonth().toString().padStart(2, "0")) {
-                                case "04":
-                                    sMonthDes = "MAY";
-                                    break;
+        //             //Maintain Regulation Transaction Types
+        //             // aTransactionTypeTs = await oRegulationComplianceBaseInstance.getRegulationTransactionTypeTs("regulationType_regulationType eq '" +
+        //             //     regulationType + "' and transactionCategory_category eq '" + transactionCategory + "'",
+        //             //     {} as ILogUtility);
+        //             const oTransactionTypeTs = aTransactionTypeTs.map[regulationType + transactionCategory];
 
-                                case "05":
-                                    sMonthDes = "JUN";
-                                    break;
+        //             if (oTransactionTypeTs.transactionCategoryCategory) {
+        //                 // Fetch regulation subscenario
+        //                 // const sfilterSubObjectScenario = "regulationType_regulationType eq '" + regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'";
+        //                 // aRegulationSubscenario = await oRegulationComplianceBaseInstance.getRgulationSubScnario("regulationType_regulationType eq '" +
+        //                 //     regulationType + "' and transactionSourceScenario_category eq 'MDJ' and objectCategory_category eq '" + objectType + "'",
+        //                 //     {} as ILogUtility);
+        //                 const oRegualtionSubscenario = aRegulationSubscenario.map[regulationType + "MDJ" + objectType]
 
-                                case "06":
-                                    sMonthDes = "JUL";
-                                    break;
 
-                                case "07":
-                                    sMonthDes = "AUG";
-                                    break;
-                            }
+        //                 if (oRegualtionSubscenario.regulationSubScenarioCategory) {
 
-                            // Adjustment base is by Volume
-                            if (adjustmentBase === "V") {
-                                // Fields configured while Volumne based is configured
-                                const {
-                                    fuelUnitofMeasurement,
-                                    fuelQuantity,
-                                    renewablesEpaCompanyId,
-                                    renewablesEpaFacilityId,
-                                    fuelLogisticsMaterialNumber,
-                                } = ODataRequest.data;
+        //                     // Month desc
+        //                     let sMonthDes;
+        //                     switch (new Date(documentDate).getMonth().toString().padStart(2, "0")) {
+        //                         case "04":
+        //                             sMonthDes = "MAY";
+        //                             break;
 
-                                // Fetch material configuration
-                                if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
-                                    // const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear;
-                                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
-                                    //     {} as ILogUtility);
-                                }
-                                if (aMaterialConfig.length > 0) {
-                                    // Get Fuel Unit of Measure if alternate UOM is BBL
-                                    if (fuelUnitofMeasurement === 'BBL') {
-                                    }
-                                    // For each material config
-                                    for (let iMatConfig = 0; iMatConfig < aMaterialConfig.length; iMatConfig++) {
-                                        const oMaterialConfig = aMaterialConfig[iMatConfig];
-                                        oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");
+        //                         case "05":
+        //                             sMonthDes = "JUN";
+        //                             break;
 
-                                        if (oObjectID && oMaterialConfig.obligationPercent) {
-                                            aFinalData.push({
-                                                objectId: oObjectID,
-                                                regulationType: regulationType,
-                                                regulationCategory: regulationType,// check if these two are same
-                                                objectCategory: objectType,
-                                                objectType: oRegObjectCateory.objectCategoryCategory,
-                                                sourceScenario: 'MDJ',
-                                                subObjectScenario: oRegualtionSubscenario.regulationSubScenarioCategory,//get from material subscenariosubScenario[0].regulationSubScenario,//
-                                                // transactionType: oTransactionTypeTs.transactionType,
-                                                // transactionTypeDesc: oTransactionTypeTs.description,
-                                                transactionCategory: transactionCategory,//'PUR',//Maintain Regulation Transaction Types
-                                                impact: impact,
-                                                documentDate: documentDate,//'2024-06-01',
-                                                renewablesDocumentMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                                renewablesDocumentQuarter: (Math.floor((new Date(documentDate).getMonth() + 3) / 3)).toString() as Quarter,
-                                                renewablesDocumentComplianceYear: renewablesDocumentComplianceYear,
-                                                businessPartnerNumber: businessPartnerNumber,
-                                                reasonCode: reasonCode,
-                                                reasonCodeDesc: reasonCodeDesc,
-                                                sourceOrgPlant: sourceOrgPlant,
-                                                regulationQuantity: Math.round(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
-                                                regulationQuantityWholeNumber: Math.floor(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
-                                                // regulationUnitOfMeasurement: regulationUoMCategory,  
-                                                renewablesEpaCompanyId: renewablesEpaCompanyId,
-                                                renewablesEpaFacilityId: renewablesEpaFacilityId,
-                                                fuelUnitofMeasurement: fuelUnitofMeasurement, //'BBL',
-                                                fuelAlternateUnitofMeasurement: fuelUnitofMeasurement,
-                                                sourceOrgMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
-                                                regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
-                                                billofLading: billofLading,
-                                                fuelCategory: fuelCategory,
-                                                fuelQuantity: fuelQuantity,
-                                                adjustmentBase: adjustmentBase,
-                                                fuelLogisticsMaterialNumber: fuelLogisticsMaterialNumber,
-                                                renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                                renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                                renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                                renewablesTransferMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                                renewablesSubmissionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                                renewablesDocumentMonthDes: sMonthDes,
-                                                rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRfs2Material
-                                                // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
-                                                regulationUnitOfMeasurement: "RIN"
-                                            })
-                                        }//if (oObjectID...
-                                        else {
-                                            aFinalData = [];
-                                            break;
-                                        }
-                                    }//for (let iMatConfig...
-                                }
-                            }//if (vadjustmentBase..
-                            else {
-                                const {
-                                    regulationQuantity,
-                                    regulationUnitOfMeasurement,
-                                    regulationLogisticsMaterialNumber,
-                                    // sourceOrgMaterialNumber
-                                } = ODataRequest.data;
-                                oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
-                                if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
-                                    // const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" +
-                                     oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" +
-                                      regulationLogisticsMaterialNumber + "'";
-                                    // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
-                                    //     {} as ILogUtility);
-                                }
-                                if (aMaterialConfig.length > 0) {
-                                    // oObjectID = 435;
-                                    if (oObjectID) {
-                                        aFinalData.push({
-                                            objectId: oObjectID,
-                                            regulationType: regulationType,
-                                            regulationCategory: regulationType,// check if these two are same
-                                            objectCategory: objectType,
-                                            objectType: oRegObjectCateory.objectCategoryCategory,//'RVO',
-                                            sourceScenario: 'MDJ',
-                                            subObjectScenario: oRegualtionSubscenario.regulationSubScenarioCategory,//get from material subscenariosubScenario[0].regulationSubScenario,//
-                                            // transactionType: oTransactionTypeTs.transactionType,
-                                            // transactionTypeDesc: oTransactionTypeTs.description,
-                                            transactionCategory: transactionCategory,//'PUR',//Maintain Regulation Transaction Types
-                                            impact: impact,
-                                            documentDate: documentDate,//'2024-06-01',
-                                            renewablesDocumentMonth: new Date(documentDate).getMonth().toString().padStart(2, "0") as Month,
-                                            renewablesDocumentQuarter: (Math.floor((new Date(documentDate).getMonth() + 3) / 3)).toString() as Quarter,
-                                            renewablesDocumentComplianceYear: renewablesDocumentComplianceYear,
-                                            businessPartnerNumber: businessPartnerNumber,
-                                            reasonCode: reasonCode,
-                                            reasonCodeDesc: reasonCodeDesc,
-                                            sourceOrgPlant: sourceOrgPlant,
-                                            regulationQuantity: regulationQuantity,
-                                            regulationUnitOfMeasurement: regulationUnitOfMeasurement,
-                                            regulationLogisticsMaterialNumber: regulationLogisticsMaterialNumber,
-                                            billofLading: billofLading,
-                                            fuelCategory: fuelCategory,
-                                            adjustmentBase: adjustmentBase,
-                                            renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                            renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                            renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                            renewablesTransferMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                            renewablesSubmissionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
-                                            renewablesDocumentMonthDes: sMonthDes,
-                                            rfs2ObligationType: aMaterialConfig[0].rvoTypeCategory, //master have to correct MaintainRfs2Material
-                                            // rfs2ObligationTypeDesc: aRFS2DebitType.map[aMaterialConfig[0].rvoTypeCategory].description, error
-                                        });
-                                    }//if (oObjectID...
-                                }//if (aMaterialConfig
-                            }//else of if (vadjustmentBase...
-                        }//if (oRegualtionSubscenario
-                    }//if (oTransactionTypeTs
-                }//if (oRegObjectCateory
-            }//if (regulationType
-            if (aFinalData.length > 0) {
-                // await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData);
-            }
-            return ODataRequest.data;
-        })
+        //                         case "06":
+        //                             sMonthDes = "JUL";
+        //                             break;
+
+        //                         case "07":
+        //                             sMonthDes = "AUG";
+        //                             break;
+        //                     }
+
+        //                     // Adjustment base is by Volume
+        //                     if (adjustmentBase === "V") {
+        //                         // Fields configured while Volumne based is configured
+        //                         const {
+        //                             fuelUnitofMeasurement,
+        //                             fuelQuantity,
+        //                             renewablesEpaCompanyId,
+        //                             renewablesEpaFacilityId,
+        //                             fuelLogisticsMaterialNumber,
+        //                         } = ODataRequest.data;
+
+        //                         // Fetch material configuration
+        //                         if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
+        //                             const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" + oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear;
+        //                             // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+        //                             //     {} as ILogUtility);
+        //                         }
+        //                         if (aMaterialConfig.length > 0) {
+        //                             // Get Fuel Unit of Measure if alternate UOM is BBL
+        //                             if (fuelUnitofMeasurement === 'BBL') {
+        //                             }
+        //                             // For each material config
+        //                             for (let iMatConfig = 0; iMatConfig < aMaterialConfig.length; iMatConfig++) {
+        //                                 const oMaterialConfig = aMaterialConfig[iMatConfig];
+        //                                 oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");
+
+        //                                 if (oObjectID && oMaterialConfig.obligationPercent) {
+        //                                     aFinalData.push({
+        //                                         objectId: oObjectID,
+        //                                         regulationType: regulationType,
+        //                                         regulationCategory: regulationType,// check if these two are same
+        //                                         objectCategory: objectType,
+        //                                         objectType: oRegObjectCateory.objectCategoryCategory,
+        //                                         sourceScenario: 'MDJ',
+        //                                         subObjectScenario: oRegualtionSubscenario.regulationSubScenarioCategory,//get from material subscenariosubScenario[0].regulationSubScenario,//
+        //                                         // transactionType: oTransactionTypeTs.transactionType,
+        //                                         // transactionTypeDesc: oTransactionTypeTs.description,
+        //                                         transactionCategory: transactionCategory,//'PUR',//Maintain Regulation Transaction Types
+        //                                         impact: impact,
+        //                                         documentDate: documentDate,//'2024-06-01',
+        //                                         renewablesDocumentMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                         renewablesDocumentQuarter: (Math.floor((new Date(documentDate).getMonth() + 3) / 3)).toString() as Quarter,
+        //                                         renewablesDocumentComplianceYear: renewablesDocumentComplianceYear,
+        //                                         businessPartnerNumber: businessPartnerNumber,
+        //                                         reasonCode: reasonCode,
+        //                                         reasonCodeDesc: reasonCodeDesc,
+        //                                         sourceOrgPlant: sourceOrgPlant,
+        //                                         regulationQuantity: Math.round(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
+        //                                         regulationQuantityWholeNumber: Math.floor(fuelQuantity * Number(oMaterialConfig.obligationPercent)),
+        //                                         // regulationUnitOfMeasurement: regulationUoMCategory,  
+        //                                         renewablesEpaCompanyId: renewablesEpaCompanyId,
+        //                                         renewablesEpaFacilityId: renewablesEpaFacilityId,
+        //                                         fuelUnitofMeasurement: fuelUnitofMeasurement, //'BBL',
+        //                                         fuelAlternateUnitofMeasurement: fuelUnitofMeasurement,
+        //                                         sourceOrgMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
+        //                                         regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
+        //                                         billofLading: billofLading,
+        //                                         fuelCategory: fuelCategory,
+        //                                         fuelQuantity: fuelQuantity,
+        //                                         adjustmentBase: adjustmentBase,
+        //                                         fuelLogisticsMaterialNumber: fuelLogisticsMaterialNumber,
+        //                                         renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                         renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                         renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                         renewablesTransferMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                         renewablesSubmissionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                         renewablesDocumentMonthDes: sMonthDes,
+        //                                         rfs2ObligationType: oMaterialConfig.rvoTypeCategory, //master have to correct MaintainRfs2Material
+        //                                         // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
+        //                                         regulationUnitOfMeasurement: "RIN"
+        //                                     })
+        //                                 }//if (oObjectID...
+        //                                 else {
+        //                                     aFinalData = [];
+        //                                     break;
+        //                                 }
+        //                             }//for (let iMatConfig...
+        //                         }
+        //                     }//if (vadjustmentBase..
+        //                     else {
+        //                         const {
+        //                             regulationQuantity,
+        //                             regulationUnitOfMeasurement,
+        //                             regulationLogisticsMaterialNumber
+        //                         } = ODataRequest.data;
+        //                         oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId("RFS2_MADJ_RVO");//(oRegualtionSubscenario.regulationSubScenario).toString());
+        //                         if (oRegulationType.regulationType && objectType && renewablesDocumentComplianceYear) {
+        //                             const sfilterMaterialConfig = "regulationType_regulationType eq '" + oRegulationType.regulationType + "' and objectType_code eq '" +
+        //                              oRegObjectCateory.objectTypeCode + "' and year eq " + renewablesDocumentComplianceYear + " and material eq '" +
+        //                               regulationLogisticsMaterialNumber + "'";
+        //                             // aMaterialConfig = await oRegulationComplianceBaseInstance.getMaterialConfiguration(sfilterMaterialConfig,
+        //                             //     {} as ILogUtility);
+        //                         }
+        //                         if (aMaterialConfig.length > 0) {
+        //                             // oObjectID = 435;
+        //                             if (oObjectID) {
+        //                                 aFinalData.push({
+        //                                     objectId: oObjectID,
+        //                                     regulationType: regulationType,
+        //                                     regulationCategory: regulationType,// check if these two are same
+        //                                     objectCategory: objectType,
+        //                                     objectType: oRegObjectCateory.objectCategoryCategory,//'RVO',
+        //                                     sourceScenario: 'MDJ',
+        //                                     subObjectScenario: oRegualtionSubscenario.regulationSubScenarioCategory,//get from material subscenariosubScenario[0].regulationSubScenario,//
+        //                                     // transactionType: oTransactionTypeTs.transactionType,
+        //                                     // transactionTypeDesc: oTransactionTypeTs.description,
+        //                                     transactionCategory: transactionCategory,//'PUR',//Maintain Regulation Transaction Types
+        //                                     impact: impact,
+        //                                     documentDate: documentDate,//'2024-06-01',
+        //                                     renewablesDocumentMonth: new Date(documentDate).getMonth().toString().padStart(2, "0") as Month,
+        //                                     renewablesDocumentQuarter: (Math.floor((new Date(documentDate).getMonth() + 3) / 3)).toString() as Quarter,
+        //                                     renewablesDocumentComplianceYear: renewablesDocumentComplianceYear,
+        //                                     businessPartnerNumber: businessPartnerNumber,
+        //                                     reasonCode: reasonCode,
+        //                                     reasonCodeDesc: reasonCodeDesc,
+        //                                     sourceOrgPlant: sourceOrgPlant,
+        //                                     regulationQuantity: regulationQuantity,
+        //                                     regulationUnitOfMeasurement: regulationUnitOfMeasurement,
+        //                                     regulationLogisticsMaterialNumber: regulationLogisticsMaterialNumber,
+        //                                     billofLading: billofLading,
+        //                                     fuelCategory: fuelCategory,
+        //                                     adjustmentBase: adjustmentBase,
+        //                                     renewablesPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                     renewablesReversalPostingMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                     renewablesProductionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                     renewablesTransferMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                     renewablesSubmissionMonth: new Date(documentDate).getMonth().toString().padStart(1, "0") as Month,
+        //                                     renewablesDocumentMonthDes: sMonthDes,
+        //                                     rfs2ObligationType: aMaterialConfig[0].rvoTypeCategory, //master have to correct MaintainRfs2Material
+        //                                     // rfs2ObligationTypeDesc: aRFS2DebitType.map[aMaterialConfig[0].rvoTypeCategory].description, error
+        //                                 });
+        //                             }//if (oObjectID...
+        //                         }//if (aMaterialConfig
+        //                     }//else of if (vadjustmentBase...
+        //                 }//if (oRegualtionSubscenario
+        //             }//if (oTransactionTypeTs
+        //         }//if (oRegObjectCateory
+        //     }//if (regulationType
+        //     if (aFinalData.length > 0) {
+        //         // await oRFS2ComplianceInstance.addRegulationCompliances(aFinalData);
+        //     }
+        //     return ODataRequest.data;
+        // })
+
+        // this.on('READ', 'MaintainRegulationType', async (req) => {
 
         // this.on('READ', 'MaintainTransactionTyp', async (request) => {
         //     const oRegulationTransactionTypeTsData = await oRegulationComplianceBaseInstance.getTransactiontype('');
@@ -475,7 +515,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 oLogData: ILogUtility = {} as ILogUtility;
             oLogData.message = "RINSCreatedSuccessfully";
             oLogData.messageType = messageTypes.success;
-
+            console.log(oLogData.message);
             for (let index = 0; index < data.length; index++) {
                 // generate next no
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);

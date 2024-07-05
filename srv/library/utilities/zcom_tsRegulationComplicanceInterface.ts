@@ -213,3 +213,28 @@ export interface EventPayload {
         UnitOfMeasure: string;
     }
 }
+export interface EventPayloadMDJ {
+    regulationType: string;
+    objectType:  string;
+    sourceScenario: string;
+    transactionCategory:string;
+    impact: string;
+    documentDate :Date;
+    businessPartnerNumber: string;
+    reasonCode: string;
+    reasonCodeDesc: string;
+    renewablesDocumentComplianceYear: string;
+    sourceOrgPlant :string;
+    adjustmentBase : string;
+    billofLading: string;
+    fuelCategory : string;
+        regulationQuantity: string;
+        regulationUnitOfMeasurement: string;
+        regulationLogisticsMaterialNumber: string;
+        sourceOrgMaterialNumber: string;
+        fuelUnitofMeasurement: string;
+        fuelQuantity: string;
+        renewablesEpaCompanyId: string;
+        renewablesEpaFacilityId: string;
+        fuelLogisticsMaterialNumber: string; 
+}
