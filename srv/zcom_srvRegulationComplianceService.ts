@@ -1207,6 +1207,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         where({ ID: data[index].ID});
                     
                     // update log with success
+                    oLogData.object = oObjectID.toString();
                     oLogData.regulationType = oLogData.applicationModule = data[index].regulationType;
                     oLogData.regulationSubObjectType = data[index].objectType;
                     oLogData.applicationSubModule = data[index].subObjectScenario;
