@@ -380,7 +380,7 @@ export class RegulationComplianceBaseClass {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq '" +
                     new Date(sDocumentDate).getFullYear().toString() + "'";
-                console.log(sFilters);
+                // console.log(sFilters);
                 this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $filter: encodeURIComponent(sFilters)
@@ -397,7 +397,7 @@ export class RegulationComplianceBaseClass {
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
                     });
-                console.log(this.aMaintainRfs2Material);
+                // console.log(this.aMaintainRfs2Material);
             }
         } catch (error) {
             console.log(error);
