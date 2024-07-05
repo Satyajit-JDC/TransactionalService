@@ -3,7 +3,7 @@ import cds from '@sap/cds';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase';
 
 // import {} from './library/zcom_tsLCFSCompliance';
-import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
+import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { Quarter, Month } from '@cds-models';
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
@@ -1232,12 +1232,23 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             oLogData.messageType = messageTypes.success;
 
             for (let index = 0; index < data.length; index++) {
+                // generate next no
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data[index].subObjectScenario);
-                data[index].objectId = oObjectID;
-                oLogData.regulationType = oLogData.applicationModule = data[index].regulationType;
-                oLogData.regulationSubObjectType = data[index].objectType;
-                oLogData.applicationSubModule = data[index].subObjectScenario;
-                oRegulationComplianceBaseInstance.addLog(oLogData);
+                if(oObjectID){
+                    data[index].objectId = oObjectID;
+                    
+                    // update transaction table
+                    await UPDATE(RegulationComplianceTransaction).
+                        set({ objectId: oObjectID}).
+                        where({ ID: data[index].ID});
+                    
+                    // update log with success
+                    oLogData.object = oObjectID.toString();
+                    oLogData.regulationType = oLogData.applicationModule = data[index].regulationType;
+                    oLogData.regulationSubObjectType = data[index].objectType;
+                    oLogData.applicationSubModule = data[index].subObjectScenario;
+                    oRegulationComplianceBaseInstance.addLog(oLogData);
+                }
             }
         })
         this.on('READ', 'TransactionType', async (req) => {
@@ -1273,6 +1284,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'GetRegulationSubType', async (req) => {
             return await valueListWithFilterQuery(req.query);
         })
+        this.on('READ', 'GetPlant', async (req) => {
+            return await valueListWithFilterQuery(req.query);
+        })
+        
         
 
         return super.init()

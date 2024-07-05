@@ -46,6 +46,8 @@ service RegulationComplianceTransactionService {
     entity GetMovementType                              as projection on master.MaintainMovementType;
     entity GetTransactionType                           as projection on master.MaintainTransactionType;
     entity GetRegulationSubType                         as projection on master.RegulationSubType;
+    entity GetPlant                                     as projection on master.MaintainCompanyIdToPlantMapping;
+    //entity GetProcessingStatus                          as projection on master.processingStatus;
 
     //S4 API
     entity GetFuelMaterialS4                            as
@@ -56,76 +58,11 @@ service RegulationComplianceTransactionService {
             RegulationGroup,
             RegulationMaterialGroup
         };
-
-    // CDs View for aggregating Regulation Quantity by Plant
-
-    define view MaintainWorkplaceAgggregationByPlantView as
-        select from RegulationComplianceTransaction {
-            sourceOrgPlant,
-            regulationQuantity,
-            sum(regulationQuantity) as TotalRegQuantityByPlant : Integer
-        }
-        group by
-            sourceOrgPlant,
-            regulationQuantity;
-
-    // CDs View for aggregating Regulation Quantity by Month
-
-    define view MaintainWorkplaceAgggregationByMonthView as
-        select from RegulationComplianceTransaction {
-            renewablesDocumentMonth,
-            renewablesDocumentMonthDes,
-            regulationQuantity,
-            sum(regulationQuantity) as TotalRegQuantityByMonth : Integer
-        }
-        group by
-            renewablesDocumentMonth,
-            renewablesDocumentMonthDes,
-            regulationQuantity;
-
-    // CDS View for aggregating Regulation Quantity by Category
-    define view MaintainWorkplaceAgggregationByCategoryView as
-        select from RegulationComplianceTransaction {
-            rfs2ObligationType,
-            rfs2ObligationTypeDesc,
-            regulationQuantity,
-            sum(regulationQuantity) as TotalRegQuantityByCategory : Integer
-        }
-        group by
-            regulationQuantity,
-            rfs2ObligationTypeDesc,
-            rfs2ObligationType;
-    define view MaintainWorkplaceAgggregationByObjectTypeView as
-        select from RegulationComplianceTransaction {
-            regulationQuantity,
-            objectType,
-            objectTypeDesc,
-            sum(regulationQuantity) as TotalRegQuantityByObjectType : Integer
-        }
-        group by
-            regulationQuantity,
-            objectType,
-            objectTypeDesc;
-
-    define view MaintainWorkplaceAgggregationByDcodeView as
-        select from RegulationComplianceTransaction {
-            regulationQuantity,
-            dcode,
-            dcodeDesc,
-            sum(regulationQuantity) as TotalRegQuantityByDcode : Integer
-        }
-        group by
-            regulationQuantity,
-            dcode,
-            dcodeDesc;
-
-     define view MaintainWorkplaceAgggregationByStatusView as
-        select from RegulationComplianceTransaction {
-            regulationQuantity,
-            processingStatus,
-            sum(regulationQuantity) as TotalRegQuantityByStatus : Integer
-        }
-        group by
-            regulationQuantity,
-            processingStatus;
+    entity MaintainWorkplaceAggregationByPlantView as projection on transaction.MaintainWorkplaceAggregationByPlantView;
+    entity MaintainWorkplaceAggregationByMonthView as projection on transaction.MaintainWorkplaceAggregationByMonthView;
+    entity MaintainWorkplaceAggregationByCategoryView as projection on transaction.MaintainWorkplaceAggregationByCategoryView;
+    entity MaintainWorkplaceAggregationByObjectTypeView as projection on transaction.MaintainWorkplaceAggregationByObjectTypeView;
+    entity MaintainWorkplaceAggregationByDcodeView as projection on transaction.MaintainWorkplaceAggregationByDcodeView;
+    entity MaintainWorkplaceAggregationByStatusView as projection on transaction.MaintainWorkplaceAggregationByStatusView;
 }
+

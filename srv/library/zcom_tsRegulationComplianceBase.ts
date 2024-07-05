@@ -810,10 +810,14 @@ export class RegulationComplianceBaseClass {
         if (oLogData) {
             const oResourceManager = new ResourceManager("../../_i18n/i18n"),
                 oBundle = oResourceManager.getTextBundle(language),
+                { logUtilityServiceApi } = logutilityserviceApi();
+            let logObjectID:string = "";
+
+            if(this.oEventPayloadData.RenewableEventType){
                 logObjectID = this.oEventPayloadData.RenewableEventType +
                     this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
-                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "",
-                { logUtilityServiceApi } = logutilityserviceApi();
+                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "";
+            }
 
             // fill unfilled common data
             if (!oLogData.object) {
