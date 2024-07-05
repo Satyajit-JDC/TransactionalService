@@ -43,7 +43,7 @@ Content-Type: application/json
       "QAPcertified":"",
       "Quantity": "0.000",
       "UnitOfMeasure":"",
-      "RenewablePassRetainIndicator":false,
+      "RenewablePassRetainIndicator":"",
       "RenewableDealNumber":"",
       "RenewableDcodeription":"",
       "RenewableVintageYearription":"0",

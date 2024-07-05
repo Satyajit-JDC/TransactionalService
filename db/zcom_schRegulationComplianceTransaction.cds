@@ -146,7 +146,7 @@ type EventData {
         QAPcertified                   : String;
         Quantity                       : String;
         UnitOfMeasure                  : String;
-        RenewablePassRetainIndicator   : Boolean;
+        RenewablePassRetainIndicator   : String;
         RenewableDealNumber            : String;
         RenewableDcodeription          : String;
         RenewableVintageYearription    : String;
