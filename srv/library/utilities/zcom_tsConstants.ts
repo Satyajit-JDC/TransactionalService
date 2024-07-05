@@ -35,3 +35,8 @@ export const regulationSubScenario = {
     RFS2_MADJ_RVO: "RFS2_MADJ_RVO",
     RFS2_MADJ_RIN: "RFS2_MADJ_RIN"
 } as const;
+
+export const adjustmentBaseMDJ = {
+    quantity: 'Q',
+    volume: 'V'
+} as const;

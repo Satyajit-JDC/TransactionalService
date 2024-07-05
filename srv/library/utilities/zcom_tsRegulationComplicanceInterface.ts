@@ -227,17 +227,13 @@ export interface EventPayloadMDJ {
     adjustmentBase : string;
     billofLading: string;
     fuelCategory : string;
-    _quantityBased:{
         regulationQuantity: string;
         regulationUnitOfMeasurement: string;
         regulationLogisticsMaterialNumber: string;
         sourceOrgMaterialNumber: string;
-    },
-    _volumeBased:{
         fuelUnitofMeasurement: string;
         fuelQuantity: string;
         renewablesEpaCompanyId: string;
         renewablesEpaFacilityId: string;
-        fuelLogisticsMaterialNumber: string;   
-    }
+        fuelLogisticsMaterialNumber: string; 
 }
