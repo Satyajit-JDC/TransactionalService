@@ -1248,6 +1248,10 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         this.on('READ', 'GetRegulationSubType', async (req) => {
             return await valueListWithFilterQuery(req.query);
         })
+        this.on('READ', 'GetPlant', async (req) => {
+            return await valueListWithFilterQuery(req.query);
+        })
+        
         
 
         return super.init()
