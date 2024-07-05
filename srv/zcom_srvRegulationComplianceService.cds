@@ -45,6 +45,7 @@ service RegulationComplianceTransactionService {
     entity GetFuelSubCategory                           as projection on master.FuelSubCategory;
     entity GetMovementType                              as projection on master.MaintainMovementType;
     entity GetTransactionType                           as projection on master.MaintainTransactionType;
+    entity GetRegulationSubType                         as projection on master.RegulationSubType;
 
     //S4 API
     entity GetFuelMaterialS4                            as
@@ -57,7 +58,7 @@ service RegulationComplianceTransactionService {
         };
 
     // CDs View for aggregating Regulation Quantity by Plant
-    @cds.persistence.skip
+
     define view MaintainWorkplaceAgggregationByPlantView as
         select from RegulationComplianceTransaction {
             sourceOrgPlant,
@@ -65,29 +66,66 @@ service RegulationComplianceTransactionService {
             sum(regulationQuantity) as TotalRegQuantityByPlant : Integer
         }
         group by
-            sourceOrgPlant;
+            sourceOrgPlant,
+            regulationQuantity;
 
     // CDs View for aggregating Regulation Quantity by Month
-    @cds.persistence.skip
+
     define view MaintainWorkplaceAgggregationByMonthView as
         select from RegulationComplianceTransaction {
             renewablesDocumentMonth,
+            renewablesDocumentMonthDes,
             regulationQuantity,
             sum(regulationQuantity) as TotalRegQuantityByMonth : Integer
         }
         group by
-            renewablesDocumentMonthDes;
+            renewablesDocumentMonth,
+            renewablesDocumentMonthDes,
+            regulationQuantity;
 
     // CDS View for aggregating Regulation Quantity by Category
-    @cds.persistence.skip
     define view MaintainWorkplaceAgggregationByCategoryView as
         select from RegulationComplianceTransaction {
             rfs2ObligationType,
+            rfs2ObligationTypeDesc,
             regulationQuantity,
             sum(regulationQuantity) as TotalRegQuantityByCategory : Integer
         }
         group by
-            rfs2ObligationTypeDesc;
+            regulationQuantity,
+            rfs2ObligationTypeDesc,
+            rfs2ObligationType;
+    define view MaintainWorkplaceAgggregationByObjectTypeView as
+        select from RegulationComplianceTransaction {
+            regulationQuantity,
+            objectType,
+            objectTypeDesc,
+            sum(regulationQuantity) as TotalRegQuantityByObjectType : Integer
+        }
+        group by
+            regulationQuantity,
+            objectType,
+            objectTypeDesc;
 
+    define view MaintainWorkplaceAgggregationByDcodeView as
+        select from RegulationComplianceTransaction {
+            regulationQuantity,
+            dcode,
+            dcodeDesc,
+            sum(regulationQuantity) as TotalRegQuantityByDcode : Integer
+        }
+        group by
+            regulationQuantity,
+            dcode,
+            dcodeDesc;
 
+     define view MaintainWorkplaceAgggregationByStatusView as
+        select from RegulationComplianceTransaction {
+            regulationQuantity,
+            processingStatus,
+            sum(regulationQuantity) as TotalRegQuantityByStatus : Integer
+        }
+        group by
+            regulationQuantity,
+            processingStatus;
 }

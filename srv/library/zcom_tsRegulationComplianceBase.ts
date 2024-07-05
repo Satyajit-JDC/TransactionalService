@@ -14,10 +14,12 @@ import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes, language } from './utilities/zcom_tsConstants';
 import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
+import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
+import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
-import { materialcharacteristicsApi } from '../external/materialcharacteristics_api';
-// import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
-// import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
+import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
+ 
+ 
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -25,43 +27,43 @@ export class RegulationComplianceBaseClass {
 
     // public elements
     public oEventPayloadData: EventPayload;
-    public oRFS2RegulationData!: MaintainRegulationGroupView;
-    public oRegulationDataIsReady!: Promise<unknown>;
-    public oRFS2CreditData!: MaintainRegulationMaterialGroupView;
-    public oRFS2DebitData!: MaintainRegulationMaterialGroupView;
-    public oMaintainRegulationObjectType!: MaintainRegulationObjectType;
-    public aMaintainRegulationObjectType!: MaintainRegulationObjectType[];
-    public oMaintainRegulationSubScenarioToScenarioType!: MaintainRegulationSubScenarioToScenarioType;
-    public oMaintainMovementType!: MaintainMovementType;
-    public aMaintainMovementType!: MaintainMovementType[];
-    public oMaintainMovementTypeToTransactionCategoryMapping!: MaintainMovementTypeToTransactionCategoryMapping;
-    public aMaintainMovementTypeToTransactionCategoryMapping!: MaintainMovementTypeToTransactionCategoryMapping[];
-    public aMaintainRfs2Material!: MaintainRfs2Material[];
-    public oMaintainRegulationTransactionType!: MaintainRegulationTransactionType;
-    public oMaintainRegulationType!: MaintainRegulationType;
-    public aMaintainRegulationType!: MaintainRegulationType[];
-    public aMaintainTransactionType!: MaintainTransactionType[];
-    public mMaintainTransactionType!: { [index: string]: MaintainTransactionType };
-    public aRfs2DebitType!: Rfs2DebitType[];
-    public mRfs2DebitType!: { [index: string]: Rfs2DebitType };
-    public aFuelCategory!: FuelCategory[];
-    public mFuelCategory!: { [index: string]: FuelCategory };
-    public aFuelSubCategory!: FuelSubCategory[];
-    public mFuelSubCategory!: { [index: string]: FuelSubCategory };
-    public aObjectCategory!: ObjectCategory[];
-    public aMaintainAdjustmentReasonCode!: MaintainAdjustmentReasonCode[];
-    public aRegulationUom!: RegulationUom[];
-    public aImpact!: Impact[];
+    public oRFS2RegulationData: MaintainRegulationGroupView = {} as MaintainRegulationGroupView;
+    public oRegulationDataIsReady: Promise<unknown>;
+    public oRFS2CreditData: MaintainRegulationMaterialGroupView = {} as MaintainRegulationMaterialGroupView;
+    public oRFS2DebitData: MaintainRegulationMaterialGroupView = {} as MaintainRegulationMaterialGroupView;
+    public oMaintainRegulationObjectType: MaintainRegulationObjectType = {} as MaintainRegulationObjectType;
+    public aMaintainRegulationObjectType: MaintainRegulationObjectType[] = [];
+    public oMaintainRegulationSubScenarioToScenarioType: MaintainRegulationSubScenarioToScenarioType = {} as MaintainRegulationSubScenarioToScenarioType;
+    public oMaintainMovementType: MaintainMovementType = {} as MaintainMovementType;
+    public aMaintainMovementType: MaintainMovementType[] = [];
+    public oMaintainMovementTypeToTransactionCategoryMapping: MaintainMovementTypeToTransactionCategoryMapping = {} as MaintainMovementTypeToTransactionCategoryMapping;
+    public aMaintainMovementTypeToTransactionCategoryMapping: MaintainMovementTypeToTransactionCategoryMapping[] = [];
+    public aMaintainRfs2Material: MaintainRfs2Material[] = [];
+    public oMaintainRegulationTransactionType: MaintainRegulationTransactionType = {} as MaintainRegulationTransactionType;
+    public aMaintainRegulationTransactionType: MaintainRegulationTransactionType[] = [];
+    public oMaintainRegulationType: MaintainRegulationType = {} as MaintainRegulationType;
+    public aMaintainRegulationType: MaintainRegulationType[] = [];
+    public aMaintainTransactionType: MaintainTransactionType[] = [];
+    public mMaintainTransactionType: { [index: string]: MaintainTransactionType } = {};
+    public aRfs2DebitType: Rfs2DebitType[] = [];
+    public mRfs2DebitType: { [index: string]: Rfs2DebitType } = {};
+    public aFuelCategory: FuelCategory[] = [];
+    public mFuelCategory: { [index: string]: FuelCategory } = {};
+    public aFuelSubCategory: FuelSubCategory[] = [];
+    public mFuelSubCategory: { [index: string]: FuelSubCategory } = {};
+    public aObjectCategory: ObjectCategory[] = [];
+    public aMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode[] = [];
+    public aRegulationUom: RegulationUom[] = [];
+    public aImpact: Impact[] = [];
     public oEventPayloadMDJData!: EventPayloadMDJ;
-
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
         // initialize the data
-
+        
         this.oRegulationDataIsReady = new Promise(async (resolve, reject) => {
             // check is regulation data available
-            if (!this.oRFS2RegulationData) {
+            if (!this.oRFS2RegulationData.regulationType) {
                 // regulation group present then set Regulation Type to class object
                 if (oEventPayloadData.RegulationGroupName) {
                     try {
@@ -81,7 +83,7 @@ export class RegulationComplianceBaseClass {
         });
     }
     //-------- End of Base constructor ------------------
-
+    
     // --------- Start of Setter methods ------------------
     // set RFS2 Class Instance Object
     set setRFS2ComplianceClassObject(oRFS2ClassObjectInstance: RFS2ComplianceClass) {
@@ -130,7 +132,7 @@ export class RegulationComplianceBaseClass {
     // set material group data and object category
     async setRegulationMaterialGroup() {
         try {
-            if (this.oRFS2RegulationData) {
+            if (this.oRFS2RegulationData.regulationType) {
                 // create object
                 const { maintainRegulationMaterialGroupViewApi } = regulationcompliancemasterserviceApi();
 
@@ -178,13 +180,13 @@ export class RegulationComplianceBaseClass {
     async setRgulationSubScnario() {
         try {
             const { maintainRegulationSubScenarioToScenarioApi } = regulationcompliancemasterserviceApi();
-            if (this.oEventPayloadData.RenewableEventType && this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+            if (this.oEventPayloadData.RenewableEventType && this.oRFS2RegulationData.regulationType && (this.oRFS2CreditData.category || this.oRFS2DebitData.category)) {
                 const sSourceScenario = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
                     RFS2ConstantValues.eventTypeMDJ : this.oEventPayloadData.RenewableEventType.substring(0, 2);
                 const sFilterSubObjectScenario = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType
                     + "' and transactionSourceScenario_category eq '" + sSourceScenario +
                     "' and objectCategory_category eq '"
-                    + (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
+                    + (this.oRFS2CreditData.category ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
 
                 // call Cloud SDK
                 (await maintainRegulationSubScenarioToScenarioApi.requestBuilder().getAll()
@@ -231,10 +233,10 @@ export class RegulationComplianceBaseClass {
     async setRegulationObjectType() {
         const { maintainRegulationObjectTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && (this.oRFS2CreditData || this.oRFS2DebitData)) {
+            if (this.oRFS2RegulationData.regulationType && (this.oRFS2CreditData.category || this.oRFS2DebitData.category)) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectCategory_category eq '" +
-                    (this.oRFS2CreditData ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
+                    (this.oRFS2CreditData.category ? this.oRFS2CreditData.category : this.oRFS2DebitData.category) + "'";
 
                 (await maintainRegulationObjectTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -278,7 +280,7 @@ export class RegulationComplianceBaseClass {
     async setMovementType() {
         const { maintainMovementTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "'";
 
@@ -322,14 +324,15 @@ export class RegulationComplianceBaseClass {
     async setMvtTypeTransationRelevance() {
         const { maintainMovementTypeToTransactionCategoryMappingApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType && this.oMaintainMovementType) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oMaintainMovementType.movementType) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode +
-                    "' and movementType_movementType eq '" + this.oMaintainMovementType.movementType + "'";
+                    "' and movementType/movementType eq '" + this.oMaintainMovementType.movementType + "'";
 
                 (await maintainMovementTypeToTransactionCategoryMappingApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent(sFilters)
+                        $filter: encodeURIComponent(sFilters),
+                        $expand: "movementType"
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -369,10 +372,10 @@ export class RegulationComplianceBaseClass {
     async setMaterialConfiguration() {
         const { maintainRfs2MaterialApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData && this.oMaintainRegulationObjectType && this.oEventPayloadData._RenewableMaterialDocument.DocumentDate) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oEventPayloadData._RenewableMaterialDocument) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq " +
-                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString();
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq '" +
+                    new Date(this.oEventPayloadData._RenewableMaterialDocument.DocumentDate).getFullYear().toString() + "'";
 
                 this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -382,13 +385,15 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     });
             }
-            //  else {
-            //     this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
-            //         .middleware(resilience({ retry: 3, circuitBreaker: true }))
-            //         .execute({
-            //             destinationName: destinationNames.regulationComplianceMasterService
-            //         });
-            // }
+             else {
+                this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $expand: 'regulationType'
+                    }).middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    });
+            }
         } catch (error) {
             console.log(error);
             let sErrorMsg = "";
@@ -411,7 +416,7 @@ export class RegulationComplianceBaseClass {
     async setRegulationTypes() {
         const { maintainRegulationTypeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oRFS2RegulationData) {
+            if (this.oRFS2RegulationData.regulationType) {
                 const sFilters = "regulationType eq '" + this.oRFS2RegulationData.regulationType + "'";
 
                 (await maintainRegulationTypeApi.requestBuilder().getAll()
@@ -456,7 +461,7 @@ export class RegulationComplianceBaseClass {
         try {
             const { maintainRegulationTransactionTypeApi } = regulationcompliancemasterserviceApi();
 
-            if (this.oRFS2RegulationData) {
+            if (this.oRFS2RegulationData.regulationType && this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and transactionCategory_category eq '" + this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory + "'";
 
@@ -472,13 +477,13 @@ export class RegulationComplianceBaseClass {
                     });
             }
             else {
-                (await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
+                this.aMaintainRegulationTransactionType = await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
+                    .addCustomQueryParameters({
+                        $expand: 'transactionCategory'
+                    })
                     .middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
-                    })).
-                    forEach((oData) => {
-                        this.oMaintainRegulationTransactionType = oData;
                     });
             }
         } catch (error) {
@@ -629,7 +634,7 @@ export class RegulationComplianceBaseClass {
     async setAdjustmentReasonCode() {
         const { maintainAdjustmentReasonCodeApi } = regulationcompliancemasterserviceApi();
         try {
-            if (this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode) {
+            if (this.oEventPayloadData._RenewableMaterialDocument) {
                 const sFilters = "reasonCode eq " + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "";
 
                 (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
@@ -806,8 +811,8 @@ export class RegulationComplianceBaseClass {
             const oResourceManager = new ResourceManager("../../_i18n/i18n"),
                 oBundle = oResourceManager.getTextBundle(language),
                 logObjectID = this.oEventPayloadData.RenewableEventType +
-                    this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument +
-                    this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem,
+                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
+                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "",
                 { logUtilityServiceApi } = logutilityserviceApi();
 
             // fill unfilled common data
@@ -861,7 +866,7 @@ export class RegulationComplianceBaseClass {
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
         return await srv.read(RegulationComplianceTransaction).where({ sourceScenario: sourceScenario });
     }
-    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]> {
+    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
         let aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
         (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
@@ -883,9 +888,9 @@ export class RegulationComplianceBaseClass {
                     MaterialDescription: fm.materialDescription,
                     RegulationMaterialGroup: fm.regulationMaterialGroup
                 });
-
+ 
             });
-        return aFuelMaterial;
-    }
+            return aFuelMaterial;
+        }
 
 }

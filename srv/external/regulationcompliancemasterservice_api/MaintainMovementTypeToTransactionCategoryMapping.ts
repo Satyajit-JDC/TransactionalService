@@ -74,11 +74,6 @@ export class MaintainMovementTypeToTransactionCategoryMapping<
    */
   declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -98,12 +93,6 @@ export class MaintainMovementTypeToTransactionCategoryMapping<
    * @nullable
    */
   declare movementTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
-   * Movement Type Movement Type.
-   * Maximum length: 4.
-   * @nullable
-   */
-  declare movementTypeMovementType?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Origin Relevant.
    * @nullable
@@ -204,11 +193,9 @@ export interface MaintainMovementTypeToTransactionCategoryMappingType<
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   objectTypeCode?: DeserializedType<T, 'Edm.String'> | null;
   movementTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  movementTypeMovementType?: DeserializedType<T, 'Edm.String'> | null;
   originRelevant?: DeserializedType<T, 'Edm.String'> | null;
   originMaterialRelevant?: DeserializedType<T, 'Edm.String'> | null;
   destinationRelevant?: DeserializedType<T, 'Edm.String'> | null;

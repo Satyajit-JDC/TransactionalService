@@ -52,13 +52,11 @@ export class MaintainRegulationSubScenarioToScenarioRequestBuilder<
 
   /**
    * Returns a request builder for retrieving one `MaintainRegulationSubScenarioToScenario` entity based on its keys.
-   * @param id Key property. See {@link MaintainRegulationSubScenarioToScenario.id}.
    * @param regulationSubScenarioCategory Key property. See {@link MaintainRegulationSubScenarioToScenario.regulationSubScenarioCategory}.
    * @param isActiveEntity Key property. See {@link MaintainRegulationSubScenarioToScenario.isActiveEntity}.
    * @returns A request builder for creating requests to retrieve one `MaintainRegulationSubScenarioToScenario` entity based on its keys.
    */
   getByKey(
-    id: DeserializedType<T, 'Edm.Guid'>,
     regulationSubScenarioCategory: DeserializedType<T, 'Edm.String'>,
     isActiveEntity: DeserializedType<T, 'Edm.Boolean'>
   ): GetByKeyRequestBuilder<MaintainRegulationSubScenarioToScenario<T>, T> {
@@ -66,7 +64,6 @@ export class MaintainRegulationSubScenarioToScenarioRequestBuilder<
       MaintainRegulationSubScenarioToScenario<T>,
       T
     >(this.entityApi, {
-      ID: id,
       regulationSubScenario_category: regulationSubScenarioCategory,
       IsActiveEntity: isActiveEntity
     });
@@ -88,13 +85,11 @@ export class MaintainRegulationSubScenarioToScenarioRequestBuilder<
 
   /**
    * Returns a request builder for deleting an entity of type `MaintainRegulationSubScenarioToScenario`.
-   * @param id Key property. See {@link MaintainRegulationSubScenarioToScenario.id}.
    * @param regulationSubScenarioCategory Key property. See {@link MaintainRegulationSubScenarioToScenario.regulationSubScenarioCategory}.
    * @param isActiveEntity Key property. See {@link MaintainRegulationSubScenarioToScenario.isActiveEntity}.
    * @returns A request builder for creating requests that delete an entity of type `MaintainRegulationSubScenarioToScenario`.
    */
   delete(
-    id: string,
     regulationSubScenarioCategory: string,
     isActiveEntity: boolean
   ): DeleteRequestBuilder<MaintainRegulationSubScenarioToScenario<T>, T>;
@@ -107,8 +102,7 @@ export class MaintainRegulationSubScenarioToScenarioRequestBuilder<
     entity: MaintainRegulationSubScenarioToScenario<T>
   ): DeleteRequestBuilder<MaintainRegulationSubScenarioToScenario<T>, T>;
   delete(
-    idOrEntity: any,
-    regulationSubScenarioCategory?: string,
+    regulationSubScenarioCategoryOrEntity: any,
     isActiveEntity?: boolean
   ): DeleteRequestBuilder<MaintainRegulationSubScenarioToScenario<T>, T> {
     return new DeleteRequestBuilder<
@@ -116,11 +110,12 @@ export class MaintainRegulationSubScenarioToScenarioRequestBuilder<
       T
     >(
       this.entityApi,
-      idOrEntity instanceof MaintainRegulationSubScenarioToScenario
-        ? idOrEntity
+      regulationSubScenarioCategoryOrEntity instanceof
+      MaintainRegulationSubScenarioToScenario
+        ? regulationSubScenarioCategoryOrEntity
         : {
-            ID: idOrEntity!,
-            regulationSubScenario_category: regulationSubScenarioCategory!,
+            regulationSubScenario_category:
+              regulationSubScenarioCategoryOrEntity!,
             IsActiveEntity: isActiveEntity!
           }
     );

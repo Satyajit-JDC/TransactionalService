@@ -9,27 +9,27 @@ import {
   DeSerializers,
   DeserializedType
 } from '@sap-cloud-sdk/odata-v4';
-import type { MaintainCompanyIdOrPlantToFacilityIdApi } from './MaintainCompanyIdOrPlantToFacilityIdApi';
+import type { MaintainCompanyIdOrPlantToFacilityIdMappingApi } from './MaintainCompanyIdOrPlantToFacilityIdMappingApi';
 
 /**
- * This class represents the entity "MaintainCompanyIdOrPlantToFacilityId" of service "RegulationComplianceMasterService".
+ * This class represents the entity "MaintainCompanyIdOrPlantToFacilityIdMapping" of service "RegulationComplianceMasterService".
  */
-export class MaintainCompanyIdOrPlantToFacilityId<
+export class MaintainCompanyIdOrPlantToFacilityIdMapping<
     T extends DeSerializers = DefaultDeSerializers
   >
   extends Entity
-  implements MaintainCompanyIdOrPlantToFacilityIdType<T>
+  implements MaintainCompanyIdOrPlantToFacilityIdMappingType<T>
 {
   /**
-   * Technical entity name for MaintainCompanyIdOrPlantToFacilityId.
+   * Technical entity name for MaintainCompanyIdOrPlantToFacilityIdMapping.
    */
-  static _entityName = 'MaintainCompanyIdOrPlantToFacilityId';
+  static _entityName = 'MaintainCompanyIdOrPlantToFacilityIdMapping';
   /**
    * Default url path for the according service.
    */
   static _defaultBasePath = '/service/RegulationComplianceMasterService';
   /**
-   * All key fields of the MaintainCompanyIdOrPlantToFacilityId entity
+   * All key fields of the MaintainCompanyIdOrPlantToFacilityIdMapping entity
    */
   static _keys = ['ID', 'IsActiveEntity'];
   /**
@@ -89,16 +89,16 @@ export class MaintainCompanyIdOrPlantToFacilityId<
    */
   declare hasDraftEntity: DeserializedType<T, 'Edm.Boolean'>;
   /**
-   * One-to-one navigation property to the {@link MaintainCompanyIdOrPlantToFacilityId} entity.
+   * One-to-one navigation property to the {@link MaintainCompanyIdOrPlantToFacilityIdMapping} entity.
    */
-  declare siblingEntity?: MaintainCompanyIdOrPlantToFacilityId<T> | null;
+  declare siblingEntity?: MaintainCompanyIdOrPlantToFacilityIdMapping<T> | null;
 
-  constructor(_entityApi: MaintainCompanyIdOrPlantToFacilityIdApi<T>) {
+  constructor(_entityApi: MaintainCompanyIdOrPlantToFacilityIdMappingApi<T>) {
     super(_entityApi);
   }
 }
 
-export interface MaintainCompanyIdOrPlantToFacilityIdType<
+export interface MaintainCompanyIdOrPlantToFacilityIdMappingType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   id: DeserializedType<T, 'Edm.Guid'>;
@@ -112,5 +112,5 @@ export interface MaintainCompanyIdOrPlantToFacilityIdType<
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasDraftEntity: DeserializedType<T, 'Edm.Boolean'>;
-  siblingEntity?: MaintainCompanyIdOrPlantToFacilityIdType<T> | null;
+  siblingEntity?: MaintainCompanyIdOrPlantToFacilityIdMappingType<T> | null;
 }

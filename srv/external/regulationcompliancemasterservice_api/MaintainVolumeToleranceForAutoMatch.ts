@@ -63,11 +63,6 @@ export class MaintainVolumeToleranceForAutoMatch<
    */
   declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -115,7 +110,6 @@ export interface MaintainVolumeToleranceForAutoMatchType<
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   range?: DeserializedType<T, 'Edm.Int32'> | null;
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;

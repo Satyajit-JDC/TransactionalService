@@ -186,13 +186,6 @@ export class MaintainMovementTypeApi<
       MaintainMovementType<DeSerializers>,
       DeSerializersT,
       'Edm.String',
-      false,
-      true
-    >;
-    REGULATION_TYPE_ID: OrderableEdmTypeField<
-      MaintainMovementType<DeSerializers>,
-      DeSerializersT,
-      'Edm.Guid',
       true,
       true
     >;
@@ -357,15 +350,6 @@ export class MaintainMovementTypeApi<
         MOVEMENT_TYPE: fieldBuilder.buildEdmTypeField(
           'movementType',
           'Edm.String',
-          false
-        ),
-        /**
-         * Static representation of the {@link regulationTypeId} property for query construction.
-         * Use to reference this property in query operations such as 'select' in the fluent request API.
-         */
-        REGULATION_TYPE_ID: fieldBuilder.buildEdmTypeField(
-          'regulationType_ID',
-          'Edm.Guid',
           true
         ),
         /**

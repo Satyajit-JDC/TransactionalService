@@ -34,9 +34,9 @@ import {
   MaintainRenewableMovementType,
   MaintainRfs2Material,
   MaintainCompanyIdToPlantMapping,
-  MaintainCompanyIdOrPlantToFacilityId,
+  MaintainCompanyIdOrPlantToFacilityIdMapping,
   MaintainRegulationSubScenarioToScenario,
-  MaintainRegulationSubScenarioAction,
+  MaintainActionSubScenarioMapping,
   ManageRegulationTypeAndActive,
   ManageRegulationTypeAndObjectCategory,
   MaintainIdRangeForRenewableObjectSequence,
@@ -198,7 +198,7 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
@@ -206,7 +206,7 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetAllRequestBuilder<
-      MaintainRegulationSubScenarioAction<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetAllRequestBuilder<
@@ -323,7 +323,7 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
@@ -331,7 +331,7 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
-      MaintainRegulationSubScenarioAction<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT
     >
   | GetByKeyRequestBuilder<
@@ -568,15 +568,15 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainCompanyIdOrPlantToFacilityId<DeSerializersT>,
+      MaintainCompanyIdOrPlantToFacilityIdMapping<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<
@@ -592,15 +592,15 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       DeSerializersT
     >
   | CreateRequestBuilder<
-      MaintainRegulationSubScenarioAction<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT
     >
   | UpdateRequestBuilder<
-      MaintainRegulationSubScenarioAction<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT
     >
   | DeleteRequestBuilder<
-      MaintainRegulationSubScenarioAction<DeSerializersT>,
+      MaintainActionSubScenarioMapping<DeSerializersT>,
       DeSerializersT
     >
   | CreateRequestBuilder<

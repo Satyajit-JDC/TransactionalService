@@ -43,11 +43,6 @@ export class MaintainRegulationGroupView<
    */
   declare regulationType?: DeserializedType<T, 'Edm.String'> | null;
   /**
-   * Regulation Group Id.
-   * @nullable
-   */
-  declare regulationGroupId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Group Regulation Group.
    * Maximum length: 5.
    * @nullable
@@ -76,7 +71,6 @@ export interface MaintainRegulationGroupViewType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   regulationType?: DeserializedType<T, 'Edm.String'> | null;
-  regulationGroupId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationGroupRegulationGroup?: DeserializedType<T, 'Edm.String'> | null;
   description?: DeserializedType<T, 'Edm.String'> | null;
   regulationGroup?: MaintainRegulationGroupType<T> | null;

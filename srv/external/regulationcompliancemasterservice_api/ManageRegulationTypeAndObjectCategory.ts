@@ -46,11 +46,6 @@ export class ManageRegulationTypeAndObjectCategory<
    */
   declare id: DeserializedType<T, 'Edm.Guid'>;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -65,11 +60,6 @@ export class ManageRegulationTypeAndObjectCategory<
    * @nullable
    */
   declare objectCategoryCategory?: DeserializedType<T, 'Edm.String'> | null;
-  /**
-   * Regulation Material Group Id.
-   * @nullable
-   */
-  declare regulationMaterialGroupId?: DeserializedType<T, 'Edm.Guid'> | null;
   /**
    * Regulation Material Group Regulation Material Group.
    * Maximum length: 5.
@@ -117,10 +107,8 @@ export interface ManageRegulationTypeAndObjectCategoryType<
   T extends DeSerializers = DefaultDeSerializers
 > {
   id: DeserializedType<T, 'Edm.Guid'>;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   objectCategoryCategory?: DeserializedType<T, 'Edm.String'> | null;
-  regulationMaterialGroupId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationMaterialGroupRegulationMaterialGroup?: DeserializedType<
     T,
     'Edm.String'

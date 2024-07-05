@@ -68,11 +68,6 @@ export class MaintainRenewableMovementType<
    */
   declare modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
   /**
-   * Regulation Type Id.
-   * @nullable
-   */
-  declare regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
    * Regulation Type Regulation Type.
    * Maximum length: 5.
    * @nullable
@@ -92,15 +87,6 @@ export class MaintainRenewableMovementType<
    * @nullable
    */
   declare inventoryMovementTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  /**
-   * Inventory Movement Type Movement Type.
-   * Maximum length: 4.
-   * @nullable
-   */
-  declare inventoryMovementTypeMovementType?: DeserializedType<
-    T,
-    'Edm.String'
-  > | null;
   /**
    * Contract Relevant.
    * @nullable
@@ -158,11 +144,9 @@ export interface MaintainRenewableMovementTypeType<
   createdBy?: DeserializedType<T, 'Edm.String'> | null;
   modifiedAt?: DeserializedType<T, 'Edm.DateTimeOffset'> | null;
   modifiedBy?: DeserializedType<T, 'Edm.String'> | null;
-  regulationTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   regulationTypeRegulationType?: DeserializedType<T, 'Edm.String'> | null;
   objectTypeCode?: DeserializedType<T, 'Edm.String'> | null;
   inventoryMovementTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
-  inventoryMovementTypeMovementType?: DeserializedType<T, 'Edm.String'> | null;
   contractRelevant?: DeserializedType<T, 'Edm.String'> | null;
   contractSide?: DeserializedType<T, 'Edm.String'> | null;
   relevantMovementType?: DeserializedType<T, 'Edm.String'> | null;
