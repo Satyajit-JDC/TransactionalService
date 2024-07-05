@@ -53,6 +53,7 @@ export class RegulationComplianceBaseClass {
     public mFuelSubCategory: { [index: string]: FuelSubCategory } = {};
     public aObjectCategory: ObjectCategory[] = [];
     public aMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode[] = [];
+    public oMaintainAdjustmentReasonCode: MaintainAdjustmentReasonCode = {} as MaintainAdjustmentReasonCode;
     public aRegulationUom: RegulationUom[] = [];
     public aImpact: Impact[] = [];
 
@@ -468,7 +469,8 @@ export class RegulationComplianceBaseClass {
 
                 (await maintainRegulationTransactionTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
-                        $filter: encodeURIComponent(sFilters)
+                        $filter: encodeURIComponent(sFilters),
+                        $expand: "transactionType"
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
                         destinationName: destinationNames.regulationComplianceMasterService
@@ -636,7 +638,7 @@ export class RegulationComplianceBaseClass {
         const { maintainAdjustmentReasonCodeApi } = regulationcompliancemasterserviceApi();
         try {
             if (this.oEventPayloadData._RenewableMaterialDocument) {
-                const sFilters = "reasonCode eq " + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "";
+                const sFilters = "reasonCode eq '" + this.oEventPayloadData._RenewableMaterialDocument.RenewableReasonReasonCode + "'";
 
                 (await maintainAdjustmentReasonCodeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
@@ -646,7 +648,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     })).
                     forEach(oData => {
-                        this.aMaintainAdjustmentReasonCode.push(oData);
+                        this.oMaintainAdjustmentReasonCode = oData;
                     });
             }
             else {
