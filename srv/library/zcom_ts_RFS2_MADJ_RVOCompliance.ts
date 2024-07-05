@@ -28,12 +28,12 @@ export class RFS2_MADJ_RVOCompliance {
     private async _validateData(): Promise<boolean> {
 
         // set regulation type
-        await this._oRegulationComplianceBaseClassInstance.setRegulationTypes();
-        if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType) {
-            // data available
-        } else {
-            return false;
-        }
+        // await this._oRegulationComplianceBaseClassInstance.setRegulationTypes();
+        // if (this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType) {
+        //     // data available
+        // } else {
+        //     return false;
+        // }
 
         // set reg object catefory
         await this._oRegulationComplianceBaseClassInstance.setRegulationObjectType();
@@ -144,7 +144,7 @@ export class RFS2_MADJ_RVOCompliance {
                 if (oMaterialConfig.obligationPercent) {
                     aFinalData.push({
                         regulationType: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.regulationType,
-                        regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.description,
+                        // regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.description,
                         regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                         objectCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                         objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
@@ -170,9 +170,9 @@ export class RFS2_MADJ_RVOCompliance {
                         renewablesEpaCompanyId: oMatVolumeBased.renewablesEpaCompanyId,
                         renewablesEpaFacilityId: oMatVolumeBased.renewablesEpaFacilityId,
                         fuelUnitofMeasurement: oMatVolumeBased.fuelUnitofMeasurement, //'BBL',
-                        fuelAlternateUnitofMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.fuelAlternateUom,
+                        // fuelAlternateUnitofMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.fuelAlternateUom,
                         // ,                   sourceOrgCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
-                        regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
+                        regulationLogisticsMaterialNumber: oMatVolumeBased.fuelLogisticsMaterialNumber,//'CELLULOSIC_2024',need to confirm
                         billofLading: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.billofLading,
                         fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.fuelCategory,
                         fuelQuantity: parseFloat(oMatVolumeBased.fuelQuantity),
@@ -184,10 +184,10 @@ export class RFS2_MADJ_RVOCompliance {
                         renewablesTransferMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                         renewablesSubmissionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                         rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
-                        rfs2ObligationTypeDesc: oMaterialConfig.description,
+                        rfs2ObligationTypeDesc: oMaterialConfig.description//,
                       
                         // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
-                        regulationUnitOfMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationUoMCategory,
+                        // regulationUnitOfMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationUoMCategory,
                     })
 
                 }
@@ -204,7 +204,7 @@ export class RFS2_MADJ_RVOCompliance {
               
             aFinalData.push({
                 regulationType: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.regulationType,
-                regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.description,
+                // regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.description,
                 regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                 objectCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                 objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
@@ -227,7 +227,7 @@ export class RFS2_MADJ_RVOCompliance {
                 regulationQuantityWholeNumber:parseFloat(oMatQtyBased.regulationQuantity), 
                 regulationUnitOfMeasurement: oMatQtyBased.regulationUnitOfMeasurement,  
                // ,                   sourceOrgCompanyMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024'
-                regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
+                // regulationLogisticsMaterialNumber: oMaterialConfig.material,//'CELLULOSIC_2024',
                 billofLading: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.billofLading,
                 fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.fuelCategory,
                 adjustmentBase: adjustmentBaseMDJ.quantity,
