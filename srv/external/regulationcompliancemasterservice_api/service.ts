@@ -27,6 +27,7 @@ import { MaintainActionSubScenarioMappingApi } from './MaintainActionSubScenario
 import { ManageRegulationTypeAndActiveApi } from './ManageRegulationTypeAndActiveApi';
 import { ManageRegulationTypeAndObjectCategoryApi } from './ManageRegulationTypeAndObjectCategoryApi';
 import { MaintainIdRangeForRenewableObjectSequenceApi } from './MaintainIdRangeForRenewableObjectSequenceApi';
+import { ProcessingStatusApi } from './ProcessingStatusApi';
 import { MaintainRegulationGroupViewApi } from './MaintainRegulationGroupViewApi';
 import { MaintainRegulationMaterialGroupViewApi } from './MaintainRegulationMaterialGroupViewApi';
 import { MaintainIdRangeForRenewableObjectApi } from './MaintainIdRangeForRenewableObjectApi';
@@ -546,6 +547,10 @@ class RegulationcompliancemasterserviceApi<
     ];
     api._addNavigationProperties(linkedApis);
     return api;
+  }
+
+  get processingStatusApi(): ProcessingStatusApi<DeSerializersT> {
+    return this.initApi('processingStatusApi', ProcessingStatusApi);
   }
 
   get maintainRegulationGroupViewApi(): MaintainRegulationGroupViewApi<DeSerializersT> {

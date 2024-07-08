@@ -227,7 +227,7 @@ export class MaintainMovementTypeApi<
     NEGATIVE_IMPACT: OrderableEdmTypeField<
       MaintainMovementType<DeSerializers>,
       DeSerializersT,
-      'Edm.String',
+      'Edm.Boolean',
       true,
       true
     >;
@@ -403,7 +403,7 @@ export class MaintainMovementTypeApi<
          */
         NEGATIVE_IMPACT: fieldBuilder.buildEdmTypeField(
           'negativeImpact',
-          'Edm.String',
+          'Edm.Boolean',
           true
         ),
         /**

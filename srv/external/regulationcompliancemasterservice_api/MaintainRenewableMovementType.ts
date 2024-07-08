@@ -99,6 +99,7 @@ export class MaintainRenewableMovementType<
   declare contractSide?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Relevant Movement Type.
+   * Maximum length: 3.
    * @nullable
    */
   declare relevantMovementType?: DeserializedType<T, 'Edm.String'> | null;

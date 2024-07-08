@@ -4,11 +4,12 @@ import {
     MaintainRfs2Material, MaintainTransactionType, MaintainAdjustmentReasonCode, RegulationUom,
     Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView, MaintainRegulationObjectType,
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryMapping,
-    MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory
+    MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory,
+    ProcessingStatus
 } from '../external/regulationcompliancemasterservice_api';
 import { EventPayload, EventPayloadMDJ } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
-import { ILogUtility } from './utilities/zcom_tsRegulationComplicanceInterface';
+import { ILogUtility} from './utilities/zcom_tsRegulationComplicanceInterface';
 import { resilience } from '@sap-cloud-sdk/resilience';
 import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes, language } from './utilities/zcom_tsConstants';
@@ -17,9 +18,8 @@ import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/reg
 // import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
 // import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
-import {  materialcharacteristicsApi} from '../external/materialcharacteristics_api';
- 
- 
+import { materialcharacteristicsApi } from '../external/materialcharacteristics_api';
+// import { ProcessingStatusApi } from 'srv/external/regulationcompliancemasterservice_api/ProcessingStatusApi';
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -57,11 +57,13 @@ export class RegulationComplianceBaseClass {
     public aRegulationUom: RegulationUom[] = [];
     public aImpact: Impact[] = [];
     public oEventPayloadMDJData!: EventPayloadMDJ;
+    public oProcessingStatus: { [index: string]: ProcessingStatus } = {};
+    public aProcesssingStatus: ProcessingStatus[] = []
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
         // initialize the data
-        
+
         this.oRegulationDataIsReady = new Promise(async (resolve, reject) => {
             // check is regulation data available
             if (!this.oRFS2RegulationData.regulationType) {
@@ -84,7 +86,7 @@ export class RegulationComplianceBaseClass {
         });
     }
     //-------- End of Base constructor ------------------
-    
+
     // --------- Start of Setter methods ------------------
     // set RFS2 Class Instance Object
     set setRFS2ComplianceClassObject(oRFS2ClassObjectInstance: RFS2ComplianceClass) {
@@ -376,8 +378,8 @@ export class RegulationComplianceBaseClass {
         try {
             if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode && this.oEventPayloadData._RenewableMaterialDocument) {
                 const sDocumentDate = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
-                this.oEventPayloadMDJData.documentDate : this.oEventPayloadData._RenewableMaterialDocument.DocumentDate;
-           
+                    this.oEventPayloadMDJData.documentDate : this.oEventPayloadData._RenewableMaterialDocument.DocumentDate;
+
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "' and year eq '" +
                     new Date(sDocumentDate).getFullYear().toString() + "'";
@@ -390,7 +392,7 @@ export class RegulationComplianceBaseClass {
                         destinationName: destinationNames.regulationComplianceMasterService
                     });
             }
-             else {
+            else {
                 this.aMaintainRfs2Material = await maintainRfs2MaterialApi.requestBuilder().getAll()
                     .addCustomQueryParameters({
                         $expand: 'regulationType'
@@ -469,8 +471,8 @@ export class RegulationComplianceBaseClass {
 
             if (this.oRFS2RegulationData.regulationType && (this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory || this.oEventPayloadMDJData.transactionCategory)) {
                 const sTransactionCategory = this.oEventPayloadData.RenewableEventType === RFS2ConstantValues.eventTypeMDJ ?
-                this.oEventPayloadMDJData.transactionCategory : this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory;
-           
+                    this.oEventPayloadMDJData.transactionCategory : this.oMaintainMovementTypeToTransactionCategoryMapping.transactionCategoryCategory;
+
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
                     "' and transactionCategory_category eq '" + sTransactionCategory + "'";
 
@@ -822,17 +824,17 @@ export class RegulationComplianceBaseClass {
             const oResourceManager = new ResourceManager("../../_i18n/i18n"),
                 oBundle = oResourceManager.getTextBundle(language),
                 { logUtilityServiceApi } = logutilityserviceApi();
-            let logObjectID:string = "";
+            let logObjectID: string = "";
 
-            if(this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ){
+            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 logObjectID = this.oEventPayloadData.RenewableEventType +
                     this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
-                    this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "";
+                        this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "";
             }
-            else{
+            else {
                 logObjectID = this.oEventPayloadMDJData.sourceScenario +
                     this.oEventPayloadMDJData.regulationLogisticsMaterialNumber ? this.oEventPayloadMDJData.regulationLogisticsMaterialNumber : "";
-         
+
             }
 
             // fill unfilled common data
@@ -864,9 +866,14 @@ export class RegulationComplianceBaseClass {
     // add regulations
     async addRegulationCompliances(data: RegulationComplianceTransaction[]) {
         console.log("addreg");
+        console.log(data);
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
+        const { RegulationComplianceTransaction } = srv.entities;
         try {
             await srv.post('RegulationComplianceTransaction', data);
+            // await srv.run(INSERT.into(RegulationComplianceTransaction).entries(data));
+            // await srv.insert.into(RegulationComplianceTransaction).entries(data)
+            // await srv.
 
         } catch (error) {
             console.log(error);
@@ -887,7 +894,7 @@ export class RegulationComplianceBaseClass {
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
         return await srv.read(RegulationComplianceTransaction).where({ sourceScenario: sourceScenario });
     }
-    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]>{
+    async getFuelMaterialS4API(): Promise<ZA_MaterialCharacteristics_R[]> {
         const { za_MaterialCharacteristics_RApi } = materialcharacteristicsApi();
         const aFuelMaterial = [] as ZA_MaterialCharacteristics_R[];
         (await za_MaterialCharacteristics_RApi.requestBuilder().getAll()
@@ -909,9 +916,23 @@ export class RegulationComplianceBaseClass {
                     MaterialDescription: fm.materialDescription,
                     RegulationMaterialGroup: fm.regulationMaterialGroup
                 });
- 
-            });
-            return aFuelMaterial;
-        }
 
+            });
+        return aFuelMaterial;
+    }
+    async getProcessingStatus() {
+        const { processingStatusApi } = regulationcompliancemasterserviceApi();
+        // this.aProcessingStatus = {map: {}, data: []} as IProcessingStatus;
+            (await processingStatusApi.requestBuilder().getAll()
+                .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                .execute({
+                    destinationName: destinationNames.regulationComplianceMasterService
+                })).
+                forEach((oData) => {
+                    this.aProcesssingStatus.push(oData);
+                    if (oData.category) {
+                        this.oProcessingStatus[oData.category] = oData;
+                    }
+                })        
+    }
 }

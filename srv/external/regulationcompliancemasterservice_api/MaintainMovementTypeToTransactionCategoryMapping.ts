@@ -95,21 +95,25 @@ export class MaintainMovementTypeToTransactionCategoryMapping<
   declare movementTypeId?: DeserializedType<T, 'Edm.Guid'> | null;
   /**
    * Origin Relevant.
+   * Maximum length: 3.
    * @nullable
    */
   declare originRelevant?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Origin Material Relevant.
+   * Maximum length: 3.
    * @nullable
    */
   declare originMaterialRelevant?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Destination Relevant.
+   * Maximum length: 3.
    * @nullable
    */
   declare destinationRelevant?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Destination Material Relevant.
+   * Maximum length: 3.
    * @nullable
    */
   declare destinationMaterialRelevant?: DeserializedType<
