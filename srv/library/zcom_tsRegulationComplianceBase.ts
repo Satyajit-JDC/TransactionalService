@@ -283,7 +283,8 @@ export class RegulationComplianceBaseClass {
         try {
             if (this.oRFS2RegulationData.regulationType && this.oMaintainRegulationObjectType.objectTypeCode) {
                 const sFilters = "regulationType_regulationType eq '" + this.oRFS2RegulationData.regulationType +
-                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + "'";
+                    "' and objectType_code eq '" + this.oMaintainRegulationObjectType.objectTypeCode + 
+                    "' and movementType eq '"+this.oEventPayloadData?._RenewableMaterialDocument?.MovementType+"'";
 
                 (await maintainMovementTypeApi.requestBuilder().getAll()
                     .addCustomQueryParameters({

@@ -135,7 +135,7 @@ export interface EventPayload {
         RenewableEventType: string;
         RenwableMaterialDocument: string;
         RenwableMaterialDocumentItem: string;
-        DocumentType: string;
+        RenwableDocumentType: string;
         MovementType: string;
         Plant: string;
         StorageLocation: string;
