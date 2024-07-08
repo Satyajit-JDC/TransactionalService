@@ -479,7 +479,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
 
         this.on('READ', ['GetObjectCategory','GetUOM','GetImpact','GetFuelCategory','GetTransactionType',
-            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType'
+            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType','GetProcessingStatus'
         ], async (req) => {
             const service = await cds.connect.to('RegulationComplianceMasterService');
             return await service.run(req.query);
