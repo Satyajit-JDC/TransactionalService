@@ -9,7 +9,7 @@ type returnData :{
 
 
 service RegulationComplianceTransactionService {
-    action actionTrigger(id: String(2), ObjectKey: UUID) returns many returnData;
+    action actionTrigger(actionName: String(20), objectKey: UUID) returns many returnData;
     action sendMessage(data : transaction.EventData);
 
     entity RegulationComplianceTransaction @(Capabilities: {

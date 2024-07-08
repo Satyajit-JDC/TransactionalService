@@ -261,3 +261,10 @@ entity Actions : cuid, managed {
 
 
 }
+
+entity ActionStatusMatrix : cuid,managed {
+       actionName : String(20);
+       regSubScn  : String(20);
+       currentStatusCode: String(2);
+       nextStatusCode: String(2);
+}

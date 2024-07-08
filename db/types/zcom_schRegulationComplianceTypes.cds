@@ -521,5 +521,6 @@ aspect Enterprise {
 type UUID_Type : UUID;
 type actionName : String(20);
 type regSubScn : String(20);
+type regType : String(20);
 
 

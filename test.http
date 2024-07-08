@@ -202,6 +202,7 @@ Content-Type: application/json
 ###
 POST http://localhost:4004/odata/v4/regulation-compliance-transaction/RegulationComplianceTransaction
 Content-Type: application/json
+
 {
     "regulationType": "RFS2",
     "regulationCategory": "RFS2",
@@ -210,16 +211,7 @@ Content-Type: application/json
     "sourceScenario": "GM",
     "subObjectScenario": "RFS2_RVO",
     "transactionCategory": "PUR",
-    "transactionType": "PUR1",
-    "impact": "I",
-    "movementType": "101",
-    "fuelLogisticsMaterialNumber": "5000",
-    "fuelQuantity": 10,
-    "fuelQuantityRaw": "10",
-    "fuelUnitofMeasurement": "RIN",
-    "fuelQuantityinAlternateUOM": "RIN",
-    "regulationQuantity": 10,
-    "regulationUnitOfMeasurement": "RIN"
+    "transactionType": "PUR1"
 }
 
 # Call on Create trans 
@@ -233,6 +225,7 @@ Content-Type: application/json
     "regulationCategory": "RFS2",
     "objectCategory": "D",
     "objectType": "RVO",
+    "processingStatus":"01",
     "sourceScenario": "MDJ",
     "subObjectScenario": "RFS2_MDJ_RVO",
     "transactionCategory": "PUR",
@@ -257,3 +250,20 @@ GET http://localhost:4004/odata/v4/regulation-compliance-transaction/MaintainReg
 ###
 GET http://localhost:4004/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction
 
+###
+POST http://localhost:4004/odata/v4/regulation-compliance-transaction/actionTrigger
+Content-Type: application/json
+
+{ "actionName":"PIP", "objectKey":"4615134b-d75f-472e-bdf8-4ee74f7f59ca" }
+###
+POST http://localhost:4004/odata/v4/regulation-compliance-transaction/Actions
+Content-Type: application/json
+
+{
+    "actionName": "PIP",
+    "regSubScn": "RFS2_RVO"
+}
+
+
+###
+GET http://localhost:4004/odata/v4/regulation-compliance-transaction/Actions

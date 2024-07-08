@@ -110,8 +110,39 @@
           }
         }
       },
-     
-      "db": "hana",
+      "RenewableEvents": {
+        "[development]": {
+          "kind": "enterprise-messaging-shared",
+          "queue": {
+            "name": "sap/dev/1/Renewable/Events"
+          },
+          "format": "cloudevents",
+          "subscribePrefix": "sap/dev/1/"
+        },
+        "[hybrid]": {
+          "kind": "enterprise-messaging-shared",
+          "queue": {
+            "name": "sap/dev/1/Renewable/Events"
+          },
+          "format": "cloudevents",
+          "subscribePrefix": "sap/dev/1/"
+        },
+        "[production]": {
+          "kind": "enterprise-messaging-shared",
+          "queue": {
+            "name": "sap/dev/1/Renewable/Events"
+          },
+          "format": "cloudevents",
+          "subscribePrefix": "sap/dev/1/"
+        }
+      },
+      "db": {
+        "[development]": {
+          "kind": "sqlite",
+          "credentials": { "url": "db.sqlite" } 
+       }
+
+      },
     
       "MaterialCharacteristics": {
         "kind": "odata",

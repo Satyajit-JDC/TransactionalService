@@ -5,6 +5,8 @@ import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationCompli
 // import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { Quarter, Month } from '@cds-models';
+
+import { RFS2Actions } from './library/zcom_tsRFS2Actions'
 import {
     IMaintainRegulationGroupView, IMaintainRegulationType,
     IMaintainRegulationMaterialGroupView, IMaintainMovementTypeToTransactionCategoryImpact,
@@ -22,14 +24,31 @@ import { RFS2ConstantValues,messageTypes } from './library/utilities/zcom_tsCons
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
 
-        this.on("actionTrigger", async data => {
+        this.on("actionTrigger", async actionData => {
+console.log(actionData.data)
+const { RegulationComplianceTransaction } = cds.entities;
+const regulations = await SELECT.from(RegulationComplianceTransaction).where({ ID: actionData.data.objectkey });
+
+switch (regulations.regulationType) {
+    case "RFS2":
+        const oRFS2ActionsInstance =  new RFS2Actions(actionData.data.objectKey,actionData.data.actionName);
+        await oRFS2ActionsInstance.executeAction(actionData.data.actionName);
+        break;
+
+     case "LCFS" :  
+     break;
+    default:
+        break;
+}
+
+
 
 
         });
-        const messaging = "";// await cds.connect.to("RenewableEvents");
+        const messaging = ""// await cds.connect.to("RenewableEvents");
         // const { RegulationComplianceTransaction } = cds.entities('com.sap.chs.com.regulationcompliancetransaction')
         this.on("sendMessage", async msg => {
-            // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+     //        messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
             if (msg.data.data) {
                 const oEventData = msg.data.data;
                 // fill data from payload to object
