@@ -181,7 +181,7 @@ export class RFS2_RF_RINCompliance {
             for (let index = 0; index < aMaterialConfig.length; index++) {
                 const oMaterialConfig = aMaterialConfig[index],
                     oMatDocData = this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument;
-                if (oMaterialConfig.obligationPercent) {
+                if (oMaterialConfig.rinMultiplier) {
                     aFinalData.push({
                     regulationType: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
                     regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.description,
