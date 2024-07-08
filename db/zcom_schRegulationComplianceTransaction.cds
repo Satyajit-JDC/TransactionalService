@@ -168,7 +168,7 @@ type EventData {
         RenewableEventType             : String;
         RenwableMaterialDocument       : String;
         RenwableMaterialDocumentItem   : String;
-        DocumentType                   : String;
+        RenwableDocumentType           : String;
         MovementType                   : String;
         Plant                          : String;
         StorageLocation                : String;

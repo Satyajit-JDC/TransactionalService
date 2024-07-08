@@ -83,7 +83,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         RenewableEventType: oEventData._RenewableMaterialDocument.RenewableEventType,
                         RenwableMaterialDocument: oEventData._RenewableMaterialDocument.RenwableMaterialDocument,
                         RenwableMaterialDocumentItem: oEventData._RenewableMaterialDocument.RenwableMaterialDocumentItem,
-                        DocumentType: oEventData._RenewableMaterialDocument.DocumentType,
+                        RenwableDocumentType: oEventData._RenewableMaterialDocument.RenwableDocumentType,
                         MovementType: oEventData._RenewableMaterialDocument.MovementType,
                         Plant: oEventData._RenewableMaterialDocument.Plant,
                         StorageLocation: oEventData._RenewableMaterialDocument.StorageLocation,
