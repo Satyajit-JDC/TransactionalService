@@ -62,13 +62,7 @@
      "type": "cds.String",
      "length": 5,
      "notNull": true,
-     "@Common.Label": "Regulation Type",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     },
-     "@Common.Text": {
-      "=": "description"
-     }
+     "@Common.Label": "Regulation Type"
     },
     "regulationCategory": {
      "type": "cds.Association",
@@ -113,9 +107,6 @@
         "ValueListProperty": "description"
        }
       ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
      }
     },
     "region": {
@@ -146,9 +137,6 @@
      "type": "cds.String",
      "length": 3,
      "@Common.Label": "Region",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     },
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "Label": "Region",
@@ -197,9 +185,6 @@
      "type": "cds.String",
      "length": 3,
      "@Common.Label": "Country",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     },
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "Label": "Country",
@@ -223,10 +208,7 @@
     "description": {
      "type": "cds.String",
      "length": 50,
-     "@Common.Label": "Description",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Description"
     },
     "materialYearly": {
      "type": "cds.String",
@@ -236,18 +218,12 @@
     "fuelUom": {
      "type": "cds.String",
      "length": 4,
-     "@Common.Label": "Fuel UoM",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Fuel UoM"
     },
     "fuelAlternateUom": {
      "type": "cds.String",
      "length": 4,
-     "@Common.Label": "Fuel Alternate UoM",
-     "@Common.FieldControl": {
-      "#": "Mandatory"
-     }
+     "@Common.Label": "Fuel Alternate UoM"
     },
     "regulationUoM": {
      "type": "cds.Association",
@@ -292,9 +268,6 @@
         "ValueListProperty": "description"
        }
       ]
-     },
-     "@Common.FieldControl": {
-      "#": "Mandatory"
      }
     },
     "IsActiveEntity": {
@@ -493,7 +466,13 @@
      }
     },
     "TypeName": {},
-    "TypeNamePlural": {}
+    "TypeNamePlural": {},
+    "Description": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "description"
+     }
+    }
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -775,7 +754,10 @@
     "transactionType_transactionType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Transaction Type"
+     "@Common.Label": "Transaction Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "regulationType": {
      "type": "cds.Association",
@@ -803,7 +785,35 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "transactionCategory": {
      "type": "cds.Association",
@@ -831,7 +841,27 @@
     "transactionCategory_category": {
      "type": "cds.String",
      "length": 4,
-     "@Common.Label": "Transaction Category"
+     "@Common.Label": "Transaction Category",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "TransactionCategory",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "transactionCategory_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -918,6 +948,70 @@
       "type": "RegulationComplianceMasterService.MaintainRegulationTransactionType"
      }
     }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionType_transactionType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionCategory_category"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType_transactionType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionCategory_category"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType_transactionType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -1311,7 +1405,36 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "objectType": {
      "type": "cds.Association",
@@ -1340,6 +1463,9 @@
      "type": "cds.String",
      "length": 4,
      "@Common.Label": "Object Type",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     },
      "@Common.ValueList": {
       "$Type": "Common.ValueListType",
       "Label": "Object Type",
@@ -1385,12 +1511,35 @@
     "objectCategory_category": {
      "type": "cds.String",
      "length": 3,
-     "@Common.Label": "Object Category"
+     "@Common.Label": "Object Category",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "ObjectCategory",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "objectCategory_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "description": {
      "type": "cds.String",
      "length": 50,
-     "@Common.Label": "Description"
+     "@Common.Label": "Description",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -1477,6 +1626,82 @@
       "type": "RegulationComplianceMasterService.MaintainRegulationObjectType"
      }
     }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "objectType_code"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "objectCategory_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "description"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "objectType_code"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "objectCategory_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "description"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -2753,11 +2978,43 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfDays": {
      "type": "cds.Integer",
-     "@Common.Label": "No Of Days"
+     "@Common.Label": "No Of Days",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -2845,6 +3102,58 @@
      }
     }
    },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "numberOfDays"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "numberOfDays"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -2923,11 +3232,46 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "range": {
      "type": "cds.Integer",
-     "@Common.Label": "Range"
+     "@Common.Label": "Range",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -3015,6 +3359,58 @@
      }
     }
    },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "range"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "range"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -3093,7 +3489,33 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": true
     },
     "transactionType": {
      "type": "cds.Association",
@@ -3121,7 +3543,25 @@
     "transactionType_transactionType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Transaction Type"
+     "@Common.Label": "Transaction Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainTransactionType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "transactionType_transactionType"
+        },
+        "ValueListProperty": "transactionType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": true
     },
     "transactionCategory": {
      "type": "cds.Association",
@@ -3149,7 +3589,24 @@
     "transactionCategory_category": {
      "type": "cds.String",
      "length": 4,
-     "@Common.Label": "Transaction Category"
+     "@Common.Label": "Transaction Category",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "TransactionCategory",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "transactionCategory_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "impact": {
      "type": "cds.Association",
@@ -3177,7 +3634,24 @@
     "impact_category": {
      "type": "cds.String",
      "length": 2,
-     "@Common.Label": "Impact"
+     "@Common.Label": "Impact",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "Impact",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "impact_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "passRetainIndicator": {
      "type": "cds.Association",
@@ -3205,7 +3679,24 @@
     "passRetainIndicator_category": {
      "type": "cds.String",
      "length": 6,
-     "@Common.Label": "Pass Retain Indicator"
+     "@Common.Label": "Pass Retain Indicator",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "PassRetainIndicator",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "passRetainIndicator_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -3292,6 +3783,94 @@
       "type": "RegulationComplianceMasterService.MaintainRegulationTransactionTypeWithImpact"
      }
     }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionType_transactionType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionCategory_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "impact_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "passRetainIndicator_category"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType_transactionType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionCategory_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "impact_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "passRetainIndicator_category"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionType_transactionType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -3460,7 +4039,8 @@
      }
     },
     "subObjectScenario": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 40,
      "@Common.Label": "Sub Object Scenario",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -3515,21 +4095,23 @@
      }
     },
     "sourceScenario": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 40,
      "@Common.Label": "Source Scenario",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
     },
     "negativeImpact": {
-     "type": "cds.LargeString",
+     "type": "cds.Boolean",
      "@Common.Label": "Negative Impact",
      "@Common.FieldControl": {
       "#": "Mandatory"
      }
     },
     "withReference": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 2,
      "@Common.Label": "With Reference",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -3825,7 +4407,33 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": false
     },
     "objectType": {
      "type": "cds.Association",
@@ -3898,22 +4506,55 @@
     },
     "movementType_ID": {
      "type": "cds.UUID",
-     "@Common.Label": "Movement Type"
+     "@Common.Label": "Movement Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainMovementType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterOut",
+        "LocalDataProperty": {
+         "=": "movementType/movementType"
+        },
+        "ValueListProperty": "movementType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationType_regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "objectType_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "movementType_ID"
+        },
+        "ValueListProperty": "ID"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": true
     },
     "originRelevant": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 3,
      "@Common.Label": "Origin Relevant"
     },
     "originMaterialRelevant": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 3,
      "@Common.Label": "Origin Material Relevant"
     },
     "destinationRelevant": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 3,
      "@Common.Label": "Destination Relevant"
     },
     "destinationMaterialRelevant": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 3,
      "@Common.Label": "Destination Material Relevant"
     },
     "mode": {
@@ -3988,7 +4629,24 @@
     "transactionCategory_category": {
      "type": "cds.String",
      "length": 4,
-     "@Common.Label": "Transaction Category"
+     "@Common.Label": "Transaction Category",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "TransactionCategory",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "transactionCategory_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "impact": {
      "type": "cds.Association",
@@ -4016,7 +4674,24 @@
     "impact_category": {
      "type": "cds.String",
      "length": 2,
-     "@Common.Label": "Impact"
+     "@Common.Label": "Impact",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "Impact",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "impact_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -4103,6 +4778,163 @@
       "type": "RegulationComplianceMasterService.MaintainMovementTypeToTransactionCategoryMapping"
      }
     }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "objectType_code"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "originRelevant"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "originMaterialRelevant"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "destinationRelevant"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "destinationMaterialRelevant"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "mode_code"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "transactionCategory_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "impact_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "movementType/movementType"
+      },
+      "Label": "Movement Type"
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "objectType_code"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "movementType/movementType"
+     },
+     "Label": "Movement Type"
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "originRelevant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "originMaterialRelevant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "destinationMaterialRelevant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "destinationRelevant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "impact_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "mode_code"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "transactionCategory_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "movementType_ID"
+     },
+     "@UI.Hidden": true
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "movementType_ID"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -4339,7 +5171,8 @@
      }
     },
     "relevantMovementType": {
-     "type": "cds.LargeString",
+     "type": "cds.String",
+     "length": 3,
      "@Common.Label": "Relevant Movement Type",
      "@Common.FieldControl": {
       "#": "Mandatory"
@@ -4603,7 +5436,33 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": false
     },
     "objectType": {
      "type": "cds.Association",
@@ -4682,7 +5541,24 @@
     "rvoType_category": {
      "type": "cds.String",
      "length": 3,
-     "@Common.Label": "RVO Type"
+     "@Common.Label": "RVO Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "RFS2DebitType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "rvoType_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "dCode": {
      "type": "cds.Association",
@@ -4710,7 +5586,24 @@
     "dCode_category": {
      "type": "cds.String",
      "length": 3,
-     "@Common.Label": "DCode"
+     "@Common.Label": "DCode",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "RFS2FuelCode",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "dCode_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     }
     },
     "material": {
      "type": "cds.LargeString",
@@ -4817,6 +5710,253 @@
      }
     }
    },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "objectType_code"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "year"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "rvoType_category"
+      },
+      "@UI.Hidden": {
+       "$Ne": [
+        {
+         "$Path": "objectType_code"
+        },
+        "RVO"
+       ]
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "dCode_category"
+      },
+      "@UI.Hidden": {
+       "$Ne": [
+        {
+         "$Path": "objectType_code"
+        },
+        "RIN"
+       ]
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "material"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "obligationPercent"
+      },
+      "@UI.Hidden": {
+       "$Ne": [
+        {
+         "$Path": "objectType_code"
+        },
+        "RVO"
+       ]
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "rinMultiplier"
+      },
+      "@UI.Hidden": {
+       "$Ne": [
+        {
+         "$Path": "objectType_code"
+        },
+        "RIN"
+       ]
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "description"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "objectType_code"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "year"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "rvoType_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "material"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "obligationPercent"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "description"
+     }
+    }
+   ],
+   "@UI.SelectionPresentationVariant#tableView": {
+    "$Type": "UI.SelectionPresentationVariantType",
+    "PresentationVariant": {
+     "$Type": "UI.PresentationVariantType",
+     "Visualizations": [
+      "@UI.LineItem"
+     ]
+    },
+    "SelectionVariant": {
+     "$Type": "UI.SelectionVariantType",
+     "SelectOptions": []
+    },
+    "Text": "RVO"
+   },
+   "@UI.LineItem#tableView": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "objectType_code"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "year"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "dCode_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "material"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "rinMultiplier"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "description"
+     }
+    }
+   ],
+   "@UI.SelectionPresentationVariant#tableView1": {
+    "$Type": "UI.SelectionPresentationVariantType",
+    "PresentationVariant": {
+     "$Type": "UI.PresentationVariantType",
+     "Visualizations": [
+      "@UI.LineItem#tableView"
+     ]
+    },
+    "SelectionVariant": {
+     "$Type": "UI.SelectionVariantType",
+     "SelectOptions": [
+      {
+       "$Type": "UI.SelectOptionType",
+       "PropertyName": {
+        "=": "objectType_code"
+       },
+       "Ranges": [
+        {
+         "$Type": "UI.SelectionRangeType",
+         "Sign": {
+          "#": "I"
+         },
+         "Option": {
+          "#": "EQ"
+         },
+         "Low": "RIN"
+        }
+       ]
+      }
+     ]
+    },
+    "Text": "RIN"
+   },
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -4872,12 +6012,18 @@
     "companyId": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Company ID"
+     "@Common.Label": "Company ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "plant": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Plant"
+     "@Common.Label": "Plant",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -4965,6 +6111,58 @@
      }
     }
    },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "companyId"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "plant"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "companyId"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "plant"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "companyId"
+     }
+    }
+   },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
     "ActivationAction": "RegulationComplianceMasterService.draftActivate",
@@ -5020,17 +6218,26 @@
     "companyId": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Company ID"
+     "@Common.Label": "Company ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "plant": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Plant"
+     "@Common.Label": "Plant",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "facilityId": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Facility ID"
+     "@Common.Label": "Facility ID",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -5115,6 +6322,70 @@
      },
      "returns": {
       "type": "RegulationComplianceMasterService.MaintainCompanyIdOrPlantToFacilityIdMapping"
+     }
+    }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "companyId"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "plant"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "facilityId"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "companyId"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "plant"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "facilityId"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "facilityId"
      }
     }
    },
@@ -5629,7 +6900,27 @@
     "regulationSubScenario_category": {
      "type": "cds.String",
      "length": 20,
-     "@Common.Label": "Regulation Sub Scenario"
+     "@Common.Label": "Regulation Sub Scenario",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "RegulationSubType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationSubScenario_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "action": {
      "type": "cds.Association",
@@ -5657,7 +6948,27 @@
     "action_category": {
      "type": "cds.String",
      "length": 10,
-     "@Common.Label": "Action"
+     "@Common.Label": "Action",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "ActionInventory",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "action_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -5744,6 +7055,58 @@
       "type": "RegulationComplianceMasterService.MaintainActionSubScenarioMapping"
      }
     }
+   },
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationSubScenario_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "action_category"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubScenario_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "action_category"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubScenario_category"
+     }
+    },
+    "TypeName": {},
+    "TypeNamePlural": {}
    },
    "@Common.DraftRoot": {
     "$Type": "Common.DraftRootType",
@@ -6224,6 +7587,28 @@
     }
    }
   },
+  "RegulationComplianceMasterService.ProcessingStatus": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "elements": {
+    "category": {
+     "key": true,
+     "type": "cds.String",
+     "length": 3,
+     "notNull": true,
+     "@Common.Label": "Category"
+    },
+    "description": {
+     "type": "cds.String",
+     "length": 100,
+     "@Common.Label": "Description"
+    }
+   },
+   "@Capabilities.DeleteRestrictions.Deletable": false,
+   "@Capabilities.InsertRestrictions.Insertable": false,
+   "@Capabilities.UpdateRestrictions.Updatable": false
+  },
   "RegulationComplianceMasterService.MaintainRegulationGroupView": {
    "kind": "entity",
    "@cds.external": true,
@@ -6382,15 +7767,41 @@
     "regulationSubScenario_category": {
      "type": "cds.String",
      "length": 20,
-     "@Common.Label": "Regulation Sub Scenario"
+     "@Common.Label": "Regulation Sub Scenario",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "RegulationSubType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationSubScenario_category"
+        },
+        "ValueListProperty": "category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "description"
+       }
+      ]
+     },
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfStart": {
      "type": "cds.Integer",
-     "@Common.Label": "Number Of Start"
+     "@Common.Label": "Number Of Start",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfEnd": {
      "type": "cds.Integer",
-     "@Common.Label": "Number Of End"
+     "@Common.Label": "Number Of End",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "inActive": {
      "type": "cds.Boolean",
@@ -6486,6 +7897,82 @@
     }
    },
    "@UI.UpdateHidden": true,
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationSubScenario_category"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "numberOfStart"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "numberOfEnd"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "inActive"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubScenario_category"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "numberOfStart"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "numberOfEnd"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "inActive"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationSubScenario_category"
+     }
+    }
+   },
    "@Capabilities.InsertRestrictions.Insertable": true,
    "@Capabilities.DeleteRestrictions.Deletable": false,
    "@Capabilities.UpdateRestrictions.Updatable": true,
@@ -6567,15 +8054,50 @@
     "regulationType_regulationType": {
      "type": "cds.String",
      "length": 5,
-     "@Common.Label": "Regulation Type"
+     "@Common.Label": "Regulation Type",
+     "@Common.ValueList": {
+      "$Type": "Common.ValueListType",
+      "CollectionPath": "MaintainRegulationType",
+      "Parameters": [
+       {
+        "$Type": "Common.ValueListParameterInOut",
+        "LocalDataProperty": {
+         "=": "regulationType_regulationType"
+        },
+        "ValueListProperty": "regulationType"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "regulationCategory_category"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "region_code"
+       },
+       {
+        "$Type": "Common.ValueListParameterDisplayOnly",
+        "ValueListProperty": "country_code"
+       }
+      ]
+     },
+     "@Common.ValueListWithFixedValues": true,
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfStart": {
      "type": "cds.Integer",
-     "@Common.Label": "Number Of Start"
+     "@Common.Label": "Number Of Start",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "numberOfEnd": {
      "type": "cds.Integer",
-     "@Common.Label": "Number Of End"
+     "@Common.Label": "Number Of End",
+     "@Common.FieldControl": {
+      "#": "Mandatory"
+     }
     },
     "IsActiveEntity": {
      "key": true,
@@ -6664,6 +8186,70 @@
     }
    },
    "@UI.UpdateHidden": true,
+   "@UI.FieldGroup#GeneratedGroup": {
+    "$Type": "UI.FieldGroupType",
+    "Data": [
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "regulationType_regulationType"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "numberOfStart"
+      }
+     },
+     {
+      "$Type": "UI.DataField",
+      "Value": {
+       "=": "numberOfEnd"
+      }
+     }
+    ]
+   },
+   "@UI.Facets": [
+    {
+     "$Type": "UI.ReferenceFacet",
+     "ID": "GeneratedFacet1",
+     "Label": "General Information",
+     "Target": {
+      "=": "@UI.FieldGroup#GeneratedGroup"
+     }
+    }
+   ],
+   "@UI.LineItem": [
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "numberOfStart"
+     }
+    },
+    {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "numberOfEnd"
+     }
+    }
+   ],
+   "@UI.HeaderInfo": {
+    "$Type": "UI.HeaderInfoType",
+    "TypeName": {},
+    "TypeNamePlural": {},
+    "Title": {
+     "$Type": "UI.DataField",
+     "Value": {
+      "=": "regulationType_regulationType"
+     }
+    }
+   },
    "@Capabilities.InsertRestrictions.Insertable": true,
    "@Capabilities.DeleteRestrictions.Deletable": false,
    "@Capabilities.UpdateRestrictions.Updatable": true,

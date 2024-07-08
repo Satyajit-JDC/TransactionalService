@@ -2,7 +2,8 @@ import {
     MaintainRegulationGroupView, MaintainRegulationType, MaintainRegulationMaterialGroupView,
     MaintainMovementTypeToTransactionCategoryMapping,
     MaintainMovementType, MaintainRegulationObjectType, MaintainRegulationSubScenarioToScenarioType,
-    MaintainRegulationTransactionType, Rfs2DebitType, FuelCategory, FuelSubCategory
+    MaintainRegulationTransactionType, Rfs2DebitType, FuelCategory, FuelSubCategory,
+    ProcessingStatus
 } from '../../external/regulationcompliancemasterservice_api';
 
 export interface ILogUtility {
@@ -215,26 +216,30 @@ export interface EventPayload {
 }
 export interface EventPayloadMDJ {
     regulationType: string;
-    objectType:  string;
+    objectType: string;
     sourceScenario: string;
-    transactionCategory:string;
+    transactionCategory: string;
     impact: string;
-    documentDate :Date;
+    documentDate: Date;
     businessPartnerNumber: string;
     reasonCode: string;
     reasonCodeDesc: string;
     renewablesDocumentComplianceYear: string;
-    sourceOrgPlant :string;
-    adjustmentBase : string;
+    sourceOrgPlant: string;
+    adjustmentBase: string;
     billofLading: string;
-    fuelCategory : string;
-        regulationQuantity: string;
-        regulationUnitOfMeasurement: string;
-        regulationLogisticsMaterialNumber: string;
-        sourceOrgMaterialNumber: string;
-        fuelUnitofMeasurement: string;
-        fuelQuantity: string;
-        renewablesEpaCompanyId: string;
-        renewablesEpaFacilityId: string;
-        fuelLogisticsMaterialNumber: string; 
+    fuelCategory: string;
+    regulationQuantity: string;
+    regulationUnitOfMeasurement: string;
+    regulationLogisticsMaterialNumber: string;
+    sourceOrgMaterialNumber: string;
+    fuelUnitofMeasurement: string;
+    fuelQuantity: string;
+    renewablesEpaCompanyId: string;
+    renewablesEpaFacilityId: string;
+    fuelLogisticsMaterialNumber: string;
 }
+// export interface IProcessingStatus {
+//     map: { [index: string]: ProcessingStatus };
+//     data: ProcessingStatus[];
+// }

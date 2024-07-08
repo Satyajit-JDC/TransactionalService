@@ -40,6 +40,7 @@ import {
   ManageRegulationTypeAndActive,
   ManageRegulationTypeAndObjectCategory,
   MaintainIdRangeForRenewableObjectSequence,
+  ProcessingStatus,
   MaintainRegulationGroupView,
   MaintainRegulationMaterialGroupView,
   MaintainIdRangeForRenewableObject,
@@ -221,6 +222,7 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       MaintainIdRangeForRenewableObjectSequence<DeSerializersT>,
       DeSerializersT
     >
+  | GetAllRequestBuilder<ProcessingStatus<DeSerializersT>, DeSerializersT>
   | GetAllRequestBuilder<
       MaintainRegulationGroupView<DeSerializersT>,
       DeSerializersT
@@ -346,6 +348,7 @@ export type ReadRegulationcompliancemasterserviceApiRequestBuilder<
       MaintainIdRangeForRenewableObjectSequence<DeSerializersT>,
       DeSerializersT
     >
+  | GetByKeyRequestBuilder<ProcessingStatus<DeSerializersT>, DeSerializersT>
   | GetByKeyRequestBuilder<
       MaintainRegulationGroupView<DeSerializersT>,
       DeSerializersT
@@ -639,6 +642,9 @@ export type WriteRegulationcompliancemasterserviceApiRequestBuilder<
       MaintainIdRangeForRenewableObjectSequence<DeSerializersT>,
       DeSerializersT
     >
+  | CreateRequestBuilder<ProcessingStatus<DeSerializersT>, DeSerializersT>
+  | UpdateRequestBuilder<ProcessingStatus<DeSerializersT>, DeSerializersT>
+  | DeleteRequestBuilder<ProcessingStatus<DeSerializersT>, DeSerializersT>
   | CreateRequestBuilder<
       MaintainRegulationGroupView<DeSerializersT>,
       DeSerializersT

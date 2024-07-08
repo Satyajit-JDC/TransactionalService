@@ -87,6 +87,7 @@ export class MaintainMovementType<
   declare objectTypeCode?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Sub Object Scenario.
+   * Maximum length: 40.
    * @nullable
    */
   declare subObjectScenario?: DeserializedType<T, 'Edm.String'> | null;
@@ -98,6 +99,7 @@ export class MaintainMovementType<
   declare impactCategory?: DeserializedType<T, 'Edm.String'> | null;
   /**
    * Source Scenario.
+   * Maximum length: 40.
    * @nullable
    */
   declare sourceScenario?: DeserializedType<T, 'Edm.String'> | null;
@@ -105,9 +107,10 @@ export class MaintainMovementType<
    * Negative Impact.
    * @nullable
    */
-  declare negativeImpact?: DeserializedType<T, 'Edm.String'> | null;
+  declare negativeImpact?: DeserializedType<T, 'Edm.Boolean'> | null;
   /**
    * With Reference.
+   * Maximum length: 2.
    * @nullable
    */
   declare withReference?: DeserializedType<T, 'Edm.String'> | null;
@@ -159,7 +162,7 @@ export interface MaintainMovementTypeType<
   subObjectScenario?: DeserializedType<T, 'Edm.String'> | null;
   impactCategory?: DeserializedType<T, 'Edm.String'> | null;
   sourceScenario?: DeserializedType<T, 'Edm.String'> | null;
-  negativeImpact?: DeserializedType<T, 'Edm.String'> | null;
+  negativeImpact?: DeserializedType<T, 'Edm.Boolean'> | null;
   withReference?: DeserializedType<T, 'Edm.String'> | null;
   isActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
   hasActiveEntity: DeserializedType<T, 'Edm.Boolean'>;
