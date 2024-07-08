@@ -111,8 +111,15 @@ export class RFS2_RF_RINCompliance {
             if (this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode.reasonCode) {
                 // data available
             }
-
+            //set Processing Status
+            await this._oRegulationComplianceBaseClassInstance.getProcessingStatus();
+            if (this._oRegulationComplianceBaseClassInstance.aProcesssingStatus) {
+    
+            } else {
+                return false;
+            }
             return true;
+           
         }
     
         private async _postRFS2Credit() {
@@ -213,8 +220,8 @@ export class RFS2_RF_RINCompliance {
                     dealNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenwableDealDocument,
                     contractDocumentNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract,
                     contractItemNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableCotractItem,
-                    processingStatus: createdStatus.key,
-                    objectStatusDesc: createdStatus.value,
+                    processingStatus: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].category,
+                    objectStatusDesc:  this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].description,
                     // priceStatus
                     // matchStatus
                     // reconcilliationGroupID: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal., //not avilable in payload
@@ -440,4 +447,5 @@ export class RFS2_RF_RINCompliance {
             }
         }
         //-------- End of private methods --------------------
+    
 }
