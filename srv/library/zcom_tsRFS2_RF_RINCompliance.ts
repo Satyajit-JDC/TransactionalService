@@ -111,8 +111,15 @@ export class RFS2_RF_RINCompliance {
             if (this._oRegulationComplianceBaseClassInstance.oMaintainAdjustmentReasonCode.reasonCode) {
                 // data available
             }
-
+            //set Processing Status
+             await this._oRegulationComplianceBaseClassInstance.setProcessingStatus();
+            if (this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus]) {
+                // data available
+            } else {
+                return false;
+            }
             return true;
+           
         }
     
         private async _postRFS2Credit() {
@@ -174,7 +181,7 @@ export class RFS2_RF_RINCompliance {
             for (let index = 0; index < aMaterialConfig.length; index++) {
                 const oMaterialConfig = aMaterialConfig[index],
                     oMatDocData = this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument;
-                if (oMaterialConfig.obligationPercent) {
+                if (oMaterialConfig.rinMultiplier) {
                     aFinalData.push({
                     regulationType: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
                     regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.description,
@@ -213,8 +220,8 @@ export class RFS2_RF_RINCompliance {
                     dealNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenwableDealDocument,
                     contractDocumentNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract,
                     contractItemNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableCotractItem,
-                    processingStatus: createdStatus.key,
-                    objectStatusDesc: createdStatus.value,
+                    processingStatus: createdStatus,
+                    objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description,
                     // priceStatus
                     // matchStatus
                     // reconcilliationGroupID: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal., //not avilable in payload
@@ -440,4 +447,5 @@ export class RFS2_RF_RINCompliance {
             }
         }
         //-------- End of private methods --------------------
+    
 }

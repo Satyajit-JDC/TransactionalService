@@ -21,10 +21,10 @@ import { RFS2ConstantValues, messageTypes, createdStatus } from './library/utili
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        this.on("sendMessage", async msg => {
-            // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
-            if (msg.data.data) {
-                const oEventData = msg.data.data;
+        // this.on("sendMessage", async msg => {
+            messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+            if (msg.data) {
+                const oEventData = msg.data;
                 // fill data from payload to object
                 const oEventPayloadData: EventPayload = {
                     RenewableMaterial: oEventData.RenewableMaterial,
@@ -241,8 +241,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return oRegulationComplianceBaseInstance.aMaintainAdjustmentReasonCode;
         })
 
-        this.on('READ', ['GetObjectCategory', 'GetUOM', 'GetImpact', 'GetFuelCategory', 'TransactionType',
-            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType'
+        this.on('READ', ['GetObjectCategory','GetUOM','GetImpact','GetFuelCategory','GetTransactionType',
+            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType','GetProcessingStatus'
         ], async (req) => {
             const service = await cds.connect.to('RegulationComplianceMasterService');
             return await service.run(req.query);
@@ -275,7 +275,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                     }
                 }
             }
-            else if ( data.sourceScenario === RFS2ConstantValues.eventTypeMDJ && data.processingStatus === createdStatus.key ) {
+            else if ( data.sourceScenario === RFS2ConstantValues.eventTypeMDJ && data.processingStatus === createdStatus ) {
                 // generate next no
                 const oObjectID = await oRegulationComplianceBaseInstance.getNextRenewableId(data.subObjectScenario);
                 if (oObjectID) {
@@ -303,11 +303,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return aFuelMaterial;
         })
 
-        this.on('READ', 'GetTransactionType', async () => {
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setTransactiontype();
-            return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
-        })
+        // this.on('READ', 'GetTransactionType', async () => {
+        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+        //     await oRegulationComplianceBaseInstance.setTransactiontype();
+        //     return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
+        // })
 
         return super.init()
     }
