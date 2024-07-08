@@ -832,12 +832,12 @@ export class RegulationComplianceBaseClass {
                 { logUtilityServiceApi } = logutilityserviceApi();
             let logObjectID: string = "";
 
-            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
+            if (this.oEventPayloadData.RenewableEventType &&  this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 logObjectID = this.oEventPayloadData.RenewableEventType +
                     this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
                         this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "";
             }
-            else {
+            else if(this.oEventPayloadMDJData && this.oEventPayloadMDJData.sourceScenario === RFS2ConstantValues.eventTypeMDJ) {
                 logObjectID = this.oEventPayloadMDJData.sourceScenario +
                     this.oEventPayloadMDJData.regulationLogisticsMaterialNumber ? this.oEventPayloadMDJData.regulationLogisticsMaterialNumber : "";
 
@@ -871,16 +871,9 @@ export class RegulationComplianceBaseClass {
 
     // add regulations
     async addRegulationCompliances(data: RegulationComplianceTransaction[]) {
-        console.log("addreg");
-        console.log(data);
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
-        const { RegulationComplianceTransaction } = srv.entities;
         try {
             await srv.post('RegulationComplianceTransaction', data);
-            // await srv.run(INSERT.into(RegulationComplianceTransaction).entries(data));
-            // await srv.insert.into(RegulationComplianceTransaction).entries(data)
-            // await srv.
-
         } catch (error) {
             console.log(error);
             const oLogData: ILogUtility = {} as ILogUtility;

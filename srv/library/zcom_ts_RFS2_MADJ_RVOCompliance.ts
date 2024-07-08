@@ -1,9 +1,8 @@
 import { RegulationComplianceBaseClass } from './zcom_tsRegulationComplianceBase'
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { createdStatus } from './utilities/zcom_tsConstants';
 import { CdsDate } from '@cds-models/_/index';
 import { Quarter, Month } from '@cds-models';
-import { RFS2ConstantValues, adjustmentBaseMDJ, messageTypes, language } from './utilities/zcom_tsConstants';
+import { RFS2ConstantValues, adjustmentBaseMDJ, createdStatus} from './utilities/zcom_tsConstants';
 import { MaintainRfs2Material } from 'srv/external/regulationcompliancemasterservice_api';
 
 export class RFS2_MADJ_RVOCompliance {
@@ -44,15 +43,6 @@ export class RFS2_MADJ_RVOCompliance {
         } else {
             return false;
         }
-
-        // // Get object category
-        // await this._oRegulationComplianceBaseClassInstance.setObjectCategory();
-        // if (this._oRegulationComplianceBaseClassInstance.aObjectCategory) {
-        //     // data available
-        // } else {
-        //     return false;
-        // }
-
 
         // set mat config data
         await this._oRegulationComplianceBaseClassInstance.setMaterialConfiguration();
@@ -193,7 +183,9 @@ export class RFS2_MADJ_RVOCompliance {
                         renewablesTransferMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                         renewablesSubmissionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                         rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
-                        rfs2ObligationTypeDesc: oMaterialConfig.description,
+                        rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
+                   
+                        // rfs2ObligationTypeDesc: oMaterialConfig.description,
                         processingStatus: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].category,
                         objectStatusDesc: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].description
                         // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
@@ -249,13 +241,12 @@ export class RFS2_MADJ_RVOCompliance {
                 renewablesTransferMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                 renewablesSubmissionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                 rfs2ObligationType: oMaterialConfig[0].rvoTypeCategory,
-                rfs2ObligationTypeDesc: oMaterialConfig[0].description,
+                rfs2ObligationTypeDesc: oMaterialConfig[0].rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig[0].rvoTypeCategory].description : "",
                 processingStatus: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].category,
                 objectStatusDesc: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].description
             });
 
         }
-        console.log(aFinalData);
         if (aFinalData.length > 0) {
             await this._oRegulationComplianceBaseClassInstance.addRegulationCompliances(aFinalData);
         }
