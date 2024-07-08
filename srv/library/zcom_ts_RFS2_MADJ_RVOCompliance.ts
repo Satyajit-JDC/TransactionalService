@@ -21,6 +21,7 @@ export class RFS2_MADJ_RVOCompliance {
                 await this._postRFS2MDJDebit();
             }
             resolve(true);
+            this._oRegulationComplianceBaseClassInstance.resolveMDAJ(true);
         });
     }
     //-------- End of RFS2 Debit constructor ------------------

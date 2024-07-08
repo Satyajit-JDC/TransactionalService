@@ -21,10 +21,10 @@ import { RFS2ConstantValues, messageTypes } from './library/utilities/zcom_tsCon
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        // this.on("sendMessage", async msg => {
-            messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
-            if (msg.data) {
-                const oEventData = msg.data;
+        this.on("sendMessage", async msg => {
+            // messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+            if (msg.data.data) {
+                const oEventData = msg.data.data;
                 // fill data from payload to object
                 const oEventPayloadData: EventPayload = {
                     RenewableMaterial: oEventData.RenewableMaterial,
@@ -216,35 +216,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             // oMAdjPayloadData._RenewableMaterialDocument.Plant = oDataRequest.data.sourceOrgCompanyPlant,
             // oMAdjPayloadData._RenewableMaterialDocument.RenewableBillOfLading = oDataRequest.data.billofLading,
             // oMAdjPayloadData.RenewableFuelCategory = oDataRequest.data.fuelCategory
-
-            // create Base Class Object with Event Data to identify Regulation
-            // set Regulation master data
-            const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oMAdjPayloadData);
-            oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType = oDataRequest.data.regulationType;
-            // Manual adjustment request data
-            oRegulationComplianceBaseClassInstance.oEventPayloadMDJData = oMAdjReqPayload;
-
-            // oRegulationComplianceBaseClassInstance.setImpact
-            // wait for promise to get regulations
-            oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved) => {
-                if (bResolved) {
-                    // RFS2 Regulation is Active
-                    if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
-                        // Set Debit/Credit objects
-                        if (oDataRequest.data.objectType === RFS2ConstantValues.credit) {
-                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oDataRequest.data.regulationType;
-                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.credit;
-                        }
-                        else if (oDataRequest.data.objectType === RFS2ConstantValues.debit) {
-                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oDataRequest.data.regulationType;
-                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.debit;
-                        }
-                        oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
-                    }
-                }
-            });
-
+            
+            await this.processMDAJ(oMAdjReqPayload,oMAdjPayloadData);
+            return oDataRequest.data;
         })
+
         // this.on('CREATE', 'ManualAdjRegulationComplianceTransaction', async (ODataRequest) => {
         //     let aFinalData: RegulationComplianceTransaction[] = [],
         //         aRegulationType: IMaintainRegulationType = { map: {}, data: [] },
@@ -510,7 +486,6 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
         
         this.after("CREATE", 'RegulationComplianceTransaction', async (data) => {
-            debugger;
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload),
                 oLogData: ILogUtility = {} as ILogUtility;
             oLogData.message = "RINSCreatedSuccessfully";
@@ -552,4 +527,47 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
 
         return super.init()
     }
+    
+    async processMDAJ(oMAdjReqPayload:EventPayloadMDJ,oMAdjPayloadData:EventPayload){
+        // create Base Class Object with Event Data to identify Regulation
+            // set Regulation master data
+            const oRegulationComplianceBaseClassInstance = await new RegulationComplianceBaseClass(oMAdjPayloadData);
+            oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType = oMAdjReqPayload.regulationType;
+            // Manual adjustment request data
+            oRegulationComplianceBaseClassInstance.oEventPayloadMDJData = oMAdjReqPayload;
+
+            // oRegulationComplianceBaseClassInstance.setImpact
+            // wait for promise to get regulations
+            oRegulationComplianceBaseClassInstance.oRegulationDataIsReady.then((bResolved) => {
+                if (bResolved) {
+                    // RFS2 Regulation is Active
+                    if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
+                        // Set Debit/Credit objects
+                        if (oMAdjReqPayload.objectType === RFS2ConstantValues.credit) {
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oMAdjReqPayload.regulationType;
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.credit;
+                        }
+                        else if (oMAdjReqPayload.objectType === RFS2ConstantValues.debit) {
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oMAdjReqPayload.regulationType;
+                            oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.debit;
+                        }
+                        oRegulationComplianceBaseClassInstance.setRFS2ComplianceClassObject = new RFS2ComplianceClass(oRegulationComplianceBaseClassInstance);
+                    }
+                }
+            });
+            // var fn = oRegulationComplianceBaseClassInstance.resolveMDAJ;
+            oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance =  new Promise(function(fn,reject){
+                oRegulationComplianceBaseClassInstance.resolveMDAJ = fn;
+            });
+            await oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance.then(() => {
+                debugger
+            });
+            // return oDataRequest.data;
+
+    }
+
+    resolvefn(){
+
+    }
+
 }
