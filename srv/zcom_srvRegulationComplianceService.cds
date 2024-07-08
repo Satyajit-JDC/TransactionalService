@@ -47,7 +47,7 @@ service RegulationComplianceTransactionService {
     entity GetTransactionType                           as projection on master.MaintainTransactionType;
     entity GetRegulationSubType                         as projection on master.RegulationSubType;
     entity GetPlant                                     as projection on master.MaintainCompanyIdToPlantMapping;
-    //entity GetProcessingStatus                          as projection on master.processingStatus;
+    entity GetProcessingStatus                          as projection on master.ProcessingStatus;
 
     //S4 API
     entity GetFuelMaterialS4                            as

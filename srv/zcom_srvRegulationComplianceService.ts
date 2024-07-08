@@ -478,8 +478,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return oRegulationComplianceBaseInstance.aMaintainAdjustmentReasonCode;
         })
 
-        this.on('READ', ['GetObjectCategory','GetUOM','GetImpact','GetFuelCategory','TransactionType',
-            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType'
+        this.on('READ', ['GetObjectCategory','GetUOM','GetImpact','GetFuelCategory','GetTransactionType',
+            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType','GetProcessingStatus'
         ], async (req) => {
             const service = await cds.connect.to('RegulationComplianceMasterService');
             return await service.run(req.query);
@@ -519,11 +519,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return aFuelMaterial;
         })
 
-        this.on('READ', 'GetTransactionType', async () => {
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setTransactiontype();
-            return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
-        })
+        // this.on('READ', 'GetTransactionType', async () => {
+        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+        //     await oRegulationComplianceBaseInstance.setTransactiontype();
+        //     return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
+        // })
 
         return super.init()
     }
