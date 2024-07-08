@@ -80,7 +80,8 @@ export class RFS2_MADJ_RVOCompliance {
             return false;
         }
 
-        await this._oRegulationComplianceBaseClassInstance.getProcessingStatus();
+        // set processing status
+        await this._oRegulationComplianceBaseClassInstance.setProcessingStatus();
         if (this._oRegulationComplianceBaseClassInstance.aProcesssingStatus) {
 
         } else {
@@ -194,8 +195,8 @@ export class RFS2_MADJ_RVOCompliance {
                         renewablesSubmissionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                         rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
                         rfs2ObligationTypeDesc: oMaterialConfig.description,
-                        processingStatus: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].category,
-                        objectStatusDesc: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].description
+                        processingStatus: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].category,
+                        objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description
                         // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
                         // regulationUnitOfMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationUoMCategory,
                     })
@@ -250,8 +251,8 @@ export class RFS2_MADJ_RVOCompliance {
                 renewablesSubmissionMonth: new Date(dDocDate).getMonth().toString().padStart(2, "0") as Month,
                 rfs2ObligationType: oMaterialConfig[0].rvoTypeCategory,
                 rfs2ObligationTypeDesc: oMaterialConfig[0].description,
-                processingStatus: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].category,
-                objectStatusDesc: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].description
+                processingStatus: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].category,
+                objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description
             });
 
         }

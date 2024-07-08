@@ -112,9 +112,9 @@ export class RFS2_RF_RINCompliance {
                 // data available
             }
             //set Processing Status
-            await this._oRegulationComplianceBaseClassInstance.getProcessingStatus();
-            if (this._oRegulationComplianceBaseClassInstance.aProcesssingStatus) {
-    
+             await this._oRegulationComplianceBaseClassInstance.setProcessingStatus();
+            if (this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus]) {
+                // data available
             } else {
                 return false;
             }
@@ -220,8 +220,8 @@ export class RFS2_RF_RINCompliance {
                     dealNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenwableDealDocument,
                     contractDocumentNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract,
                     contractItemNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableCotractItem,
-                    processingStatus: this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].category,
-                    objectStatusDesc:  this._oRegulationComplianceBaseClassInstance.oProcessingStatus[createdStatus.key].description,
+                    processingStatus: createdStatus,
+                    objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description,
                     // priceStatus
                     // matchStatus
                     // reconcilliationGroupID: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal., //not avilable in payload

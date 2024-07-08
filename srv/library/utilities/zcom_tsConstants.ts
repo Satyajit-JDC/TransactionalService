@@ -23,10 +23,7 @@ export const messageTypes = {
 export const language = "en_EN";
 
 // Created Status
-export const createdStatus = {
-    key: "01",
-    value: "Created"
-} as const;
+export const createdStatus = "01";
 
 // Regulation sub scenario
 export const regulationSubScenario = {

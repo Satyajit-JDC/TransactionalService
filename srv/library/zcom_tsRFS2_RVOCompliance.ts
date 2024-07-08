@@ -114,6 +114,14 @@ export class RFS2_RVOCompliance {
             // data available
         }
 
+        // set processing status
+        await this._oRegulationComplianceBaseClassInstance.setProcessingStatus();
+        if (this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus]) {
+            // data available
+        } else {
+            return false;
+        }
+
         return true;
     }
 
@@ -211,12 +219,12 @@ export class RFS2_RVOCompliance {
                     // productionType: oEventData.productionType,
                     // cancelledUser: oEventData.cancelledUser,
                     // submitted: oEventData.submitted,
-                    passRetainIndicator: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewablePassRetainIndicator, //trns have to update to String(6)
+                    passRetainIndicator: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewablePassRetainIndicator.toString(), //trns have to update to String(6)
                     dealNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenwableDealDocument,
                     contractDocumentNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableContract,
                     contractItemNo: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableContract.RenwableCotractItem,
-                    processingStatus: createdStatus.key,
-                    objectStatusDesc: createdStatus.value,
+                    processingStatus: createdStatus,
+                    objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description,
                     // priceStatus
                     // matchStatus
                     // reconcilliationGroupID: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal., //not avilable in payload
