@@ -1,4 +1,4 @@
-import cds from '@sap/cds';
+import cds, { function_call } from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import {
     MaintainRfs2Material, MaintainTransactionType, MaintainAdjustmentReasonCode, RegulationUom,
@@ -58,7 +58,9 @@ export class RegulationComplianceBaseClass {
     public aImpact: Impact[] = [];
     public oEventPayloadMDJData!: EventPayloadMDJ;
     public oProcessingStatus: { [index: string]: ProcessingStatus } = {};
-    public aProcesssingStatus: ProcessingStatus[] = []
+    public aProcesssingStatus: ProcessingStatus[] = [];
+    public oResolveRFS2_MADJ_RVOCompliance!: Promise<unknown>;
+    public resolveMDAJ!: (value: unknown) => void;
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
@@ -86,6 +88,10 @@ export class RegulationComplianceBaseClass {
         });
     }
     //-------- End of Base constructor ------------------
+
+    // resolveMDAJ(){
+
+    // }
 
     // --------- Start of Setter methods ------------------
     // set RFS2 Class Instance Object
@@ -432,7 +438,7 @@ export class RegulationComplianceBaseClass {
                         $filter: encodeURIComponent(sFilters)
                     }).middleware(resilience({ retry: 3, circuitBreaker: true }))
                     .execute({
-                        destinationName: destinationNames.regulationComplianceMasterService
+                        destinationName: "RegulationComplianceMasterService",   //destinationNames.regulationComplianceMasterService
                     })).forEach((oData) => {
                         this.oMaintainRegulationType = oData;
                     });
