@@ -57,7 +57,7 @@ export class RegulationComplianceBaseClass {
     public aRegulationUom: RegulationUom[] = [];
     public aImpact: Impact[] = [];
     public oEventPayloadMDJData!: EventPayloadMDJ;
-    public oProcessingStatus: { [index: string]: ProcessingStatus } = {};
+    public mProcessingStatus: { [index: string]: ProcessingStatus } = {};
     public aProcesssingStatus: ProcessingStatus[] = [];
     public oResolveRFS2_MADJ_RVOCompliance!: Promise<unknown>;
     public resolveMDAJ!: (value: unknown) => void;
@@ -800,6 +800,23 @@ export class RegulationComplianceBaseClass {
             }
         }
     }
+    
+    // set processing status
+    async setProcessingStatus() {
+        const { processingStatusApi } = regulationcompliancemasterserviceApi();
+        // this.aProcessingStatus = {map: {}, data: []} as IProcessingStatus;
+            (await processingStatusApi.requestBuilder().getAll()
+                .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                .execute({
+                    destinationName: destinationNames.regulationComplianceMasterService
+                })).
+                forEach((oData) => {
+                    this.aProcesssingStatus.push(oData);
+                    if (oData.category) {
+                        this.mProcessingStatus[oData.category] = oData;
+                    }
+                })        
+    }
     // --------- End of Setter methods ------------------
 
     // --------- Start of Getter methods ------------------
@@ -925,20 +942,5 @@ export class RegulationComplianceBaseClass {
 
             });
         return aFuelMaterial;
-    }
-    async getProcessingStatus() {
-        const { processingStatusApi } = regulationcompliancemasterserviceApi();
-        // this.aProcessingStatus = {map: {}, data: []} as IProcessingStatus;
-            (await processingStatusApi.requestBuilder().getAll()
-                .middleware(resilience({ retry: 3, circuitBreaker: true }))
-                .execute({
-                    destinationName: destinationNames.regulationComplianceMasterService
-                })).
-                forEach((oData) => {
-                    this.aProcesssingStatus.push(oData);
-                    if (oData.category) {
-                        this.oProcessingStatus[oData.category] = oData;
-                    }
-                })        
     }
 }
