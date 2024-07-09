@@ -173,8 +173,9 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
     UI.LineItem                      : [
         {
             $Type: 'UI.DataField',
-            Value: objectId,
+            Value:  objectId,
             Label: '{i18n>RenewableID}',
+            
         },
         {
             $Type: 'UI.DataField',
@@ -244,7 +245,6 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
 );
  
 annotate service.ManualAdjRegulationComplianceTransaction with @(UI.SelectionFields: [
-    objectId,
     regulationType,
     objectCategory,
     subObjectScenario
@@ -266,6 +266,18 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
     @Common.FilterDefaultValue : 'RFS2_MADJ_RVO'
     subObjectScenario
 };
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    @Common.FilterDefaultValue : 'RFS2'
+    regulationType
+};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    @Common.FilterDefaultValue : 'D'
+    objectCategory
+};
+// annotate  service.ManualAdjRegulationComplianceTransaction with{
+//    @UI.
+// }  ;
+
 // annotate service.MaintainRegulationTransactionType with {
 //     transactionType @Common.Text : {
 //             $value : description,
@@ -295,17 +307,32 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
             $Type : 'Common.ValueListType',
             CollectionPath : 'MaintainRenewableMaterialConfiguration',
             Parameters : [
-                {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : regulationLogisticsMaterialNumber,
-                    ValueListProperty : 'material',
-                },
-                {
-                    $Type : 'Common.ValueListParameterIn',
-                    ValueListProperty : 'regulationType/regulationType',
-                    LocalDataProperty : regulationType,
-                },
-            ],
+                    {
+                        $Type : 'Common.ValueListParameterInOut',
+                        LocalDataProperty : regulationLogisticsMaterialNumber,
+                        ValueListProperty : 'material',
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterIn',
+                        ValueListProperty : 'year',
+                        LocalDataProperty : renewablesDocumentComplianceYear,
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterInOut',
+                        ValueListProperty : 'regulationType_regulationType',
+                        LocalDataProperty : regulationType,
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterOut',
+                        ValueListProperty : 'objectType_code',
+                        LocalDataProperty : objectType,
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterOut',
+                        ValueListProperty : 'rvoType_category',
+                        LocalDataProperty : rfs2ObligationType,
+                    },
+                ],
             Label : 'RVO Material',
         },
         Common.ValueListWithFixedValues : true
@@ -314,11 +341,21 @@ annotate service.MaintainRenewableMaterialConfiguration with @(
     UI.PresentationVariant #vh_ManualAdjRegulationComplianceTransaction_sourceOrgCompanyMaterialNumber : {
         $Type : 'UI.PresentationVariantType',
         SortOrder : [
-            {
+            // {
+            //     $Type : 'Common.SortOrderType',
+            //     Property : material,
+            //     Descending : false,
+            // },
+             {
                 $Type : 'Common.SortOrderType',
-                Property : material,
-                Descending : false,
+                Property : rvoType_category,
+                Descending : true,
             },
+            //  {
+            //     $Type : 'Common.SortOrderType',
+            //     Property : objectType_code,
+            //     Descending : false,
+            // },
         ],
     }
 );
@@ -344,7 +381,10 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
         Common.ValueListWithFixedValues : true
 )};
 annotate service.MaintainRegulationObjecttype with {
-    objectCategory_category @Common.Text : description
+    objectCategory_category @Common.Text : {
+            $value : description,
+            ![@UI.TextArrangement] : #TextFirst,
+        }
 };
 annotate service.ManualAdjRegulationComplianceTransaction with {
     regulationCategory @(Common.ValueList : {
@@ -525,7 +565,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                 {
                     $Type : 'Common.ValueListParameterInOut',
                     LocalDataProperty : transactionCategory,
-                    ValueListProperty : 'transactionCategory/category',
+                    ValueListProperty : 'transactionCategory_category',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType_regulationType',
+                    LocalDataProperty : regulationType,
                 },
                 
                 // {
@@ -561,6 +606,52 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
 annotate service.GetFuelMaterialS4 with {
     ObjectKey @Common.Text : {
         $value : MaterialDescription,
+        ![@UI.TextArrangement] : #TextFirst,
+    }
+};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    objectCategory @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetObjectCategory',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : objectCategory,
+                    ValueListProperty : 'category',
+                },
+            ],
+            Label : '{i18n>CategoryType}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    subObjectScenario @(Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'GetRegulationSubscenario',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : subObjectScenario,
+                    ValueListProperty : 'regulationSubScenario_category',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType_regulationType',
+                    LocalDataProperty : regulationType,
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'objectCategory_category',
+                    LocalDataProperty : objectCategory,
+                },
+            ],
+            Label : '{i18n>SubobjectScenario}',
+        },
+        Common.ValueListWithFixedValues : true
+)};
+annotate service.GetRegulationSubscenario with {
+    regulationSubScenario_category @Common.Text : {
+        $value : description,
         ![@UI.TextArrangement] : #TextFirst,
     }
 };

@@ -5,7 +5,7 @@ import {
     Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView, MaintainRegulationObjectType,
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryMapping,
     MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory,
-    ProcessingStatus, MaintainCompanyIdOrPlantToFacilityIdMapping
+    ProcessingStatus, MaintainCompanyIdOrPlantToFacilityIdMapping,Rfs2FuelCode
 } from '../external/regulationcompliancemasterservice_api';
 import { EventPayload, EventPayloadMDJ } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
@@ -60,6 +60,8 @@ export class RegulationComplianceBaseClass {
     public mMaintainCompanyIdOrPlantToFacilityIdMapping: { [index: string]: MaintainCompanyIdOrPlantToFacilityIdMapping } = {};
     public oResolveRFS2_MADJ_RVOCompliance!: Promise<unknown>;
     public resolveMDAJ!: (value: unknown) => void;
+    public aRfs2FuelCode: Rfs2FuelCode[] = [];
+    public mRfs2FuelCode: { [index: string]: Rfs2FuelCode } = {};
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
@@ -832,6 +834,22 @@ export class RegulationComplianceBaseClass {
                 }
             })        
     }
+
+    	 // set RFS2 Fuel Code data
+         async setRFS2FuelCode() {
+            const { rfs2FuelCodeApi } = regulationcompliancemasterserviceApi();
+                (await rfs2FuelCodeApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.aRfs2FuelCode.push(oData);
+                        this.mRfs2FuelCode[oData.category] = oData;
+                    });
+          
+             
+        }
     // --------- End of Setter methods ------------------
 
     // --------- Start of Getter methods ------------------
@@ -864,12 +882,12 @@ export class RegulationComplianceBaseClass {
                 { logUtilityServiceApi } = logutilityserviceApi();
             let logObjectID: string = "";
 
-            if (this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
+            if (this.oEventPayloadData.RenewableEventType &&  this.oEventPayloadData.RenewableEventType !== RFS2ConstantValues.eventTypeMDJ) {
                 logObjectID = this.oEventPayloadData.RenewableEventType +
                     this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocument : "" +
                         this.oEventPayloadData._RenewableMaterialDocument ? this.oEventPayloadData._RenewableMaterialDocument.RenwableMaterialDocumentItem : "";
             }
-            else {
+            else if(this.oEventPayloadMDJData && this.oEventPayloadMDJData.sourceScenario === RFS2ConstantValues.eventTypeMDJ) {
                 logObjectID = this.oEventPayloadMDJData.sourceScenario +
                     this.oEventPayloadMDJData.regulationLogisticsMaterialNumber ? this.oEventPayloadMDJData.regulationLogisticsMaterialNumber : "";
 
@@ -903,16 +921,9 @@ export class RegulationComplianceBaseClass {
 
     // add regulations
     async addRegulationCompliances(data: RegulationComplianceTransaction[]) {
-        console.log("addreg");
-        console.log(data);
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
-        const { RegulationComplianceTransaction } = srv.entities;
         try {
             await srv.post('RegulationComplianceTransaction', data);
-            // await srv.run(INSERT.into(RegulationComplianceTransaction).entries(data));
-            // await srv.insert.into(RegulationComplianceTransaction).entries(data)
-            // await srv.
-
         } catch (error) {
             console.log(error);
             const oLogData: ILogUtility = {} as ILogUtility;

@@ -1,9 +1,8 @@
 import { RegulationComplianceBaseClass } from './zcom_tsRegulationComplianceBase'
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { createdStatus } from './utilities/zcom_tsConstants';
 import { CdsDate } from '@cds-models/_/index';
 import { Quarter, Month } from '@cds-models';
-import { RFS2ConstantValues, adjustmentBaseMDJ, messageTypes, language } from './utilities/zcom_tsConstants';
+import { RFS2ConstantValues, adjustmentBaseMDJ, createdStatus} from './utilities/zcom_tsConstants';
 import { MaintainRfs2Material } from 'srv/external/regulationcompliancemasterservice_api';
 
 export class RFS2_MADJ_RVOCompliance {
@@ -44,15 +43,6 @@ export class RFS2_MADJ_RVOCompliance {
         } else {
             return false;
         }
-
-        // // Get object category
-        // await this._oRegulationComplianceBaseClassInstance.setObjectCategory();
-        // if (this._oRegulationComplianceBaseClassInstance.aObjectCategory) {
-        //     // data available
-        // } else {
-        //     return false;
-        // }
-
 
         // set mat config data
         await this._oRegulationComplianceBaseClassInstance.setMaterialConfiguration();
@@ -256,7 +246,6 @@ export class RFS2_MADJ_RVOCompliance {
             });
 
         }
-        console.log(aFinalData);
         if (aFinalData.length > 0) {
             await this._oRegulationComplianceBaseClassInstance.addRegulationCompliances(aFinalData);
         }
