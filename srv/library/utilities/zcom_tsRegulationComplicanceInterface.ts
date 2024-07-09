@@ -239,6 +239,7 @@ export interface EventPayloadMDJ {
     renewablesEpaCompanyId: string;
     renewablesEpaFacilityId: string;
     fuelLogisticsMaterialNumber: string;
+    internalComments: string;
 }
 // export interface IProcessingStatus {
 //     map: { [index: string]: ProcessingStatus };

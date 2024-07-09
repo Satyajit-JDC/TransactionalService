@@ -211,7 +211,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             oMAdjReqPayload.renewablesEpaCompanyId = oDataRequest.data.renewablesEpaCompanyId;
             oMAdjReqPayload.renewablesEpaFacilityId = oDataRequest.data.renewablesEpaFacilityId;
             oMAdjReqPayload.fuelLogisticsMaterialNumber = oDataRequest.data.fuelLogisticsMaterialNumber;
-       
+            oMAdjReqPayload.internalComments = oDataRequest.data.internalComments;
             await this.processMDAJ(oMAdjReqPayload, oMAdjPayloadData);
             return oDataRequest.data;
         })

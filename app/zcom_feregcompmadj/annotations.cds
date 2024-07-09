@@ -88,6 +88,11 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
                 Value : fuelCategory,
                 Label: '{i18n>FuelCategory}'
             },
+            {
+                $Type : 'UI.DataField',
+                Value : internalComments,
+                Label: '{i18n>internalComments}'
+            },
         ],
     },
  
@@ -120,6 +125,7 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
                 $Type: 'UI.DataField',
                 Value: fuelLogisticsMaterialNumber,
                 Label: '{i18n>FuelMaterial}'
+                
             },
             {
                 $Type: 'UI.DataField',
@@ -201,6 +207,16 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
             $Type: 'UI.DataField',
             Value: fuelCategory,
             Label: '{i18n>FuelCategory}',
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: rfs2ObligationType,
+            Label: '{i18n>RenewablesRFS2ObligationType}',
+        },
+        {
+            $Type: 'UI.DataField',
+            Value: rfs2ObligationTypeDesc,
+            Label: '{i18n>RenewablesRFS2ObligationTypeDesc}',
         },
         {
             $Type: 'UI.DataField',
@@ -630,6 +646,10 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
         },
         Common.ValueListWithFixedValues : true
 )};
-// annotate service.ManualAdjRegulationComplianceTransaction with {
-//     objectCategory @Common.Text : objectType
-// };
+
+annotate service.ManualAdjRegulationComplianceTransaction with {
+    regulationType  @mandatory;
+    objectCategory @mandatory;
+    reasonCode @mandatory;
+    transactionCategory @mandatory;
+}
