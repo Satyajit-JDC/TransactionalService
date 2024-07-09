@@ -5,7 +5,7 @@ import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationCompli
 
 // import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { Quarter, Month } from '@cds-models';
+// import { Quarter, Month } from '@cds-models';
 import {
     IMaintainRegulationType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario,
     IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility, EventPayloadMDJ

@@ -302,17 +302,32 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
             $Type : 'Common.ValueListType',
             CollectionPath : 'MaintainRenewableMaterialConfiguration',
             Parameters : [
-                {
-                    $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : regulationLogisticsMaterialNumber,
-                    ValueListProperty : 'material',
-                },
-                {
-                    $Type : 'Common.ValueListParameterIn',
-                    ValueListProperty : 'regulationType/regulationType',
-                    LocalDataProperty : regulationType,
-                },
-            ],
+                    {
+                        $Type : 'Common.ValueListParameterInOut',
+                        LocalDataProperty : regulationLogisticsMaterialNumber,
+                        ValueListProperty : 'material',
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterIn',
+                        ValueListProperty : 'year',
+                        LocalDataProperty : renewablesDocumentComplianceYear,
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterInOut',
+                        ValueListProperty : 'regulationType_regulationType',
+                        LocalDataProperty : regulationType,
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterOut',
+                        ValueListProperty : 'objectType_code',
+                        LocalDataProperty : objectType,
+                    },
+                    {
+                        $Type : 'Common.ValueListParameterOut',
+                        ValueListProperty : 'rvoType_category',
+                        LocalDataProperty : rfs2ObligationType,
+                    },
+                ],
             Label : 'RVO Material',
         },
         Common.ValueListWithFixedValues : true
@@ -321,11 +336,21 @@ annotate service.MaintainRenewableMaterialConfiguration with @(
     UI.PresentationVariant #vh_ManualAdjRegulationComplianceTransaction_sourceOrgCompanyMaterialNumber : {
         $Type : 'UI.PresentationVariantType',
         SortOrder : [
-            {
+            // {
+            //     $Type : 'Common.SortOrderType',
+            //     Property : material,
+            //     Descending : false,
+            // },
+             {
                 $Type : 'Common.SortOrderType',
-                Property : material,
-                Descending : false,
+                Property : rvoType_category,
+                Descending : true,
             },
+            //  {
+            //     $Type : 'Common.SortOrderType',
+            //     Property : objectType_code,
+            //     Descending : false,
+            // },
         ],
     }
 );
@@ -535,7 +560,12 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                 {
                     $Type : 'Common.ValueListParameterInOut',
                     LocalDataProperty : transactionCategory,
-                    ValueListProperty : 'transactionCategory/category',
+                    ValueListProperty : 'transactionCategory_category',
+                },
+                {
+                    $Type : 'Common.ValueListParameterIn',
+                    ValueListProperty : 'regulationType_regulationType',
+                    LocalDataProperty : regulationType,
                 },
                 
                 // {
