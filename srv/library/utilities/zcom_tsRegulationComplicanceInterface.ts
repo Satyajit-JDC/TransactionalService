@@ -216,6 +216,7 @@ export interface EventPayload {
 }
 export interface EventPayloadMDJ {
     regulationType: string;
+    objectCategory:string;
     objectType: string;
     sourceScenario: string;
     transactionCategory: string;

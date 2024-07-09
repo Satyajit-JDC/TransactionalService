@@ -33,7 +33,7 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
     sourceScenario                               : String(40)        @title: '{i18n>RenewablesSourceScenario}';
     subObjectScenario                            : String(40)            @title: '{i18n>RenewablesSub-ObjectScenario}';
     subObjectScenarioDesc                        : String(100)           @title: '{i18n>RenewablesSub-ObjectScenarioDesc}';
-    objectId                                     : Integer               @title: '{i18n>RenewablesObjectNumber}'  @assert.unique;
+    objectId                                     : Integer      @odata.Type : 'Edm.String'         @title: '{i18n>RenewablesObjectNumber}'  @assert.unique;
     transactionCategory                          : String(4)             @title: '{i18n>RenewablesTransactionCategory}'; //TransactionCategory
     transactionType                              : String(5)             @title: '{i18n>RenewablesTransactionType}';
     transactionTypeDesc                          : String(100)           @title: '{i18n>RenewablesTransactionTypeDesc}';

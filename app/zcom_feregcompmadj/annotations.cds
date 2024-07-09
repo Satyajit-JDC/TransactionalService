@@ -173,8 +173,9 @@ annotate service.ManualAdjRegulationComplianceTransaction with @(
     UI.LineItem                      : [
         {
             $Type: 'UI.DataField',
-            Value: objectId,
+            Value:  objectId,
             Label: '{i18n>RenewableID}',
+            
         },
         {
             $Type: 'UI.DataField',
@@ -273,6 +274,10 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
     @Common.FilterDefaultValue : 'D'
     objectCategory
 };
+// annotate  service.ManualAdjRegulationComplianceTransaction with{
+//    @UI.
+// }  ;
+
 // annotate service.MaintainRegulationTransactionType with {
 //     transactionType @Common.Text : {
 //             $value : description,
