@@ -922,6 +922,7 @@ export class RegulationComplianceBaseClass {
     // add regulations
     async addRegulationCompliances(data: RegulationComplianceTransaction[]) {
         const srv = await cds.connect.to('RegulationComplianceTransactionService');
+        console.log(data);
         try {
             await srv.post('RegulationComplianceTransaction', data);
         } catch (error) {
