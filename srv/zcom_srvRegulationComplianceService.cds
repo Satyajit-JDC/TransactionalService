@@ -3,13 +3,14 @@ using {RegulationComplianceMasterService as master} from './external/RegulationC
 // using {Za_}
 using {MaterialCharacteristics as s4h} from './external/MaterialCharacteristics';
 type returnData :{
-    messageType: String;
+    messageType: String(1);
     message: String(500);
 };
 
 
 service RegulationComplianceTransactionService {
     action actionTrigger(actionName: String(20), objectKey: UUID) returns many returnData;
+    
     action sendMessage(data : transaction.EventData);
 
     entity RegulationComplianceTransaction @(Capabilities: {

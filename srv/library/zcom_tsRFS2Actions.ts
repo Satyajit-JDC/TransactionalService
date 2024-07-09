@@ -13,7 +13,7 @@ export class RFS2Actions extends RegulationActionBase {
     }
 
     public async executeAction(actionName: actionName): Promise<boolean> {
-        const isValid = await this.idValidAction(actionName);
+       
         await this.doPIP();
       switch (actionName) {
         case "PIT":

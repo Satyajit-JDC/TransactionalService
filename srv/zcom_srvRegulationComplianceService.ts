@@ -32,7 +32,11 @@ const regulations = await SELECT.from(RegulationComplianceTransaction).where({ I
 switch (regulations.regulationType) {
     case "RFS2":
         const oRFS2ActionsInstance =  new RFS2Actions(actionData.data.objectKey,actionData.data.actionName);
+        const isValid = await RFS2Actions.isValid(actionData.data.actionName);
+      if (isValid) {
         await oRFS2ActionsInstance.executeAction(actionData.data.actionName);
+      }
+ 
         break;
 
      case "LCFS" :  
