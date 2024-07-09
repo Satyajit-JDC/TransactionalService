@@ -40,3 +40,6 @@ dist/
 resources/
 *.mta
 
+
+# auto generated wildcard
+gen/db/.env
