@@ -5,7 +5,7 @@ import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationCompli
 
 // import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { Quarter, Month } from '@cds-models';
+// import { Quarter, Month } from '@cds-models';
 import {
     IMaintainRegulationType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario,
     IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility, EventPayloadMDJ
@@ -215,21 +215,21 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return oDataRequest.data;
         })
 
-        this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs();
-            return oRegulationComplianceBaseInstance.aMaintainRegulationTransactionType;
-        })
+        // this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
+        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+        //     await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs();
+        //     return oRegulationComplianceBaseInstance.aMaintainRegulationTransactionType;
+        // })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setRegulationObjectType();
             return oRegulationComplianceBaseInstance.aMaintainRegulationObjectType;
         })
-        this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
-            const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-            await oRegulationComplianceBaseInstance.setMaterialConfiguration();
-            return oRegulationComplianceBaseInstance.aMaintainRfs2Material;
-        })
+        // this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
+        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
+        //     await oRegulationComplianceBaseInstance.setMaterialConfiguration();
+        //     return oRegulationComplianceBaseInstance.aMaintainRfs2Material;
+        // })
         // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
         //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
         //     return oManualAdjustment;
@@ -242,8 +242,8 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
         })
 
         this.on('READ', ['GetObjectCategory','GetUOM','GetImpact','GetFuelCategory','GetTransactionType',
-            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType','GetProcessingStatus'
-        ], async (req) => {
+            'GetFuelSubCategory', 'GetMovementType', 'GetRegulationSubType', 'GetPlant', 'MaintainRegulationType','GetProcessingStatus',
+            'GetMaintainRegulationTransactionTypeTs', 'MaintainRenewableMaterialConfiguration', 'GetRegulationSubscenario'], async (req) => {
             const service = await cds.connect.to('RegulationComplianceMasterService');
             return await service.run(req.query);
         })
