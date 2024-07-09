@@ -2,7 +2,7 @@ import { RegulationComplianceBaseClass } from './zcom_tsRegulationComplianceBase
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
 import { createdStatus } from './utilities/zcom_tsConstants';
 import { CdsDate } from '@cds-models/_/index';
-import { Quarter, Month } from '@cds-models';
+import { Quarter, Month, Dcode } from '@cds-models';
 export class RFS2_RVOCompliance {
     // private elements
     public _oRegulationComplianceBaseClassInstance: RegulationComplianceBaseClass;
@@ -120,6 +120,12 @@ export class RFS2_RVOCompliance {
             // data available
         } else {
             return false;
+        }
+
+        // set CompanyId Or Plant To FacilityId Mapping
+        await this._oRegulationComplianceBaseClassInstance.setCompanyIdOrPlantToFacilityIdMapping();
+        if (this._oRegulationComplianceBaseClassInstance.aMaintainCompanyIdOrPlantToFacilityIdMapping.length>0) {
+            // data available
         }
 
         return true;
@@ -318,14 +324,14 @@ export class RFS2_RVOCompliance {
                     // ciMaximumValue
                     // ciMinimumValue
                     // ciAverageValue
-                    // dcode: oEventData.dcode,
-                    // dcodeDesc master des
+                    dcode: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.Dcode as Dcode,
+                    dcodeDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableDcodeription,
                     rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
                     rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
                     vintageYear: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.VintageYear,
                     rinMultiplier: Number(this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableRinMultiplierription),
-                    // qapCertified: oEventData.qapCertified,
-                    // qapCertifiedDesc: oEventData.qa
+                    qapCertified: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableQapCertifiedription,
+                    qapCertifiedDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.QAPcertified,
                     // emtsQapServiceTypeCode
                     // emtsBatchNumberText
                     // emtsProcessCode
@@ -348,7 +354,7 @@ export class RFS2_RVOCompliance {
                     // epaCompanyIdFPR
                     // epafacilityIdFPR: oEventData.ep
                     // tprCompanyIdFPR
-                    // tprFacilityIdFPR
+                    generateFacilityId: this._oRegulationComplianceBaseClassInstance?.mMaintainCompanyIdOrPlantToFacilityIdMapping[oMatDocData.Plant+oMatDocData.CompanyCode]?.facilityId,
                     // referenceContractDocumentType: oEventData.co
                     referenceContractGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
                     referenceContractDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,

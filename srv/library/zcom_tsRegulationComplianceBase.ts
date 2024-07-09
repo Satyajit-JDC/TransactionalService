@@ -1,11 +1,11 @@
-import cds, { function_call } from '@sap/cds';
+import cds from '@sap/cds';
 import { regulationcompliancemasterserviceApi } from '../external/regulationcompliancemasterservice_api/service';
 import {
     MaintainRfs2Material, MaintainTransactionType, MaintainAdjustmentReasonCode, RegulationUom,
     Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView, MaintainRegulationObjectType,
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryMapping,
     MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory,
-    ProcessingStatus
+    ProcessingStatus, MaintainCompanyIdOrPlantToFacilityIdMapping
 } from '../external/regulationcompliancemasterservice_api';
 import { EventPayload, EventPayloadMDJ } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
@@ -15,11 +15,8 @@ import { RFS2ComplianceClass } from './zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, destinationNames, messageTypes, language } from './utilities/zcom_tsConstants';
 import { ResourceManager } from '@sap/textbundle';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-// import { MaintainRegulationObjectTypeApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainRegulationObjectTypeApi';
-// import { MaintainMovementTypeToTransactionCategoryMappingApi } from 'srv/external/regulationcompliancemasterservice_api/MaintainMovementTypeToTransactionCategoryMappingApi';
 import { ZA_MaterialCharacteristics_R } from '#cds-models/MaterialCharacteristics'
 import { materialcharacteristicsApi } from '../external/materialcharacteristics_api';
-// import { ProcessingStatusApi } from 'srv/external/regulationcompliancemasterservice_api/ProcessingStatusApi';
 
 export class RegulationComplianceBaseClass {
     // private elements
@@ -59,6 +56,8 @@ export class RegulationComplianceBaseClass {
     public oEventPayloadMDJData!: EventPayloadMDJ;
     public mProcessingStatus: { [index: string]: ProcessingStatus } = {};
     public aProcesssingStatus: ProcessingStatus[] = [];
+    public aMaintainCompanyIdOrPlantToFacilityIdMapping: MaintainCompanyIdOrPlantToFacilityIdMapping[] = [];
+    public mMaintainCompanyIdOrPlantToFacilityIdMapping: { [index: string]: MaintainCompanyIdOrPlantToFacilityIdMapping } = {};
     public oResolveRFS2_MADJ_RVOCompliance!: Promise<unknown>;
     public resolveMDAJ!: (value: unknown) => void;
     //-------- Start of Base constructor ------------------
@@ -816,6 +815,22 @@ export class RegulationComplianceBaseClass {
                         this.mProcessingStatus[oData.category] = oData;
                     }
                 })        
+    }
+
+    // set CompanyId Or Plant To FacilityId Mapping
+    async setCompanyIdOrPlantToFacilityIdMapping() {
+        const { maintainCompanyIdOrPlantToFacilityIdMappingApi } = regulationcompliancemasterserviceApi();
+        (await maintainCompanyIdOrPlantToFacilityIdMappingApi.requestBuilder().getAll()
+            .middleware(resilience({ retry: 3, circuitBreaker: true }))
+            .execute({
+                destinationName: destinationNames.regulationComplianceMasterService
+            })).
+            forEach((oData) => {
+                this.aMaintainCompanyIdOrPlantToFacilityIdMapping.push(oData);
+                if (oData.plant && oData.companyId) {
+                    this.mMaintainCompanyIdOrPlantToFacilityIdMapping[oData.plant + oData.companyId] = oData;
+                }
+            })        
     }
     // --------- End of Setter methods ------------------
 
