@@ -5,7 +5,8 @@ import {
     Impact, ObjectCategory, MaintainRegulationGroupView, MaintainRegulationMaterialGroupView, MaintainRegulationObjectType,
     MaintainRegulationSubScenarioToScenarioType, MaintainMovementType, MaintainMovementTypeToTransactionCategoryMapping,
     MaintainRegulationTransactionType, MaintainRegulationType, Rfs2DebitType, FuelCategory, FuelSubCategory,
-    ProcessingStatus
+    ProcessingStatus,
+    Rfs2FuelCode
 } from '../external/regulationcompliancemasterservice_api';
 import { EventPayload, EventPayloadMDJ } from './utilities/zcom_tsRegulationComplicanceInterface';
 import { LogUtilityService, logutilityserviceApi } from '../external/logutilityservice_api';
@@ -61,6 +62,8 @@ export class RegulationComplianceBaseClass {
     public aProcesssingStatus: ProcessingStatus[] = [];
     public oResolveRFS2_MADJ_RVOCompliance!: Promise<unknown>;
     public resolveMDAJ!: (value: unknown) => void;
+    public aRfs2FuelCode: Rfs2FuelCode[] = [];
+    public mRfs2FuelCode: { [index: string]: Rfs2FuelCode } = {};
     //-------- Start of Base constructor ------------------
     constructor(oEventPayloadData: EventPayload) {
         this.oEventPayloadData = oEventPayloadData; //fill event data from S4 API
@@ -817,6 +820,22 @@ export class RegulationComplianceBaseClass {
                     }
                 })        
     }
+
+    	 // set RFS2 Fuel Code data
+         async setRFS2FuelCode() {
+            const { rfs2FuelCodeApi } = regulationcompliancemasterserviceApi();
+                (await rfs2FuelCodeApi.requestBuilder().getAll()
+                    .middleware(resilience({ retry: 3, circuitBreaker: true }))
+                    .execute({
+                        destinationName: destinationNames.regulationComplianceMasterService
+                    })).
+                    forEach((oData) => {
+                        this.aRfs2FuelCode.push(oData);
+                        this.mRfs2FuelCode[oData.category] = oData;
+                    });
+          
+             
+        }
     // --------- End of Setter methods ------------------
 
     // --------- Start of Getter methods ------------------
