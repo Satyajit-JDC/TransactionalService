@@ -87,7 +87,7 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
     originRegion                                 : String(3)             @title: '{i18n>OriginRegion}';
     destinationRegion                            : String(3)             @title: '{i18n>DestinationRegion}';
     reasonCode                                   : String(2)             @title: '{i18n>RenewablesManualAdjustmentReasonCode}';
-    reasonCodeDesc                               : String(100)           @title: '{i18n>reasonCodeDesc}';
+    reasonCodeDesc                               : String(100)  @readonly        @title: '{i18n>reasonCodeDesc}';
     regulationCompanyName                        : String(30)            @title: '{i18n>regulationCompanyName}';
     internalComments                             : String                @title: '{i18n>internalComments}';
     externalComments                             : String                @title: '{i18n>externalComments}';

@@ -189,6 +189,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             // manual adjustment payload
             oMAdjReqPayload.regulationType = oDataRequest.data.regulationType;
             oMAdjReqPayload.sourceScenario = RFS2ConstantValues.eventTypeMDJ;
+            oMAdjReqPayload.objectCategory = oDataRequest.data.objectCategory;
             oMAdjReqPayload.objectType = oDataRequest.data.objectType;
             oMAdjReqPayload.transactionCategory = oDataRequest.data.transactionCategory;
             oMAdjReqPayload.impact = oDataRequest.data.impact;
@@ -327,11 +328,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 // RFS2 Regulation is Active
                 if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
                     // Set Debit/Credit objects
-                    if (oMAdjReqPayload.objectType === RFS2ConstantValues.credit) {
+                    if (oMAdjReqPayload.objectCategory === RFS2ConstantValues.credit) {
                         oRegulationComplianceBaseClassInstance.oRFS2CreditData.regulationType = oMAdjReqPayload.regulationType;
                         oRegulationComplianceBaseClassInstance.oRFS2CreditData.category = RFS2ConstantValues.credit;
                     }
-                    else if (oMAdjReqPayload.objectType === RFS2ConstantValues.debit) {
+                    else if (oMAdjReqPayload.objectCategory === RFS2ConstantValues.debit) {
                         oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oMAdjReqPayload.regulationType;
                         oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.debit;
                     }
