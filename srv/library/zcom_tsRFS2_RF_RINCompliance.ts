@@ -207,6 +207,8 @@ export class RFS2_RF_RINCompliance {
                     incotermsPart2: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableIncoTerms2,
                     fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory,
                     fuelCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelCategory[this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory].description,
+                    // fuelCategory: 'GS',
+                    // fuelCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelCategory['GS'].description,
                     fuelSubCategory: "BD", //HC oEventData.fuelSubCategory, //Maintain Fuel Mapping
                     fuelSubCategoryDesc: this._oRegulationComplianceBaseClassInstance.mFuelSubCategory["BD"].description,
                     // feedStock: oEventData.feedStock,
@@ -318,7 +320,7 @@ export class RFS2_RF_RINCompliance {
                     //dcode: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.Dcode,
                     // dcodeDesc master des
                     rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
-                    rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
+                    rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2FuelCode[oMaterialConfig.rvoTypeCategory].description : "",
                     vintageYear: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.VintageYear,
                     rinMultiplier: Number(this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableRinMultiplierription),
                     // qapCertified: oEventData.qapCertified,
