@@ -186,7 +186,8 @@ export class RFS2_MADJ_RVOCompliance {
                         rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
                         rfs2ObligationTypeDesc: oMaterialConfig.description,
                         processingStatus: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].category,
-                        objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description
+                        objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description,
+                        internalComments: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.internalComments
                         // rfs2ObligationTypeDesc: aRFS2DebitType.map[oMaterialConfig.rvoTypeCategory].description, error
                         // regulationUnitOfMeasurement: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationUoMCategory,
                     })
@@ -242,7 +243,8 @@ export class RFS2_MADJ_RVOCompliance {
                 rfs2ObligationType: oMaterialConfig[0].rvoTypeCategory,
                 rfs2ObligationTypeDesc: oMaterialConfig[0].description,
                 processingStatus: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].category,
-                objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description
+                objectStatusDesc: this._oRegulationComplianceBaseClassInstance.mProcessingStatus[createdStatus].description,
+                internalComments: this._oRegulationComplianceBaseClassInstance.oEventPayloadMDJData.internalComments
             });
 
         }
