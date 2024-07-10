@@ -8,8 +8,8 @@ import { RFS2ConstantValues, messageTypes, createdStatus } from './library/utili
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        // this.on("sendMessage", async msg => {
-           messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+       // this.on("sendMessage", async msg => {
+        messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
             if (msg.data) {
                 const oEventData = msg.data;
                 // fill data from payload to object
@@ -53,7 +53,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         RenewableDcodeription: oEventData._RenewableDeal.RenewableDcodeription,
                         RenewableVintageYearription: oEventData._RenewableDeal.RenewableVintageYearription,
                         RenewableRinMultiplierription: oEventData._RenewableDeal.RenewableRinMultiplierription,
-                        RenewableQapCertifiedription: oEventData._RenewableDeal.RenewableQapCertifiedription
+                        RenewableQapCertifiedDesc: oEventData._RenewableDeal.RenewableQapCertifiedDesc
                     },
                     _RenewableDelivery: {
                         RenewableMaterial: oEventData._RenewableDelivery.RenewableMaterial,

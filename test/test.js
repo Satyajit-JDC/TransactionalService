@@ -224,7 +224,7 @@ describe('RFS2 Event Test', () => {
             "RenewableDcodeription":"",
             "RenewableVintageYearription":"0",
             "RenewableRinMultiplierription":"0.000",
-            "RenewableQapCertifiedription":""
+            "RenewableQapCertifiedDesc":""
          },
          "_RenewableDelivery":{
             "RenewableMaterial":"",
@@ -365,7 +365,7 @@ describe('RFS2 Event Test', () => {
             "RenewableDcodeription":"",
             "RenewableVintageYearription":"0",
             "RenewableRinMultiplierription":"0.000",
-            "RenewableQapCertifiedription":""
+            "RenewableQapCertifiedDesc":""
          },
          "_RenewableDelivery":{
             "RenewableMaterial":"",
