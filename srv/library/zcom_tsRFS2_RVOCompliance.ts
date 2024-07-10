@@ -194,7 +194,7 @@ export class RFS2_RVOCompliance {
                 aFinalData.push({
                     regulationType: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
                     regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.description,
-                    regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
+                    regulationCategory: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationCategoryCategory,
                     objectCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                     objectCategoryDesc: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.description,
                     objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
@@ -417,6 +417,7 @@ export class RFS2_RVOCompliance {
                     destinationOrgPlant: oMatDocData.Plant,
                     destinationOrgStorageLocation: oMatDocData.StorageLocation,
                     destinationOrgMaterialNumber: oMatDocData.RenewableMaterial,
+                    destinationOrgMaterialNumberDes: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
                     destinationOrgCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
                     destinationOrgRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
                     fuelLogisticsCompanyCode: oMatDocData.CompanyCode,
