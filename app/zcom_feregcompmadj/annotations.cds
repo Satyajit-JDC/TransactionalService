@@ -565,6 +565,11 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                     ValueListProperty : 'FuelCategory',
                     LocalDataProperty : fuelCategory,
                 },
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : fuelLogisticsMaterialNumberDesc,
+                    ValueListProperty : 'MaterialDescription',
+                },
             ],
             Label : '{i18n>FuelMaterial}',
         },
@@ -640,6 +645,11 @@ annotate service.ManualAdjRegulationComplianceTransaction with {
                     $Type : 'Common.ValueListParameterInOut',
                     LocalDataProperty : objectCategory,
                     ValueListProperty : 'category',
+                },
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : objectCategoryDesc,
+                    ValueListProperty : 'description',
                 },
             ],
             Label : '{i18n>CategoryType}',
