@@ -1,20 +1,7 @@
 import cds from '@sap/cds';
-// import { Query } from '@sap/cds';
-// import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase';
-
-// import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
-// import { Quarter, Month } from '@cds-models';
-import {
-    IMaintainRegulationType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario,
-    IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility, EventPayloadMDJ
-} from './library/utilities/zcom_tsRegulationComplicanceInterface';
-import {
-    MaintainRfs2Material
-} from './external/regulationcompliancemasterservice_api';
-// import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
-// import { queryObjects } from 'v8';
+import { EventPayload, ILogUtility, EventPayloadMDJ } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, messageTypes, createdStatus } from './library/utilities/zcom_tsConstants';
 
@@ -224,7 +211,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             await oRegulationComplianceBaseInstance.setRegulationObjectType();
             return oRegulationComplianceBaseInstance.aMaintainRegulationObjectType;
         })
-       
+      
         this.on('READ', 'GetReasonCode', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setAdjustmentReasonCode();
@@ -323,19 +310,14 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }
             }
         });
+      
         // To make it resolved first and return the data
         oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance = new Promise(function (fn, reject) {
             oRegulationComplianceBaseClassInstance.resolveMDAJ = fn;
         });
         await oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance.then(() => {
-            debugger
+            
         });
-        // return oDataRequest.data;
-
-    }
-
-    resolvefn() {
-
     }
 
 }

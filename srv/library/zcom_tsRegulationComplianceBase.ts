@@ -90,10 +90,6 @@ export class RegulationComplianceBaseClass {
     }
     //-------- End of Base constructor ------------------
 
-    // resolveMDAJ(){
-
-    // }
-
     // --------- Start of Setter methods ------------------
     // set RFS2 Class Instance Object
     set setRFS2ComplianceClassObject(oRFS2ClassObjectInstance: RFS2ComplianceClass) {

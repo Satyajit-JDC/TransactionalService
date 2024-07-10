@@ -37,3 +37,5 @@ export const adjustmentBaseMDJ = {
     quantity: 'Q',
     volume: 'V'
 } as const;
+
+export const rvoReversalMovementType = "522";
