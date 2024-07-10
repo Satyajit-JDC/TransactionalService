@@ -217,8 +217,10 @@ export interface EventPayload {
 export interface EventPayloadMDJ {
     regulationType: string;
     objectCategory:string;
+    objectCategoryDesc: string;
     objectType: string;
     sourceScenario: string;
+    sourceOrgCompanyCode: string;
     transactionCategory: string;
     impact: string;
     documentDate: Date;
@@ -239,6 +241,7 @@ export interface EventPayloadMDJ {
     renewablesEpaCompanyId: string;
     renewablesEpaFacilityId: string;
     fuelLogisticsMaterialNumber: string;
+    fuelLogisticsMaterialNumberDesc: string;
     internalComments: string;
 }
 // export interface IProcessingStatus {
