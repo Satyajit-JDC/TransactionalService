@@ -1,6 +1,5 @@
 using {com.sap.chs.com.regulationcompliancetransaction as transaction} from '../db/zcom_schRegulationComplianceTransaction';
 using {RegulationComplianceMasterService as master} from './external/RegulationComplianceMasterService';
-// using {Za_}
 using {MaterialCharacteristics as s4h} from './external/MaterialCharacteristics';
 
 service RegulationComplianceTransactionService {

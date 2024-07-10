@@ -151,7 +151,7 @@ type EventData {
         RenewableDcodeription          : String;
         RenewableVintageYearription    : String;
         RenewableRinMultiplierription  : String;
-        RenewableQapCertifiedription   : String;
+        RenewableQapCertifiedDesc      : String;
     };
     _RenewableDelivery                 : {
         RenewableMaterial              : String;

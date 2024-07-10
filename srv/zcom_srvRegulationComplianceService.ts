@@ -1,30 +1,17 @@
 import cds from '@sap/cds';
-// import { Query } from '@sap/cds';
-// import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase';
-
-// import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
-// import { Quarter, Month } from '@cds-models';
-import {
-    IMaintainRegulationType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario,
-    IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility, EventPayloadMDJ
-} from './library/utilities/zcom_tsRegulationComplicanceInterface';
-import {
-    MaintainRfs2Material
-} from './external/regulationcompliancemasterservice_api';
-// import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
-// import { queryObjects } from 'v8';
+import { EventPayload, ILogUtility, EventPayloadMDJ } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, messageTypes, createdStatus } from './library/utilities/zcom_tsConstants';
 
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        this.on("sendMessage", async msg => {
-          //  messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
-            if (msg.data.data) {
-                const oEventData = msg.data.data;
+        // this.on("sendMessage", async msg => {
+           messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+            if (msg.data) {
+                const oEventData = msg.data;
                 // fill data from payload to object
                 const oEventPayloadData: EventPayload = {
                     RenewableMaterial: oEventData.RenewableMaterial,
@@ -216,25 +203,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return oDataRequest.data;
         })
 
-        // this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
-        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-        //     await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs();
-        //     return oRegulationComplianceBaseInstance.aMaintainRegulationTransactionType;
-        // })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setRegulationObjectType();
             return oRegulationComplianceBaseInstance.aMaintainRegulationObjectType;
         })
-        // this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
-        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-        //     await oRegulationComplianceBaseInstance.setMaterialConfiguration();
-        //     return oRegulationComplianceBaseInstance.aMaintainRfs2Material;
-        // })
-        // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
-        //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
-        //     return oManualAdjustment;
-        // })
 
         this.on('READ', 'GetReasonCode', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
@@ -304,12 +277,6 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return aFuelMaterial;
         })
 
-        // this.on('READ', 'GetTransactionType', async () => {
-        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-        //     await oRegulationComplianceBaseInstance.setTransactiontype();
-        //     return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
-        // })
-
         return super.init()
     }
 
@@ -340,19 +307,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }
             }
         });
-        // var fn = oRegulationComplianceBaseClassInstance.resolveMDAJ;
+        
         oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance = new Promise(function (fn, reject) {
             oRegulationComplianceBaseClassInstance.resolveMDAJ = fn;
         });
         await oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance.then(() => {
-            debugger
+            
         });
-        // return oDataRequest.data;
-
-    }
-
-    resolvefn() {
-
     }
 
 }
