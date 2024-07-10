@@ -53,7 +53,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         RenewableDcodeription: oEventData._RenewableDeal.RenewableDcodeription,
                         RenewableVintageYearription: oEventData._RenewableDeal.RenewableVintageYearription,
                         RenewableRinMultiplierription: oEventData._RenewableDeal.RenewableRinMultiplierription,
-                        RenewableQapCertifiedription: oEventData._RenewableDeal.RenewableQapCertifiedription
+                        RenewableQapCertifiedDesc: oEventData._RenewableDeal.RenewableQapCertifiedDesc
                     },
                     _RenewableDelivery: {
                         RenewableMaterial: oEventData._RenewableDelivery.RenewableMaterial,
