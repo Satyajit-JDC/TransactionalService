@@ -491,6 +491,7 @@ aspect Enterprise {
     destinationOrgPlant                           : String(4)    @title: '{i18n>destinationOrgPlant}';
     destinationOrgStorageLocation                 : String(4)    @title: '{i18n>destinationOrgStorageLocation}';
     destinationOrgMaterialNumber                  : String(40)   @title: '{i18n>destinationOrgMaterialNumber}';
+    destinationOrgMaterialNumberDes               : String(40)   @title: '{i18n>destinationOrgMaterialNumberDesc}';
     destinationOrgCountryKey                      : String(10)   @title: '{i18n>destinationOrgCountryKey}';
     destinationOrgRegion                          : String(3)    @title: '{i18n>destinationOrgRegion}';
     fuelLogisticsCompanyCode                      : String(4)    @assert.unique  @title: '{i18n>fuelLogisticsCompanyCode}';
