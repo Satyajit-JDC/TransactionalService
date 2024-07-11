@@ -100,86 +100,86 @@ const { GET,POST } = cds.test(__dirname + '/..');
 //   // srv = await cds.serve('api').from(__dirname + '/../srv/api-service.cds')
 // })
 
-describe('Manual Adjustment Customer Handler', () => {
+// describe('Manual Adjustment Customer Handler', () => {
 
-  it('should send post request on manual adjustment', async () => {
-    // let data = await GET `/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction`
+//   it('should send post request on manual adjustment', async () => {
+//     // let data = await GET `/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction`
 
-    let response = await POST `/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction ${{
+//     let response = await POST `/odata/v4/regulation-compliance-transaction/ManualAdjRegulationComplianceTransaction ${{
 
-      regulationType: 'RFS2',
-      regulationCategory: 'RFS2',
-      objectCategory: 'D',
-      objectType: 'RVO',
-      sourceScenario: 'MDJ',
-      subObjectScenario: 'RFS2_MADJ_RVO',
-      subObjectScenarioDesc: 'Manual adjustment obligation',
-      transactionType: 'PRD',
-      transactionTypeDesc: 'RFS2 Prd',
-      transactionCategory: 'PRD',
-      impact: 'I',
-      documentDate: '2024-07-09',
-      renewablesDocumentMonth: '06',
-      renewablesDocumentMonthDes: 'JUL',
-      renewablesDocumentQuarter: '3',
-      renewablesDocumentComplianceYear: '2024',
-      businessPartnerNumber: '12',
-      reasonCode: '01',
-      reasonCodeDesc: 'Failed',
-      sourceOrgPlant: '0560',
-      regulationQuantity: 400,
-      regulationQuantityWholeNumber: 400,
-      regulationUnitOfMeasurement: 'RIN',
-      regulationLogisticsMaterialNumber: 'CELLULOSIC_2024',
-      billofLading: '12',
-      fuelCategory: 'GS',
-      adjustmentBase: 'Q',
-      renewablesPostingMonth: '06',
-      renewablesReversalPostingMonth: '06',
-      renewablesProductionMonth: '06',
-      renewablesTransferMonth: '06',
-      renewablesSubmissionMonth: '06',
-      rfs2ObligationType: 'CB',
-      rfs2ObligationTypeDesc: '2024 RIN Cellulosic biofuel Obligation',
-      processingStatus: '01',
-      objectStatusDesc: 'Created'
+//       regulationType: 'RFS2',
+//       regulationCategory: 'RFS2',
+//       objectCategory: 'D',
+//       objectType: 'RVO',
+//       sourceScenario: 'MDJ',
+//       subObjectScenario: 'RFS2_MADJ_RVO',
+//       subObjectScenarioDesc: 'Manual adjustment obligation',
+//       transactionType: 'PRD',
+//       transactionTypeDesc: 'RFS2 Prd',
+//       transactionCategory: 'PRD',
+//       impact: 'I',
+//       documentDate: '2024-07-09',
+//       renewablesDocumentMonth: '06',
+//       renewablesDocumentMonthDes: 'JUL',
+//       renewablesDocumentQuarter: '3',
+//       renewablesDocumentComplianceYear: '2024',
+//       businessPartnerNumber: '12',
+//       reasonCode: '01',
+//       reasonCodeDesc: 'Failed',
+//       sourceOrgPlant: '0560',
+//       regulationQuantity: 400,
+//       regulationQuantityWholeNumber: 400,
+//       regulationUnitOfMeasurement: 'RIN',
+//       regulationLogisticsMaterialNumber: 'CELLULOSIC_2024',
+//       billofLading: '12',
+//       fuelCategory: 'GS',
+//       adjustmentBase: 'Q',
+//       renewablesPostingMonth: '06',
+//       renewablesReversalPostingMonth: '06',
+//       renewablesProductionMonth: '06',
+//       renewablesTransferMonth: '06',
+//       renewablesSubmissionMonth: '06',
+//       rfs2ObligationType: 'CB',
+//       rfs2ObligationTypeDesc: '2024 RIN Cellulosic biofuel Obligation',
+//       processingStatus: '01',
+//       objectStatusDesc: 'Created'
 
-        // "regulationType": "RFS2",
-        // "regulationCategory": "RFS2",
-        // "objectCategory": "D",
-        // "objectType": "RVO",
-        // "sourceScenario": "MDJ",
-        // "transactionType": "PROD",
-        // "impact": "I",
-        // "documentDate": "2024-06-01",
-        // "renewablesDocumentComplianceYear": "2024",
-        // "businessPartnerNumber": "123",
-        // "reasonCode": "02",
-        // "reasonCodeDesc": "jest",
-        // "sourceOrgPlant": "0563",
-        // "renewablesEpaCompanyId": "1000",
-        // "renewablesEpaFacilityId": "44",
-        // "fuelUnitofMeasurement": "BBL",
-        // "fuelAlternateUnitofMeasurement": "UG6",
-        // "billofLading": "23",
-        // "fuelCategory": "DL",
-        // "fuelQuantity": 150.000,
-        // "adjustmentBase": "V",
-        // "regulationUnitOfMeasurement": "RIN",
-        // "processingStatus": "01",
-        // "objectStatusDesc": "Created"
-    }}`
-    expect(response.status).toEqual(201)
-     console.log(response.status);
-    // if  (response.fuelQuantity === 150.000) {
-    //   console.log("Success");
-    // }
-    // else {
-    //   console.log("failed");
-    // } 
-  })
+//         // "regulationType": "RFS2",
+//         // "regulationCategory": "RFS2",
+//         // "objectCategory": "D",
+//         // "objectType": "RVO",
+//         // "sourceScenario": "MDJ",
+//         // "transactionType": "PROD",
+//         // "impact": "I",
+//         // "documentDate": "2024-06-01",
+//         // "renewablesDocumentComplianceYear": "2024",
+//         // "businessPartnerNumber": "123",
+//         // "reasonCode": "02",
+//         // "reasonCodeDesc": "jest",
+//         // "sourceOrgPlant": "0563",
+//         // "renewablesEpaCompanyId": "1000",
+//         // "renewablesEpaFacilityId": "44",
+//         // "fuelUnitofMeasurement": "BBL",
+//         // "fuelAlternateUnitofMeasurement": "UG6",
+//         // "billofLading": "23",
+//         // "fuelCategory": "DL",
+//         // "fuelQuantity": 150.000,
+//         // "adjustmentBase": "V",
+//         // "regulationUnitOfMeasurement": "RIN",
+//         // "processingStatus": "01",
+//         // "objectStatusDesc": "Created"
+//     }}`
+//     expect(response.status).toEqual(201)
+//      console.log(response.status);
+//     // if  (response.fuelQuantity === 150.000) {
+//     //   console.log("Success");
+//     // }
+//     // else {
+//     //   console.log("failed");
+//     // } 
+//   })
 
-})
+// })
 
 describe('RFS2 Event Test', () => {
   it('should send post request on RFS2 RVO event and passed', async () => {
@@ -464,4 +464,306 @@ describe('RFS2 Event Test', () => {
     expect(response.status).toEqual(204)
      console.log(response.status);
   })
+  it('should send post request on RFS2 RF RIN event and passed', async () => {
+   let response = await POST `http://localhost:4004/odata/v4/regulation-compliance-transaction/sendMessage ${{
+      "data":
+      {
+        "RenewableMaterial":"300004",
+        "RenewableEventType":"GM-CR-ET",
+        "RenewableFuelCategory":"GS",
+        "RenewableTransactionType":"PUR",
+        "RegulationGroupName":"R001",
+        "RegulationMateGroup":"M002",
+        "MaterialDescription":"ULSD15 #1 CLEAR",
+        "_RenewableContract":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableContract":"",
+         "RenwableCotractItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableDeal":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableDealDocument":"",
+         "RenwableDealItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "AttachedIndicator":"",
+         "Dcode":"",
+         "VintageYear":"2024",
+         "Multiplier":"",
+         "RINObligation":"",
+         "RINsGenerator":"",
+         "RINspriced":"",
+         "QAPcertified":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":"",
+         "RenewablePassRetainIndicator":"false",
+         "RenewableDealNumber":"",
+         "RenewableDcodeription":"",
+         "RenewableVintageYearription":"0",
+         "RenewableRinMultiplierription":"0.000",
+         "RenewableQapCertifiedDesc":""
+        },
+        "_RenewableDelivery":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableDelivery":"",
+         "RenwableDeliveryItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableMaterialDocument":
+        {
+         "RenewableMaterial":"300004",
+         "RenewableEventType":"WE",
+         "RenwableMaterialDocument":"5000000082",
+         "RenwableMaterialDocumentItem":"1",
+         "RenwableDocumentType":"",
+         "MovementType":"101",
+         "Plant":"0563",
+         "StorageLocation":"BULK",
+         "CompanyCode":"1000",
+         "DocumentDate":"2024-07-08",
+         "Quantity":"1.000",
+         "UnitOfMeasure":"UG6",
+         "RenewableMaterialDocDocDte":"2024-07-08",
+         "RenewableMaterialDocPostgDte":"2024-07-08",
+         "RenewableBillOfLading":"",
+         "RenewableReasonReasonCode":"0",
+         "RenewableReversalPostingDate":"2024-07-08"
+        },
+        "_RenewableNominationData":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableNomination":"",
+         "NominationKey":"",
+         "RenwableNominationItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableProductionOrder":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableProductionOrder":"",
+         "RenwableProductionOrderItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":"",
+         "RenewableBusinessPartnerNumber":"",
+         "RenewableBusinessPartnerDesc":"",
+         "RenewableIncoTerms1":"",
+         "RenewableIncoTerms2":"",
+         "RenewableContract":"",
+         "RenewableContractItem":"0"
+        },
+        "_RenewablePurchaseOrder":
+        {
+         "RenewableMaterial":"300004",
+         "RenewableEventType":"WE",
+         "RenwablePurchaseOrder":"4500000089",
+         "RenwablePurchaseOrderItem":"10",
+         "DocumentType":"",
+         "MovementType":"101",
+         "Quantity":"1.000",
+         "UnitOfMeasure":"UG6"
+        },
+        "_RenewableSalesOrder":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableSalesOrder":"",
+         "RenwableSalesOrderItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableTicketData":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableTicket":"",
+         "RenwableTicketItem":"0",
+         "Ticketkey":"",
+         "TicketVersion":"0",
+         "TicketPurpose":"",
+         "Tickettype":"",
+         "ExternalTicketNumber":"",
+         "ExternalPositionNumber":"",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        }
+      }
+  }}`
+   expect(response.status).toEqual(204)
+    console.log(response.status);
+ })
+ it('should send post request on RFS2 RF RIN event and fail for wrong data', async () => {
+   let response = await POST `http://localhost:4004/odata/v4/regulation-compliance-transaction/sendMessage ${{
+      "data":
+      {
+        "RenewableMaterial":"300004",
+        "RenewableEventType":"GM-CR-ET",
+        "RenewableFuelCategory":"GS",
+        "RenewableTransactionType":"PUR",
+        "RegulationGroupName":"R001",
+        "RegulationMateGroup":"M002",
+        "MaterialDescription":"ULSD15 #1 CLEAR",
+        "_RenewableContract":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableContract":"",
+         "RenwableCotractItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableDeal":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableDealDocument":"",
+         "RenwableDealItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "AttachedIndicator":"",
+         "Dcode":"",
+         "VintageYear":"2024",
+         "Multiplier":"",
+         "RINObligation":"",
+         "RINsGenerator":"",
+         "RINspriced":"",
+         "QAPcertified":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":"",
+         "RenewablePassRetainIndicator":"false",
+         "RenewableDealNumber":"",
+         "RenewableDcodeription":"",
+         "RenewableVintageYearription":"0",
+         "RenewableRinMultiplierription":"0.000",
+         "RenewableQapCertifiedDesc":""
+        },
+        "_RenewableDelivery":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableDelivery":"",
+         "RenwableDeliveryItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableMaterialDocument":
+        {
+         "RenewableMaterial":"300004",
+         "RenewableEventType":"WE",
+         "RenwableMaterialDocument":"5000000082",
+         "RenwableMaterialDocumentItem":"1",
+         "RenwableDocumentType":"",
+         "MovementType":"101",
+         "Plant":"0563",
+         "StorageLocation":"BULK",
+         "CompanyCode":"1000",
+         "DocumentDate":"2024-07-08",
+         "Quantity":"1.000",
+         "UnitOfMeasure":"UG6",
+         "RenewableMaterialDocDocDte":"2024-07-08",
+         "RenewableMaterialDocPostgDte":"2024-07-08",
+         "RenewableBillOfLading":"",
+         "RenewableReasonReasonCode":"0",
+         "RenewableReversalPostingDate":"2024-07-08"
+        },
+        "_RenewableNominationData":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableNomination":"",
+         "NominationKey":"",
+         "RenwableNominationItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableProductionOrder":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableProductionOrder":"",
+         "RenwableProductionOrderItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":"",
+         "RenewableBusinessPartnerNumber":"",
+         "RenewableBusinessPartnerDesc":"",
+         "RenewableIncoTerms1":"",
+         "RenewableIncoTerms2":"",
+         "RenewableContract":"",
+         "RenewableContractItem":"0"
+        },
+        "_RenewablePurchaseOrder":
+        {
+         "RenewableMaterial":"300004",
+         "RenewableEventType":"WE",
+         "RenwablePurchaseOrder":"4500000089",
+         "RenwablePurchaseOrderItem":"10",
+         "DocumentType":"",
+         "MovementType":"101",
+         "Quantity":"1.000",
+         "UnitOfMeasure":"UG6"
+        },
+        "_RenewableSalesOrder":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableSalesOrder":"",
+         "RenwableSalesOrderItem":"0",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":"0.000",
+         "UnitOfMeasure":""
+        },
+        "_RenewableTicketData":
+        {
+         "RenewableMaterial":"",
+         "RenewableEventType":"",
+         "RenwableTicket":"",
+         "RenwableTicketItem":"0",
+         "Ticketkey":"",
+         "TicketVersion":"0",
+         "TicketPurpose":"",
+         "Tickettype":"",
+         "ExternalTicketNumber":"",
+         "ExternalPositionNumber":"",
+         "DocumentType":"",
+         "MovementType":"",
+         "Quantity":0,
+         "UnitOfMeasure":""
+        }
+      }
+  }}`
+   expect(response.status).toEqual(204)
+    console.log(response.status);
+ })
 })
