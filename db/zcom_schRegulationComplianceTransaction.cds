@@ -77,7 +77,7 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
     fuelQuantityinAlternateUOM                   : Decimal(13, 3)        @title: '{i18n>RenewablesFuelQuantityinAlternateUOM}';
     fuelQuantityinAlternateUOMRaw                : String(34)            @title: '{i18n>RenewablesFuelQuantityInAlternateUomRaw}';
     fuelAlternateUnitofMeasurement               : String(3)             @title: '{i18n>RenewablesFuelAlternateUnitOfMeasurement}';
-    numeratorforConversiontoBaseUnitsOfMeasure   : Decimal(5, 0)         @title: '{i18n>numeratorforConversiontoBaseUnitsofMeasure}';
+    numeratorforConversiontoBaseUnitsOfMeasure   : Decimal(5, 0)         @title: '{i18n>NumeratorforConversiontoBaseUnitsofMeasure}';
     denominatorforConversiontoBaseUnitsOfMeasure : Decimal(5, 0)         @title: '{i18n>DenominatorForConversionToBaseUnitsOfMeasure}';
     regulationQuantity                           : Decimal(13, 3)        @title: '{i18n>RenewablesRegulationQuantity}';
     regulationQuantityWholeNumber                : Decimal(13, 3)        @title: '{i18n>RenewablesRegulationQuantityWholeNumber}';
@@ -87,7 +87,7 @@ entity RegulationComplianceTransaction : cuid, RenewableDate, Enterprise, RFS2, 
     originRegion                                 : String(3)             @title: '{i18n>OriginRegion}';
     destinationRegion                            : String(3)             @title: '{i18n>DestinationRegion}';
     reasonCode                                   : String(2)             @title: '{i18n>RenewablesManualAdjustmentReasonCode}';
-    reasonCodeDesc                               : String(100)           @title: '{i18n>reasonCodeDesc}';
+    reasonCodeDesc                               : String(100)  @readonly        @title: '{i18n>reasonCodeDesc}';
     regulationCompanyName                        : String(30)            @title: '{i18n>regulationCompanyName}';
     internalComments                             : String                @title: '{i18n>internalComments}';
     externalComments                             : String                @title: '{i18n>externalComments}';
@@ -151,7 +151,7 @@ type EventData {
         RenewableDcodeription          : String;
         RenewableVintageYearription    : String;
         RenewableRinMultiplierription  : String;
-        RenewableQapCertifiedription   : String;
+        RenewableQapCertifiedDesc      : String;
     };
     _RenewableDelivery                 : {
         RenewableMaterial              : String;

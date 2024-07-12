@@ -1,30 +1,17 @@
 import cds from '@sap/cds';
-// import { Query } from '@sap/cds';
-// import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RegulationComplianceBaseClass } from './library/zcom_tsRegulationComplianceBase';
-
-// import {} from './library/zcom_tsLCFSCompliance';
 import { RegulationComplianceTransaction } from '#cds-models/com/sap/chs/com/regulationcompliancetransaction';
-// import { Quarter, Month } from '@cds-models';
-import {
-    IMaintainRegulationType, IMaintainRegulationObjecttype, IMaintainRegulationSubscenariotoScenario,
-    IMaintainRegulationTransactionTypeTs, EventPayload, ILogUtility, EventPayloadMDJ
-} from './library/utilities/zcom_tsRegulationComplicanceInterface';
-import {
-    MaintainRfs2Material
-} from './external/regulationcompliancemasterservice_api';
-// import { materialcharacteristicsApi } from './external/materialcharacteristics_api';
-// import { queryObjects } from 'v8';
+import { EventPayload, ILogUtility, EventPayloadMDJ } from './library/utilities/zcom_tsRegulationComplicanceInterface';
 import { RFS2ComplianceClass } from './library/zcom_tsRFS2Compliance';
 import { RFS2ConstantValues, messageTypes, createdStatus } from './library/utilities/zcom_tsConstants';
 
 module.exports = class RegulationComplianceService extends cds.ApplicationService {
     async init() {
         const messaging = await cds.connect.to("RenewableEvents");
-        this.on("sendMessage", async msg => {
-          //  messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
-            if (msg.data.data) {
-                const oEventData = msg.data.data;
+       // this.on("sendMessage", async msg => {
+        messaging.on("ce/zcom/Renewable/RaiseEvent/v1", async msg => {
+            if (msg.data) {
+                const oEventData = msg.data;
                 // fill data from payload to object
                 const oEventPayloadData: EventPayload = {
                     RenewableMaterial: oEventData.RenewableMaterial,
@@ -66,7 +53,7 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                         RenewableDcodeription: oEventData._RenewableDeal.RenewableDcodeription,
                         RenewableVintageYearription: oEventData._RenewableDeal.RenewableVintageYearription,
                         RenewableRinMultiplierription: oEventData._RenewableDeal.RenewableRinMultiplierription,
-                        RenewableQapCertifiedription: oEventData._RenewableDeal.RenewableQapCertifiedription
+                        RenewableQapCertifiedDesc: oEventData._RenewableDeal.RenewableQapCertifiedDesc
                     },
                     _RenewableDelivery: {
                         RenewableMaterial: oEventData._RenewableDelivery.RenewableMaterial,
@@ -184,11 +171,13 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 oMAdjReqPayload: EventPayloadMDJ = {} as EventPayloadMDJ;
             // To assign event type to divert to MDJ process
             oMAdjPayloadData.RenewableEventType = RFS2ConstantValues.eventTypeMDJ;
-            // oMAdjPayloadData._RenewableMaterialDocument.DocumentDate = oDataRequest.data.documentDate as string;
-
+          
             // manual adjustment payload
             oMAdjReqPayload.regulationType = oDataRequest.data.regulationType;
             oMAdjReqPayload.sourceScenario = RFS2ConstantValues.eventTypeMDJ;
+            oMAdjReqPayload.sourceOrgCompanyCode = oDataRequest.data.sourceOrgCompanyCode;
+            oMAdjReqPayload.objectCategory = oDataRequest.data.objectCategory;
+            oMAdjReqPayload.objectCategoryDesc = oDataRequest.data.objectCategoryDesc;
             oMAdjReqPayload.objectType = oDataRequest.data.objectType;
             oMAdjReqPayload.transactionCategory = oDataRequest.data.transactionCategory;
             oMAdjReqPayload.impact = oDataRequest.data.impact;
@@ -210,31 +199,19 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             oMAdjReqPayload.renewablesEpaCompanyId = oDataRequest.data.renewablesEpaCompanyId;
             oMAdjReqPayload.renewablesEpaFacilityId = oDataRequest.data.renewablesEpaFacilityId;
             oMAdjReqPayload.fuelLogisticsMaterialNumber = oDataRequest.data.fuelLogisticsMaterialNumber;
-       
+            oMAdjReqPayload.fuelLogisticsMaterialNumberDesc = oDataRequest.data.fuelLogisticsMaterialNumberDesc;
+            oMAdjReqPayload.internalComments = oDataRequest.data.internalComments;
             await this.processMDAJ(oMAdjReqPayload, oMAdjPayloadData);
             return oDataRequest.data;
+
         })
 
-        // this.on('READ', 'GetMaintainRegulationTransactionTypeTs', async () => {
-        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-        //     await oRegulationComplianceBaseInstance.setRegulationTransactionTypeTs();
-        //     return oRegulationComplianceBaseInstance.aMaintainRegulationTransactionType;
-        // })
         this.on('READ', 'MaintainRegulationObjecttype', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setRegulationObjectType();
             return oRegulationComplianceBaseInstance.aMaintainRegulationObjectType;
         })
-        // this.on('READ', 'MaintainRenewableMaterialConfiguration', async () => {
-        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-        //     await oRegulationComplianceBaseInstance.setMaterialConfiguration();
-        //     return oRegulationComplianceBaseInstance.aMaintainRfs2Material;
-        // })
-        // this.on('READ', 'ManualAdjRegulationComplianceTransaction', async (request) => {
-        //     const oManualAdjustment = await oRegulationComplianceBaseInstance.getManualAdjustmentData('MDJ');
-        //     return oManualAdjustment;
-        // })
-
+      
         this.on('READ', 'GetReasonCode', async () => {
             const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
             await oRegulationComplianceBaseInstance.setAdjustmentReasonCode();
@@ -303,12 +280,6 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
             return aFuelMaterial;
         })
 
-        // this.on('READ', 'GetTransactionType', async () => {
-        //     const oRegulationComplianceBaseInstance = new RegulationComplianceBaseClass({} as EventPayload);
-        //     await oRegulationComplianceBaseInstance.setTransactiontype();
-        //     return oRegulationComplianceBaseInstance.oMaintainRegulationTransactionType;
-        // })
-
         return super.init()
     }
 
@@ -327,11 +298,11 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 // RFS2 Regulation is Active
                 if (oRegulationComplianceBaseClassInstance.oRFS2RegulationData) {
                     // Set Debit/Credit objects
-                    if (oMAdjReqPayload.objectType === RFS2ConstantValues.credit) {
+                    if (oMAdjReqPayload.objectCategory === RFS2ConstantValues.credit) {
                         oRegulationComplianceBaseClassInstance.oRFS2CreditData.regulationType = oMAdjReqPayload.regulationType;
                         oRegulationComplianceBaseClassInstance.oRFS2CreditData.category = RFS2ConstantValues.credit;
                     }
-                    else if (oMAdjReqPayload.objectType === RFS2ConstantValues.debit) {
+                    else if (oMAdjReqPayload.objectCategory === RFS2ConstantValues.debit) {
                         oRegulationComplianceBaseClassInstance.oRFS2DebitData.regulationType = oMAdjReqPayload.regulationType;
                         oRegulationComplianceBaseClassInstance.oRFS2DebitData.category = RFS2ConstantValues.debit;
                     }
@@ -339,19 +310,14 @@ module.exports = class RegulationComplianceService extends cds.ApplicationServic
                 }
             }
         });
-        // var fn = oRegulationComplianceBaseClassInstance.resolveMDAJ;
+      
+        // To make it resolved first and return the data
         oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance = new Promise(function (fn, reject) {
             oRegulationComplianceBaseClassInstance.resolveMDAJ = fn;
         });
         await oRegulationComplianceBaseClassInstance.oResolveRFS2_MADJ_RVOCompliance.then(() => {
-            debugger
+            
         });
-        // return oDataRequest.data;
-
-    }
-
-    resolvefn() {
-
     }
 
 }

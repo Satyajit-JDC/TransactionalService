@@ -1,8 +1,8 @@
 import { RegulationComplianceBaseClass } from './zcom_tsRegulationComplianceBase';
 import { RegulationComplianceTransaction } from '@cds-models/com/sap/chs/com/regulationcompliancetransaction';
-import { createdStatus } from './utilities/zcom_tsConstants';
+import { createdStatus,rvoReversalMovementType } from './utilities/zcom_tsConstants';
 import { CdsDate } from '@cds-models/_/index';
-import { Quarter, Month } from '@cds-models';
+import { Quarter, Month, Dcode, DocumentType } from '@cds-models';
 export class RFS2_RVOCompliance {
     // private elements
     public _oRegulationComplianceBaseClassInstance: RegulationComplianceBaseClass;
@@ -122,6 +122,12 @@ export class RFS2_RVOCompliance {
             return false;
         }
 
+        // set CompanyId Or Plant To FacilityId Mapping
+        await this._oRegulationComplianceBaseClassInstance.setCompanyIdOrPlantToFacilityIdMapping();
+        if (this._oRegulationComplianceBaseClassInstance.aMaintainCompanyIdOrPlantToFacilityIdMapping.length>0) {
+            // data available
+        }
+
         return true;
     }
 
@@ -183,12 +189,13 @@ export class RFS2_RVOCompliance {
         const aMaterialConfig = this._oRegulationComplianceBaseClassInstance.aMaintainRfs2Material;
         for (let index = 0; index < aMaterialConfig.length; index++) {
             const oMaterialConfig = aMaterialConfig[index],
-                oMatDocData = this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument;
+                oMatDocData = this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableMaterialDocument,
+                sMovementType = oMatDocData.MovementType;
             if (oMaterialConfig.obligationPercent) {
                 aFinalData.push({
                     regulationType: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
                     regulationTypeDesc: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.description,
-                    regulationCategory: this._oRegulationComplianceBaseClassInstance.oRFS2RegulationData.regulationType,
+                    regulationCategory: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regulationCategoryCategory,
                     objectCategory: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.category,
                     objectCategoryDesc: this._oRegulationComplianceBaseClassInstance.oRFS2DebitData.description,
                     objectType: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationObjectType.objectTypeCode,
@@ -205,7 +212,7 @@ export class RFS2_RVOCompliance {
                     impact: this._oRegulationComplianceBaseClassInstance.oMaintainMovementType.impactCategory,
                     businessPartnerNumber: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableBusinessPartnerNumber,
                     businessPartnerDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableBusinessPartnerDesc,
-                    movementType: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.MovementType,
+                    movementType: sMovementType,
                     incotermsPart1: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableIncoTerms1,
                     incotermsPart2: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableProductionOrder.RenewableIncoTerms2,
                     fuelCategory: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.RenewableFuelCategory,
@@ -318,14 +325,14 @@ export class RFS2_RVOCompliance {
                     // ciMaximumValue
                     // ciMinimumValue
                     // ciAverageValue
-                    // dcode: oEventData.dcode,
-                    // dcodeDesc master des
+                    dcode: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.Dcode as Dcode,
+                    dcodeDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableDcodeription,
                     rfs2ObligationType: oMaterialConfig.rvoTypeCategory,
                     rfs2ObligationTypeDesc: oMaterialConfig.rvoTypeCategory ? this._oRegulationComplianceBaseClassInstance.mRfs2DebitType[oMaterialConfig.rvoTypeCategory].description : "",
                     vintageYear: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.VintageYear,
                     rinMultiplier: Number(this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableRinMultiplierription),
-                    // qapCertified: oEventData.qapCertified,
-                    // qapCertifiedDesc: oEventData.qa
+                    qapCertified: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.QAPcertified,
+                    qapCertifiedDesc: this._oRegulationComplianceBaseClassInstance.oEventPayloadData._RenewableDeal.RenewableQapCertifiedDesc,
                     // emtsQapServiceTypeCode
                     // emtsBatchNumberText
                     // emtsProcessCode
@@ -348,10 +355,10 @@ export class RFS2_RVOCompliance {
                     // epaCompanyIdFPR
                     // epafacilityIdFPR: oEventData.ep
                     // tprCompanyIdFPR
-                    // tprFacilityIdFPR
+                    generateFacilityId: this._oRegulationComplianceBaseClassInstance?.mMaintainCompanyIdOrPlantToFacilityIdMapping[oMatDocData.Plant+oMatDocData.CompanyCode]?.facilityId,
                     // referenceContractDocumentType: oEventData.co
-                    referenceContractGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
-                    referenceContractDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,
+                    // referenceContractGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
+                    // referenceContractDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,
                     // referenceContractDocumentSubItem: oEventData.ref
                     // referenceContractMaterialDocumentYear: oEventData.ref
                     // referenceContractSequentialSegmentNumber
@@ -390,16 +397,16 @@ export class RFS2_RVOCompliance {
                     // renewableDeliveryDocNoDocumentItemNumber
                     // renewableDeliveryDocNoDocumentSubItem
                     // renewableDeliveryDocNoMaterialDocumentYear
-                    renewableMaterialDocumentType: 'G',
-                    renewableMaterialGeneralDocumentNumber: oMatDocData.RenwableMaterialDocument,
-                    renewableMaterialDocumentItemNumber: oMatDocData.RenwableMaterialDocumentItem,
+                    renewableMaterialDocumentType: rvoReversalMovementType !== sMovementType ? oMatDocData.RenwableDocumentType as DocumentType : "" as DocumentType,
+                    renewableMaterialGeneralDocumentNumber: rvoReversalMovementType !== sMovementType ? oMatDocData.RenwableMaterialDocument : "",
+                    renewableMaterialDocumentItemNumber: rvoReversalMovementType !== sMovementType ? oMatDocData.RenwableMaterialDocumentItem : "",
                     // renewableMaterialDocNoDocumentSubItem
                     // renewableMaterialDocNoMaterialDocumentYear
-                    // renewableReverseMaterialDocNoDocumentType
-                    // renewableReverseMaterialDocNoGeneralDocumentNumber
-                    // renewableReverseMaterialDocNoDocumentItemNumber
-                    // renewableReverseMaterialDocNoDocumentSubItem
-                    // renewableReverseMaterialDocNoMaterialDocumentYear
+                    renewableReverseMaterialDocumentType: rvoReversalMovementType === sMovementType ? oMatDocData.RenwableDocumentType as DocumentType : "" as DocumentType,
+                    renewableReverseMaterialGeneralDocumentNumber: rvoReversalMovementType === sMovementType ? oMatDocData.RenwableMaterialDocument : "",
+                    renewableReverseMaterialDocumentItemNumber: rvoReversalMovementType === sMovementType ? oMatDocData.RenwableMaterialDocumentItem : "",
+                    // renewableReverseMaterialDocumentSubItem
+                    // renewableReverseMaterialMaterialDocumentYear
                     sourceOrgCompanyCode: oMatDocData.CompanyCode,
                     sourceOrgPlant: oMatDocData.Plant,
                     sourceOrgStorageLocation: oMatDocData.StorageLocation,
@@ -411,6 +418,7 @@ export class RFS2_RVOCompliance {
                     destinationOrgPlant: oMatDocData.Plant,
                     destinationOrgStorageLocation: oMatDocData.StorageLocation,
                     destinationOrgMaterialNumber: oMatDocData.RenewableMaterial,
+                    destinationOrgMaterialNumberDes: this._oRegulationComplianceBaseClassInstance.oEventPayloadData.MaterialDescription,
                     destinationOrgCountryKey: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.countryCode,
                     destinationOrgRegion: this._oRegulationComplianceBaseClassInstance.oMaintainRegulationType.regionCode,
                     fuelLogisticsCompanyCode: oMatDocData.CompanyCode,
